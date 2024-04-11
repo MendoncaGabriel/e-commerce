@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-require('dotenv').config()
+
 
 let localAddress = process.env.LOCALADDRESS || 'localhost'
 let user = process.env.USER || 'root'
