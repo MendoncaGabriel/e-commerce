@@ -9,14 +9,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
 </head>
-<body>
+<body class="max-w-screen-md m-auto relative">
     <%- include('../components/aviso') %>
     <%- include('../components/navbar') %>
+    <%- include('../components/modal') %>
+    <%- include('../components/menu') %>
+    <%- include('../components/carrinho') %>
     <%- include('../components/categorias') %>
     <%- include('../components/carroselBanner') %>
-    <%- include('../components/carroselProdutos') %>
+    <%- include('../components/carroselProdutos', {titulo: 'Novidades'}) %>
+    <%- include('../components/carroselProdutos', {titulo: 'Produtos com Desconto'}) %>
     <%- include('../components/newsletter') %>
     <%- include('../components/sigaNoInstagram') %>
     <%- include('../components/footer') %>
 </body>
 </html>
+
+

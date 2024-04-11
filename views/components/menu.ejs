@@ -1,0 +1,53 @@
+<section id="menu" class="fixed top-0   right-[-100%] h-full w-[90%] z-50 duration-300  bg-white flex flex-col justify-between max-w-screen-md  ">
+    <ul class="text-right text-gray-700 text-xl">
+
+        <li class="border-b p-2 pr-5">
+            <button onclick="fecharMenu()" >
+                <i class="bi bi-x  text-4xl text-gray-700"></i>
+            </button>
+        </li>
+        <li class="border-b p-2 pr-5">
+            <a href="#">Item 1</a>
+        </li>
+        <li class="border-b p-2 pr-5">
+            <a href="#">Item 2</a>
+        </li>
+        <li class="border-b p-2 pr-5">
+            <a href="#">Item 3</a>
+        </li>
+    </ul>
+    <div>
+
+        <div>
+            <img src="/images/logo.png" alt="logo" class="w-[50%] m-auto ">
+        </div>
+        <div class="bg-blue-300 p-2 pr-5 flex items-center space-x-2 text-xl text-blue-600 ">
+            <i class="bi bi-person-fill leading-3"></i>
+            <a href="#">Criar uma conta</a>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+    function fecharMenu(){
+        const menu = document.getElementById('menu')
+        menu.classList.add('right-[-100%]')
+
+        setTimeout(() => {
+            
+            menu.classList.add('hidden')
+        }, 300);
+    }
+    function abrirMenu(){
+        const menu = document.getElementById('menu')
+        menu.classList.remove('hidden')
+        
+        setTimeout(() => {
+            menu.classList.replace('right-[-100%]', 'right-0')
+
+        
+        }, 30);
+    }
+</script>
