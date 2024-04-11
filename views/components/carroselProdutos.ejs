@@ -24,9 +24,17 @@
     </button>
     
     <div id="<%= id  %>" class="flex p-5 w-full space-x-5 overflow-x-auto snap-x snap-mandatory duration-300">
+        
+        <!-- este dados tem que vir do backEnd -->
+        
         <% for( let i = 0; i < 10; i++ ) { %>
             <div>
-                <%- include('cardProduto', {id: 'idnosql' + i}) %>
+                <%- include('cardProduto', {
+                    id: 'idnosql' + i,
+                    imagem: 'https://images.tcdn.com.br/img/img_prod/1208773/balao_metalizado_astronauta_10161_191_2_0c91eb830fe13dba42203d774dcf8793.jpg',
+                    nome: "2 Kit Balão metalizado astronalta - shop dos balões",
+                    valor:"9.99",
+                }) %>
             </div>
             
         <% } %>
@@ -51,12 +59,4 @@
             behavior: 'smooth'
         });
     })
-  
-
-
-    //adicionar ao carrinho
-    function adicionarAoCarrinho(id){
-        abrirModal()
-    }
-
 </script>

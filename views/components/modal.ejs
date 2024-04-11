@@ -1,3 +1,10 @@
+
+<script>
+    let valorProduto = 0
+    let quantidade = 1
+    let valorTotal = ""
+</script>
+
 <div id="shadowModal" class="hidden w-full h-full bg-gray-600 opacity-80 fixed z-40 top-0 left-0 ">
 </div>
 
@@ -13,30 +20,40 @@
 
         <div class="flex space-x-2">
             <img 
-                src="https://cdn.dooca.store/8573/products/7jvnqrpmxuwanlfv18hk4c4sqeuflrq7p1nx_640x640+fill_ffffff.jpg?v=1664978573&webp=0" 
+                src="" 
                 alt=""
-                class="w-20 aspect-square border shadow-md rounded-lg overflow-hidden object-cover"
+                class="w-20 h-20 aspect-square border shadow-md rounded-lg overflow-hidden object-cover flex-none"
+                id="imagemModal"
             >
-            <h2>Nome do produto aqui</h2>
+            <h2 id="nomeModal">Nome do produto aqui</h2>
         </div>
 
-        <div class="flex flex-col items-end  ">
+        <div class="flex justify-between items-center  ">
+            <div class=" text-gray-700">
+                <h2 id="valorModal">valor</h2>
+                <h2 id="totalModal">total</h2>
+            </div>
             <div>
 
                 <label for="" class="text-sm text-gray-600">Quantidade</label><br>
                 <div class="border w-28 rounded-lg border-gray-700 flex items-center justify-around">
-                    <button onclick="maisModal()" ontouchstart="mais()" class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-plus-circle-fill leading-3"></i></button>
+                    <button onclick="maisModal()"  class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-plus-circle-fill leading-3"></i></button>
                     <input id="quantidade" type="number" value="1" class="border-b text-center text-xl w-10 focus:outline-none">
-                    <button onclick="menosModal()" ontouchstart="menos()" class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-dash-circle leading-3"></i></button>
+                    <button onclick="menosModal()"  class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-dash-circle leading-3"></i></button>
                 </div>
             </div>
         </div>
 
-        <button class="bg-blue-400 px-4 py-2 w-full mt-2 text-white hover:bg-blue-500">ADICIONAR</button>
+        <button onclick="adicionarAoCarinho()" class="bg-blue-400 px-4 py-2 w-full mt-2 text-white hover:bg-blue-500">ADICIONAR</button>
     </div>
 </div>
 
 <script>
+
+    const informacoesModal = {
+        id: '', imagem: '', nome: '', valor: '', total: '', quantidade: 1
+    }
+  
     function fecharModal(){
         const modal = document.getElementById('modal')
         const modalContainer = document.getElementById('modalContainer')
@@ -53,32 +70,61 @@
             
         
     }
+    
+    function abrirModal(id, imagem, nome, valor){
+        // atualizar objeto global
+        informacoesModal.id = id;
+        informacoesModal.imagem = imagem;
+        informacoesModal.nome = nome;
+        informacoesModal.valor = valor;
+        informacoesModal.total = valor;
 
-    function abrirModal(){
+        console.log(informacoesModal)
+
+        carregarInfoNoModal()
+
         const modal = document.getElementById('modal')
         const modalContainer = document.getElementById('modalContainer')
         const shadowModal = document.getElementById('shadowModal')
       
+        // montar animação de abertura
         modalContainer.classList.remove('hidden')
         shadowModal.classList.remove('hidden')
         modal.classList.remove('hidden')
- 
-        
         setTimeout(() => {
             modal.classList.replace('translate-y-full', '-translate-y-1/2')
         }, 10);
     }
 
+
+    function carregarInfoNoModal(){
+        document.getElementById('imagemModal').src = informacoesModal.imagem
+        document.getElementById('nomeModal').innerText = informacoesModal.nome
+        document.getElementById('valorModal').innerText = `Valor: R$${informacoesModal.valor}`
+        document.getElementById('totalModal').innerText = `Total: R$${informacoesModal.valor}`
+    }
+
+
+    // controladores de quantidade
     function maisModal(){
-        let quantidade = parseInt(document.getElementById('quantidade').value);
-        quantidade += 1;
-        document.getElementById('quantidade').value = quantidade;
+        informacoesModal.quantidade += 1
+        document.getElementById('quantidade').value = informacoesModal.quantidade;
+        atualizarTotal()
     }
     function menosModal(){
-        let quantidade = parseInt(document.getElementById('quantidade').value);
-        if (quantidade > 1) {
-            quantidade -= 1;
-            document.getElementById('quantidade').value = quantidade;
-        }
+        informacoesModal.quantidade > 1 ? informacoesModal.quantidade -= 1 : ''
+
+        document.getElementById('quantidade').value = informacoesModal.quantidade;
+        
+        atualizarTotal()
     }
+
+    function atualizarTotal(){
+        let total = Number(informacoesModal.valor) * Number(informacoesModal.quantidade)
+        informacoesModal.total = total
+        document.getElementById('totalModal').innerText = `Total: R$${total}`
+    }
+
+
 </script>
+
