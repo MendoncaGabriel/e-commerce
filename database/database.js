@@ -1,10 +1,11 @@
 const mysql = require('mysql2');
+require('dotenv').config()
 
 const conexao = mysql.createConnection({
-  localAddress: 'localhost',
-  user: 'root',
-  password: '@Gam1997Vsc*',
-  database: 'shopdosbaloes'
+  localAddress: process.env.LOCALADDRESS || 'localhost',
+  user: process.env.USER || 'root',
+  password: process.env.PASS || '@Gam1997Vsc*',
+  database: process.env.DATABASE || 'shopdosbaloes'
 });
 
 module.exports = {
