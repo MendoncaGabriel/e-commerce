@@ -8,11 +8,12 @@
 
         <h2 class="w-full p-4 text-2xl text-center">MEU CARRINHO</h2>
 
-        <ul>
+        <ul id="listaProdutosCarrinho" class="overflow-y-auto max-h-96">
             <li class="py-2 px-4 border border-blue-500 rounded-full text-blue-500 flex items-center justify-between space-x-2 w-[80%] m-auto">
                 <i class="bi bi-exclamation-circle leading-3"></i>
                 <p class="text-sm">O carrinho de compras esta vazio</p>
             </li>
+
         </ul>
       
     </div>
@@ -32,6 +33,7 @@
 
 
 <script>
+    // abrir e fechar
     function fecharCarrinho(){
         const carrinho = document.getElementById('carrinho')
         carrinho.classList.add('right-[-100%]')
@@ -41,6 +43,7 @@
         }, 300);
     }
     function abrirCarrinho(){
+        carregarCarrinho()
         const carrinho = document.getElementById('carrinho')
         carrinho.classList.remove('hidden')
         
@@ -48,4 +51,34 @@
             carrinho.classList.replace('right-[-100%]', 'right-0')
         }, 30);
     }
+
+
+
+    function carregarCarrinho(){
+        if(localStorage.carrinho){
+            const carrinho = JSON.parse(localStorage.carrinho)
+
+            const listaProdutosCarrinho = document.getElementById('listaProdutosCarrinho')
+
+            let lista = ''
+            carrinho.forEach(e => {
+                lista += `
+                
+                <li class="border text-left p-2 ">
+                    <p><b>Produto:</b> ${e.nome}</p>
+                    <p><b>Quantidade:</b> ${e.quantidade}</p>
+                    <p><b>Valor:</b> R$${e.valor}</p>
+                    <p><b>Valor:</b> R$${e.total}</p>
+                    <button class=" ml-auto block">
+                        <i class="bi bi-trash2-fill text-red-400 text-2xl"></i>
+                    </button>
+                </li>
+                `
+            });
+
+            listaProdutosCarrinho.innerHTML = lista
+
+        }
+    }
+
 </script>
