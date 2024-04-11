@@ -1,3 +1,13 @@
+<% const valor = 9.50 %> 
+<script>
+    const valorProduto = Number("<%= valor %>")
+    let quantidade = 1
+    let valorTotal = ""
+</script>
+
+
+
+
 <div id="shadowModal" class="hidden w-full h-full bg-gray-600 opacity-80 fixed z-40 top-0 left-0 ">
 </div>
 
@@ -20,23 +30,28 @@
             <h2>Nome do produto aqui</h2>
         </div>
 
-        <div class="flex flex-col items-end  ">
+        <div class="flex justify-between items-center  ">
+            <div class=" text-gray-700">
+                <h2 id="valorProduto">Valor: R$<%= String(valor.toFixed(2)).replace('.', ',') %></h2>
+                <h2 id="totalModal">Total: R$<%= String(valor.toFixed(2)).replace('.', ',') %></h2>
+            </div>
             <div>
 
                 <label for="" class="text-sm text-gray-600">Quantidade</label><br>
                 <div class="border w-28 rounded-lg border-gray-700 flex items-center justify-around">
-                    <button onclick="maisModal()" ontouchstart="mais()" class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-plus-circle-fill leading-3"></i></button>
+                    <button onclick="maisModal()"  class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-plus-circle-fill leading-3"></i></button>
                     <input id="quantidade" type="number" value="1" class="border-b text-center text-xl w-10 focus:outline-none">
-                    <button onclick="menosModal()" ontouchstart="menos()" class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-dash-circle leading-3"></i></button>
+                    <button onclick="menosModal()"  class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-dash-circle leading-3"></i></button>
                 </div>
             </div>
         </div>
 
-        <button class="bg-blue-400 px-4 py-2 w-full mt-2 text-white hover:bg-blue-500">ADICIONAR</button>
+        <button onclick="adicionarAoCariinho()" class="bg-blue-400 px-4 py-2 w-full mt-2 text-white hover:bg-blue-500">ADICIONAR</button>
     </div>
 </div>
 
 <script>
+    //abrir e fechar
     function fecharModal(){
         const modal = document.getElementById('modal')
         const modalContainer = document.getElementById('modalContainer')
@@ -53,7 +68,6 @@
             
         
     }
-
     function abrirModal(){
         const modal = document.getElementById('modal')
         const modalContainer = document.getElementById('modalContainer')
@@ -69,16 +83,55 @@
         }, 10);
     }
 
+
+    // controladores de quantidade
     function maisModal(){
         let quantidade = parseInt(document.getElementById('quantidade').value);
         quantidade += 1;
+        atualizarContador(quantidade)
         document.getElementById('quantidade').value = quantidade;
+
     }
     function menosModal(){
         let quantidade = parseInt(document.getElementById('quantidade').value);
         if (quantidade > 1) {
             quantidade -= 1;
+            atualizarContador(quantidade)
             document.getElementById('quantidade').value = quantidade;
         }
     }
+
+    //atualizar
+    function atualizarContador(v){
+        quantidade = v
+        atualizarTotal()
+    }
+    function atualizarTotal(){
+        let total = Number(valorProduto) * Number(quantidade)
+        document.getElementById("valorProduto").innerHTML = `Valor: R$${String(valorProduto.toFixed(2)).replace('.', ',')} `
+        document.getElementById("totalModal").innerHTML = `Total: R$${String(total.toFixed(2)).replace('.', ',')}`
+    }
+
+    //persistir em localhistorage
+    function adicionarAoCariinho(){
+
+        const novoItem = {
+            id: "123",
+            nome: "nome do produto",
+            quantidade: "5",
+            valor:"9.99",
+            total:"49,95"
+        }
+
+        if(!localStorage.carrinho){
+            localStorage.carrinho = JSON.stringify([novoItem])
+        }else{
+            const carrinho = JSON.parse(localStorage.carrinho)
+            carrinho.push(novoItem)
+            localStorage.carrinho = JSON.stringify(carrinho)
+        }
+
+        fecharModal()
+    }
+
 </script>
