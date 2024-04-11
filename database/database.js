@@ -1,11 +1,16 @@
 const mysql = require('mysql2');
 require('dotenv').config()
 
+let localAddress = process.env.LOCALADDRESS || 'localhost'
+let user = process.env.USER || 'root'
+let password = process.env.PASS || '@Gam1997Vsc*'
+let database = process.env.DATABASE || 'shopdosbaloes'
+
 const conexao = mysql.createConnection({
-  localAddress: process.env.LOCALADDRESS || 'localhost',
-  user: process.env.USER || 'root',
-  password: process.env.PASS || '@Gam1997Vsc*',
-  database: process.env.DATABASE || 'shopdosbaloes'
+  localAddress: localAddress,
+  user: user,
+  password: password,
+  database: database
 });
 
 module.exports = {
