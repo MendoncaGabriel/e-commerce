@@ -1,17 +1,16 @@
 const mysql = require('mysql2');
+require('dotenv').config()
 
 
-let localAddress = process.env.LOCALADDRESS || 'localhost'
-let user = process.env.USER || 'root'
-let password = process.env.PASS || '@Gam1997Vsc*'
-let database = process.env.DATABASE || 'shopdosbaloes'
 
 const conexao = mysql.createConnection({
-  localAddress: localAddress,
-  user: user,
-  password: password,
-  database: database
-});
+    host: process.env.LOCALADDRESS,
+    user: process.env.USER,
+    password: process.env.PASS,
+    database: process.env.DATABASE,
+    port: 3306 
+  });
+   
 
 module.exports = {
     conexao: async () => {
