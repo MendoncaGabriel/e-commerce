@@ -3,12 +3,20 @@ const router = express.Router()
 const produtoController = require('../controllers/produtoController')
 const helpRouter = require('./help')
 
+// MIDDLEWARE
+const  upload = require('../middlewares/multer')
+
+
 //HELP
 router.use('/help', helpRouter)
 
 //CRIAR
-router.post('/produto', produtoController.novoProduto)
+
+router.post('/produto', upload.array('imagens'),  produtoController.novoProduto)
 router.post('/variante', produtoController.novaVariante)
+
+
+
 
 
 //LER

@@ -9,7 +9,7 @@ function executeSql(sql, values){
                     sqlMessage: error.message || ""
                 } 
                 console.log(resumoErro)
-                reject(new Error("Erro ao remover produto!", {error: resumoErro || error}))
+                reject(new Error("Erro ao executar SQL!", {error: resumoErro || error}))
             }else{
                 resolve(retorno)
             }
@@ -29,6 +29,7 @@ module.exports = {
             return result
 
         } catch (error) {
+            console.log(error)
             throw new Error("Erro ao salvar novo produto", error)
         }
     },
@@ -66,6 +67,7 @@ module.exports = {
 
             
         } catch (error) {
+            console.log(error)
             throw new Error("Erro ao  inserir nova variante", error)
         }
     },
@@ -75,14 +77,60 @@ module.exports = {
             const pagina = pg || 1;
             const offset = (pagina - 1) * limit;
             const sql = `
-                SELECT * FROM produtos
-                ORDER BY produto_id
+                SELECT p.*, v.*
+                FROM produtos p
+                LEFT JOIN variantes v ON p.produto_id = v.produto_id
+                ORDER BY p.produto_id
                 LIMIT ?, ?;
             `
             const values = [offset, limit];
 
             const result = await  executeSql(sql, values)
-            return result
+
+            //agrupar
+
+            /// Array para armazenar produtos com suas variantes
+            const produtosAgrupados = [];
+
+            // Percorre os resultados da consulta e agrupa os produtos por ID
+            result.forEach(resultado => {
+            const { produto_id, nome_produto, descricao_produto, status_produto, modelo_produto, categoria, marca, variante_id, preco, tamanho, quantidade, referencia, vendas, ean, estoque, custo, imagem } = resultado;
+
+            // Verifica se o produto já existe no array de produtos agrupados
+            let produtoExistente = produtosAgrupados.find(produto => produto.produto_id === produto_id);
+
+            // Se o produto ainda não existir no array, cria um novo objeto para ele
+            if (!produtoExistente) {
+                produtoExistente = {
+                produto_id: produto_id,
+                nome_produto: nome_produto,
+                descricao_produto: descricao_produto,
+                status_produto: status_produto,
+                modelo_produto: modelo_produto,
+                categoria: categoria,
+                marca: marca,
+                variantes: [] // Inicializa um array vazio para armazenar as variantes do produto
+                };
+                produtosAgrupados.push(produtoExistente); // Adiciona o novo produto ao array de produtos agrupados
+            }
+
+            // Adiciona a variante atual ao array de variantes do produto
+            produtoExistente.variantes.push({
+                variante_id: variante_id,
+                preco: preco,
+                tamanho: tamanho,
+                quantidade: quantidade,
+                referencia: referencia,
+                vendas: vendas,
+                ean: ean,
+                estoque: estoque,
+                custo: custo,
+                imagem: imagem
+            });
+            });
+
+            
+            return  produtosAgrupados
             
         } catch (error) {
             console.log(error)
@@ -152,8 +200,6 @@ module.exports = {
             throw new Error("Erro ao atualizar variante", error)
         }
     },
-
-
     removerProduto: async (id) => {
         try {
 
@@ -164,6 +210,33 @@ module.exports = {
 
         } catch (error) {
             throw new Error("Erro ao remover produto")
+        }
+    },
+    variantes: async (produto_id) => {
+        try {
+            const sql = ` SELECT * FROM variantes WHERE produto_id = ?`
+            const values = [produto_id]
+            const result = await executeSql(sql, values)
+            return result
+        } catch (error) {
+            console.log(error)
+            throw new Error("Erro ao pegar lista de variantes", error)
+        }
+    },
+    produtoComVariantes: async (id) => {
+        try {
+            const sql = `
+            SELECT p.*, v.*
+            FROM produtos p
+            LEFT JOIN variantes v ON p.produto_id = v.produto_id
+            WHERE p.produto_id = ?;
+            `
+            const values = [id]
+            const result = await executeSql(sql, values)
+            return result
+        } catch (error) {
+            console.log(error)
+            throw new Error("Erro ao pegar produto", error)
         }
     }
 }

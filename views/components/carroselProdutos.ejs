@@ -25,19 +25,22 @@
     
     <div id="<%= id  %>" class="flex p-5 w-full space-x-5 overflow-x-auto snap-x snap-mandatory duration-300">
         
-        <!-- este dados tem que vir do backEnd -->
-        
-        <% for( let i = 0; i < 10; i++ ) { %>
-            <div>
-                <%- include('cardProduto', {
-                    id: 'idnosql' + i,
-                    imagem: 'https://images.tcdn.com.br/img/img_prod/1208773/balao_metalizado_astronauta_10161_191_2_0c91eb830fe13dba42203d774dcf8793.jpg',
-                    nome: "2 Kit Balão metalizado astronalta - shop dos balões",
-                    valor:"9.99",
-                }) %>
-            </div>
-            
+
+        <% if (typeof produtos != "undefined" && produtos) { %>
+            <% produtos.forEach(e => { %>
+                <% if (typeof e.variantes[0].imagem != "undefined" && e.variantes[0].imagem != null && e.variantes[0].imagem) { %>
+                    <%- include('cardProduto', {
+                        id: e.produto_id,
+                        imagem: '/images/' + e.variantes[0].imagem,
+                        nome: e.nome_produto,
+                        valor:e.variantes[0].preco,
+                    }) %>
+                <% } %>
+            <% }) %>
         <% } %>
+
+
+
     </div>
 </section>
 

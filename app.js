@@ -10,6 +10,7 @@ const sqlstring = require('./middlewares/sqlstring')
 
 const apiRouter = require('./routes/api');
 const pagesRouter = require('./routes/page')
+const adminRouter = require('./routes/admin')
 
 
 var app = express();
@@ -26,7 +27,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(sqlstring) //proteção contra sql injection
+//app.use(sqlstring) //proteção contra sql injection
+app.use('/admin', adminRouter);
 app.use('/api', apiRouter);
 app.use('/', pagesRouter);
 

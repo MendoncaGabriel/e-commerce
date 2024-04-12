@@ -15,8 +15,9 @@
 
         <h2 class="w-full p-4 text-2xl text-center">MEU CARRINHO</h2>
 
+        <!-- LISTA DE PRODUTOS NO CARRINHO -->
         <ul id="listaProdutosCarrinho" class="overflow-y-auto h-screen  ">
-            <li class="py-2 px-4 border border-blue-500 rounded-full text-blue-500 flex items-center justify-between space-x-2 w-[80%] m-auto">
+            <li class="py-2 px-4 border border-blue-500 rounded-full text-blue-500 flex items-center justify-between space-x-2 w-[80%] m-auto ">
                 <i class="bi bi-exclamation-circle leading-3"></i>
                 <p class="text-sm">O carrinho de compras esta vazio</p>
             </li>
@@ -25,7 +26,11 @@
     </div>
 
     <div>
-        <h2 class="p-4 text-xl" id="subtotal">Subtotal: R$0,00</h2>
+        <div class="flex justify-between items-center font-semibold">
+            <h2 class="p-4 text-xl " >Subtotal: </h2>
+            <h2 class="p-4 text-xl " id="subtotal">R$0,00</h2>
+
+        </div>
         <button class="bg-blue-500 px-4 py-2 w-full font-semibold text-white my-2">FINALIZAR COMPRA</button>
         <div>
             <img src="/images/logo.png" alt="logo" class="w-[50%] m-auto ">
@@ -66,34 +71,36 @@
                 subtotal += Number(e.valor * e.quantidade)
                 lista += `
                 
-                <li class="border text-left p-2 ">
+                <li class=" text-left p-2 bg-gray-50 my-2 text-sm p-5 relative shadow-sm">
                     <p><b>Produto:</b> ${e.nome}</p>
+                    <hr class="my-2">
                     <p><b>Quantidade:</b> ${e.quantidade}</p>
-                    <p><b>Valor:</b> R$${e.valor}</p>
-                    <p><b>Total:</b> R$${e.total}</p>
-                    <button onclick="removerDoCarrinho('${e.id}')" class=" ml-auto block">
-                        <i class="bi bi-trash2-fill text-red-400 text-2xl"></i>
+                    <p><b>Valor:</b> <span class=" font-semibold">R$${e.valor}</span></p>
+                    <p><b>Total:</b> <span class="text-green-600 text-xl font-semibold">R$${e.total}</span></p>
+
+                    <button onclick="removerDoCarrinho('${e.id}')" class=" ml-auto block absolute right-4 bottom-2">
+                        <i class="bi bi-trash2-fill text-red-400 text-3xl"></i>
                     </button>
                 </li>
                 `
             });
 
             listaProdutosCarrinho.innerHTML = lista
-            document.getElementById('subtotal').innerText = `Subtotal: R$${String(subtotal.toFixed(2)).replace('.', ',')}`
+            document.getElementById('subtotal').innerText = `R$${String(subtotal.toFixed(2)).replace('.', ',')}`
 
         
 
      
 
         }else{
-            console.log('ok')
-            // item default
             listaProdutosCarrinho.innerHTML = `
             <li class="py-2 px-4 border border-blue-500 rounded-full text-blue-500 flex items-center justify-between space-x-2 w-[80%] m-auto">
                 <i class="bi bi-exclamation-circle leading-3"></i>
                 <p class="text-sm">O carrinho de compras esta vazio</p>
             </li>
             `
+
+            document.getElementById('subtotal').innerText = `R$00,00`
         }
     }
 
@@ -104,6 +111,7 @@
         localStorage.carrinho = JSON.stringify(novoCarrinho)
 
         carregarCarrinho()
+        atualizarIndicadorItensCarrinho()
     }
 
 
@@ -124,6 +132,7 @@
             carrinho.push(novoItem)
             localStorage.carrinho = JSON.stringify(carrinho)
         }
+        atualizarIndicadorItensCarrinho()
 
         fecharModal()
     }

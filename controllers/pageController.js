@@ -1,16 +1,24 @@
+const produtoModel = require('../model/produtoModel')
+
+
 
 module.exports = {
-    home:  (req, res) => {
+    home: async (req, res) => {
         try {
-            res.render('ecommerce/home')
+            const produtos = await produtoModel.listaProdutos(1)
+
+            res.render('ecommerce/home', {produtos})
         } catch (error) {
             console.log(error)
         }
 
     },
-    produtos: (req, res) => {
+    produtos: async (req, res) => {
         try {
-            res.render('ecommerce/produtos')
+            const id = req.query.id
+            const produto = await produtoModel.produtoComVariantes(id)
+            
+            res.render('ecommerce/produtos', {produto})
         } catch (error) {
             console.log(error)
         }
