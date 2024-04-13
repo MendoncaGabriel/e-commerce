@@ -11,13 +11,8 @@ const  upload = require('../middlewares/multer')
 router.use('/help', helpRouter)
 
 //CRIAR
-
 router.post('/produto', upload.array('imagens'),  produtoController.novoProduto)
 router.post('/variante', produtoController.novaVariante)
-
-
-
-
 
 //LER
 router.get('/produto/:id', produtoController.pegarProdutoId)
@@ -25,7 +20,7 @@ router.get('/produto/lista/:pg', produtoController.listaProdutos)
 
 //ATUALIZAR
 router.patch('/produto/:id', produtoController.atualizarProduto)
-router.patch('/variante/:id', produtoController.atualizarVariante)
+router.patch('/variante/:id', upload.array('imagens'), produtoController.atualizarVariante)
 
 
 //DELETAR

@@ -1,21 +1,6 @@
-const db = require('../database/database').db
-
-function executeSql(sql, values){
-    return new Promise((resolve, reject) => {
-        db.query(sql, values, (error, retorno) => {
-            if(error){
-                let resumoErro = {
-                    sqlState: error.sqlState || '?',
-                    sqlMessage: error.message || ""
-                } 
-                console.log(resumoErro)
-                reject(new Error("Erro ao executar SQL!", {error: resumoErro || error}))
-            }else{
-                resolve(retorno)
-            }
-        })
-    })
-}
+const executeSql = require('../utilities/executarSql')
+const fs = require('fs');
+const path = require('path')
 
 module.exports = {
     novoProduto: async (data) => {
@@ -154,13 +139,13 @@ module.exports = {
             // Remova a vírgula extra do final da string updateFields
             updateFields = updateFields.slice(0, -2);
 
-            const sql = `
+            //atualizar produto
+            const result = await  executeSql(`
                 UPDATE produtos
                     SET ${updateFields}
                 WHERE produto_id = ?;
-            `;
+            `, values)
 
-            const result = await  executeSql(sql, values)
             return result
 
         } catch (error) {
@@ -168,11 +153,43 @@ module.exports = {
             throw new Error("Erro ao atualizar produto", error)
         }
     },
-    atualizarVariante: async (id, data) => {
+    atualizarVariante: async (id, data, imagem) => {
         try {
+            //BUSCAR VARIANTE
+            const variante = await executeSql(`
+                SELECT * FROM variantes WHERE variante_id = ${id};
+            `)
+
+            //VERIFICAR SE IMAGEM ANTIGA EXISTE, E APAGAR
+            if(imagem && variante.length > 0 && variante[0].imagem){
+                const caminho = path.resolve('public', 'images', variante[0].imagem);
+                fs.access(caminho, fs.constants.F_OK, (erro) => {
+                    if(erro){
+                        console.log('Sem imagem antiga')
+                    }else{
+                        console.log('Imagem antiga encontradada, apagar!')
+                        fs.unlink(caminho, (err) => {
+                            if(err){
+                                console.log('erro ao excluir imagem')
+                            }else{
+                                console.log('imagem antiga excluida!')
+                            }
+                        })
+                    }
+                })
+            }
+
+
             let updateFields = '';
             const values = []
 
+            // SE TIVER IMAGEM, ATUALIZA CAMPO COM NOME DO ARQUIVO
+            if (imagem) {
+                updateFields += `imagem = ?, `;
+                values.push(imagem[0]); 
+            }
+
+            // MONTA SET DE ATUALIZAÇÃO
             for (const key in data) {
                 if (Object.hasOwnProperty.call(data, key)) {
                     updateFields += `${key} = ?, `;
@@ -181,20 +198,16 @@ module.exports = {
             }
 
             values.push(Number(id));
-
-            // Remova a vírgula extra do final da string updateFields
             updateFields = updateFields.slice(0, -2);
 
+            // ATUALIZA VARIANTE
             const sql = `
                 UPDATE variantes
                     SET ${updateFields}
                 WHERE variante_id = ?;
             `;
-
-
             const result = await  executeSql(sql, values)
             return result
-
         } catch (error) {
             console.log(error)
             throw new Error("Erro ao atualizar variante", error)
@@ -203,7 +216,53 @@ module.exports = {
     removerProduto: async (id) => {
         try {
 
-            const v = await executeSql('DELETE FROM variantes WHERE produto_id = ?;', [id])
+            // buscando produto 
+            const produto = await  executeSql(`
+                SELECT p.*, v.* 
+                FROM produtos p 
+                LEFT JOIN variantes v ON p.produto_id = v.produto_id 
+                WHERE p.produto_id = ${id}
+            `)
+
+            //separar imagens
+            const imagens = produto.map(produto => {
+                if (produto.imagem.length > 0) {
+                    return produto.imagem;
+                }
+            });
+            
+  
+            
+            imagens.forEach(e =>{
+    
+                // verificar se existe imagem
+                const caminho = path.resolve('public', 'images', e)
+                fs.access(caminho, fs.constants.F_OK, (erro) => {
+                    if(erro){
+                        console.log('arquivo não existe')
+                    }else{
+                        console.log('arquivo existe, excluir')
+
+                        //excluir arquivos
+                        fs.unlink(caminho, (err)=>{
+                            if(err){
+                                console.log('erro ao excluir imagem', caminho)
+                            }else{
+                                console.log('arquivo excluido com sucesso!', caminho)
+                            }
+
+                        })
+    
+                    }
+                })
+
+            })
+       
+
+
+      
+
+            await executeSql('DELETE FROM variantes WHERE produto_id = ?;', [id])
             const p = await executeSql('DELETE FROM produtos WHERE produto_id = ?;', [id])
 
             return p
@@ -223,15 +282,16 @@ module.exports = {
             throw new Error("Erro ao pegar lista de variantes", error)
         }
     },
-    produtoComVariantes: async (id) => {
+    produtoComVariantes: async (nome) => {
         try {
             const sql = `
             SELECT p.*, v.*
             FROM produtos p
             LEFT JOIN variantes v ON p.produto_id = v.produto_id
-            WHERE p.produto_id = ?;
+            WHERE LOWER (REPLACE(p.nome_produto, ' ', '-') = ?);
             `
-            const values = [id]
+            let nomeLoweCase = nome.toLowerCase()
+            const values = [nomeLoweCase]
             const result = await executeSql(sql, values)
             return result
         } catch (error) {

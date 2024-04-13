@@ -1,13 +1,15 @@
 const produtoModel = require('../model/produtoModel')
-
+const categoriaModel = require('../model/categoriaModel')
 
 
 module.exports = {
     home: async (req, res) => {
         try {
             const produtos = await produtoModel.listaProdutos(1)
+            const categorias = await categoriaModel.categoriasMenu()
+            console.log(JSON.stringify(categorias))
 
-            res.render('ecommerce/home', {produtos})
+            res.render('ecommerce/home', {produtos, categorias})
         } catch (error) {
             console.log(error)
         }
@@ -15,8 +17,8 @@ module.exports = {
     },
     produtos: async (req, res) => {
         try {
-            const id = req.query.id
-            const produto = await produtoModel.produtoComVariantes(id)
+            const nome = req.params.nome
+            const produto = await produtoModel.produtoComVariantes(nome)
             
             res.render('ecommerce/produtos', {produto})
         } catch (error) {

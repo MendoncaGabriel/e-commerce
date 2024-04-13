@@ -105,7 +105,7 @@ module.exports = {
         try {
             const id = req.params.id
             const data = req.body
-            const result = await produtoModel.atualizarVariante(id, data)
+            const result = await produtoModel.atualizarVariante(id, data, req.imagens)
             res.status(200).json({msg: 'Variante atualizada com sucesso!', result})
         } catch (error) {
             console.log(error)
