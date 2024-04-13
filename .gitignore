@@ -1,2 +1,5 @@
 node_modules
+
 .env
+# Ignorar arquivos dentro da pasta public/images
+public/images/*
