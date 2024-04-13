@@ -1,6 +1,8 @@
 module.exports = {
     paginaCadastro: (req, res) => {
-        console.log('cadastro')
-        res.render('admin/cadastro')
+        res.render('admin/layout')
+    },
+    cadastroProduto: (req, res) => {
+        res.render('admin/layout', {conteudo: './conteudo/cadastroProduto'})
     }
 }

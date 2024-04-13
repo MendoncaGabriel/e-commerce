@@ -1,0 +1,46 @@
+<section class="space-y-2">
+    <!-- PRODUTO -->
+    <h2 class="col-span-2 text-gray-700 font-semibold text-2xl text-center p-4">Produto</h2>
+    <div class="grid grid-cols-2   gap-4 p-4  border border-red-500  ">
+        <div class=" text-gray-700 space-y-5">
+            <div>
+                <label for="">Nome <span class="text-red-600">*</span></label><br>
+                <input type="text"  class="px-4 py-2 border w-full" name="nome_produto">
+            </div>
+            
+            <div>
+                <label for="">Modelo </label><br>
+                <input type="text"  class="px-4 py-2 border w-full" name="modelo_produto">
+            </div>
+            
+            <div>
+                <label for="">Marca</label><br>
+                <input type="text"  class="px-4 py-2 border w-full" name="marca">
+            </div>
+            
+            <div>
+                <label for="">Categoria</label><br>
+                <input type="text" class="px-4 py-2 border w-full" name="categoria">
+            </div>
+        </div>
+        <div>
+            <label for="" class="text-gray-700">Descrição</label><br>
+            <textarea  name="descricao_produto" cols="30"   class=" border w-full p-5 max-h-[300px] min-h-[300px]" placeholder=""  rows="11" ></textarea>
+        </div>
+    </div>
+    <button class="bg-green-600 px-4 py-2 text-white hover:bg-green-700 col-span-2" onclick="adicionarVariante()">ADICIONAR VARIANTE</button>
+
+    <!-- VARIANTES -->
+    <h2 class="col-span-2 text-gray-700 font-semibold text-2xl text-center p-4">Variantes</h2>
+    <div class="p-4 border  border-red-500 ">
+        <div  id="variantes" class="space-y-2 overflow-y-auto border border-blue-600 ">
+
+        </div>  
+        
+    </div>
+ 
+    <button onclick="cadastrar()" class="bg-blue-500 px-4 py-2 text-white  hover:bg-blue-600 col-span-2 my-5 w-[50%] ml-auto">CADASTRAR</button>
+
+</section>
+<script src="/js/admin/cadastro.js"></script>
+

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="/stylesheets/output.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+</head>
+<body class="bg-gray-700">
+    <!-- navbar -->
+    <section class="  p-12 shadow-xl h-screen ">
+        <div class="flex bg-gray-100 w-full h-full">
+
+            <aside class=" max-w-80  w-full  bg-gray-200">
+                <ul class=" w-full f">
+                    <li class=" px-6 py-4 hover:bg-blue-500 hover:text-white text-gray-700 font-semibold"  >
+                        <a href="/admin/cadastro/produto" class="flex items-center justify-between">
+                            <p>NOVO PRODUTO</p>
+                            <i class="bi bi-file-earmark-plus text-xl "></i>
+                        </a>
+                    </li>
+                    <li class=" px-6 py-4 hover:bg-blue-500 hover:text-white text-gray-700 font-semibold"  >
+                        <a href="/admin/cadastro/produto" class="flex items-center justify-between">
+                            <p>EDITAR PRODUTO</p>
+                            <i class="bi bi-file-earmark-plus text-xl "></i>
+                        </a>
+                    </li>
+                    <li class=" px-6 py-4 hover:bg-blue-500 hover:text-white text-gray-700 font-semibold"  >
+                        <a href="/admin/cadastro/produto" class="flex items-center justify-between">
+                            <p>LISTA DE PRODUTOS</p>
+                            <i class="bi bi-file-earmark-plus text-xl "></i>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+            <div class="w-full ">
+                <nav class="bg-blue-500 p-5 max-h-16   flex items-center">
+                    <h2 class="text-white text-2xl font-semibold">sistema de cadastro</h2>
+                </nav>
+
+                <div class="overflow-y-auto   p-10" style="height: calc(100% - 64px);">
+
+
+                    <% if (typeof conteudo != "undefined" && conteudo) { %>
+                        <%- include(conteudo) %>
+            
+
+                    <% } else { %>
+                     <h2 class="text-gray-300 text-5xl">SHOP DOS BALÕES</h2>
+                    <% } %>
+
+                   
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+
+
+
+
