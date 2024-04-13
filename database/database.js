@@ -4,10 +4,10 @@ require('dotenv').config()
 
 
 const conexao = mysql.createConnection({
-    host: process.env.LOCALADDRESS,
-    user: process.env.USE, 
-    password: process.env.PASS,
-    database: process.env.DATABASE,
+    host: 'database-gam.c3gcao0wi23m.us-east-1.rds.amazonaws.com',
+    user: 'gabroviski', 
+    password: 'Gam1997Vsc',
+    database: 'shopdosbaloes',
     port: 3306 
   });
    
