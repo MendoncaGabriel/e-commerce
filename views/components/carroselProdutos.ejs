@@ -23,24 +23,24 @@
         <i class="bi bi-arrow-right-circle-fill"></i>
     </button>
     
+
     <div id="<%= id  %>" class="flex p-5 w-full space-x-5 overflow-x-auto snap-x snap-mandatory duration-300">
         
 
         <% if (typeof produtos != "undefined" && produtos) { %>
-            <% produtos.forEach(e => { %>
-                <% if (typeof e.variantes[0].imagem != "undefined" && e.variantes[0].imagem != null && e.variantes[0].imagem) { %>
-                    <%- include('cardProduto', {
-                        id: e.produto_id,
-                        imagem: '/images/' + e.variantes[0].imagem,
-                        nome: e.nome_produto,
-                        valor:e.variantes[0].preco,
-                    }) %>
-                <% } %>
+            <!-- filtrar 1 item por variante -->
+            <%
+                const filtro = produtos.filter((obj, index) => {
+                    return index === produtos.findIndex((t) => t.produto_id === obj.produto_id);
+                });
+
+            %>
+            <% filtro.forEach(e => { %>
+                <% console.log(e) %>
+                <%- include('cardProduto', {data: e}) %>
+                
             <% }) %>
         <% } %>
-
-
-
     </div>
 </section>
 

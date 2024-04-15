@@ -1,8 +1,8 @@
-const db = require('../database/database').db
+const db = require('../database/database')
 
 function executeSql(sql, values){
     return new Promise((resolve, reject) => {
-        db.query(sql, values, (error, retorno) => {
+        db.query(sql, values, (error, data) => {
             if(error){
                 let resumoErro = {
                     sqlState: error.sqlState || '?',
@@ -11,7 +11,7 @@ function executeSql(sql, values){
                 console.log(resumoErro)
                 reject(new Error("Erro ao executar SQL!", {error: resumoErro || error}))
             }else{
-                resolve(retorno)
+                resolve(data)
             }
         })
     })

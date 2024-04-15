@@ -69,53 +69,8 @@ module.exports = {
                 LIMIT ?, ?;
             `
             const values = [offset, limit];
-
             const result = await  executeSql(sql, values)
-
-            //agrupar
-
-            /// Array para armazenar produtos com suas variantes
-            const produtosAgrupados = [];
-
-            // Percorre os resultados da consulta e agrupa os produtos por ID
-            result.forEach(resultado => {
-            const { produto_id, nome_produto, descricao_produto, status_produto, modelo_produto, categoria, marca, variante_id, preco, tamanho, quantidade, referencia, vendas, ean, estoque, custo, imagem } = resultado;
-
-            // Verifica se o produto já existe no array de produtos agrupados
-            let produtoExistente = produtosAgrupados.find(produto => produto.produto_id === produto_id);
-
-            // Se o produto ainda não existir no array, cria um novo objeto para ele
-            if (!produtoExistente) {
-                produtoExistente = {
-                produto_id: produto_id,
-                nome_produto: nome_produto,
-                descricao_produto: descricao_produto,
-                status_produto: status_produto,
-                modelo_produto: modelo_produto,
-                categoria: categoria,
-                marca: marca,
-                variantes: [] // Inicializa um array vazio para armazenar as variantes do produto
-                };
-                produtosAgrupados.push(produtoExistente); // Adiciona o novo produto ao array de produtos agrupados
-            }
-
-            // Adiciona a variante atual ao array de variantes do produto
-            produtoExistente.variantes.push({
-                variante_id: variante_id,
-                preco: preco,
-                tamanho: tamanho,
-                quantidade: quantidade,
-                referencia: referencia,
-                vendas: vendas,
-                ean: ean,
-                estoque: estoque,
-                custo: custo,
-                imagem: imagem
-            });
-            });
-
-            
-            return  produtosAgrupados
+            return  result
             
         } catch (error) {
             console.log(error)
