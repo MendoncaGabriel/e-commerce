@@ -25,6 +25,7 @@ const Carrinho = {
         if(localStorage.carrinho && localStorage.carrinho != "[]"){
             const carrinho = JSON.parse(localStorage.carrinho)
             let lista = ''
+            Carrinho.subtotal = 0
             carrinho.map((e, index) => {
                 Carrinho.subtotal += Number(e.preco * e.qtdProduto)
                 lista += `
@@ -42,7 +43,7 @@ const Carrinho = {
                 `
             });
             listaProdutosCarrinho.innerHTML = lista
-            subtotal.innerText = `R$${Carrinho.subtotal}`
+            subtotal.innerText = `R$${String(Number(Carrinho.subtotal).toFixed(2)).replace('.', ',')}`
     
 
         }else{
@@ -64,10 +65,11 @@ const Carrinho = {
             localStorage.carrinho = JSON.stringify(carrinho)
         }
         Carrinho.fechar()
+        Carrinho.caregar()
         carregarIndicadorCarrinho()
     },
     remover: (id,index) => {
-        console.log(id)
+        
         const carrinho = JSON.parse(localStorage.carrinho)
         let novoCarrinho = carrinho.filter((e, i) => e.variante_id !== Number(id) || i !== index)
         localStorage.carrinho = JSON.stringify(novoCarrinho)
@@ -76,6 +78,4 @@ const Carrinho = {
         carregarIndicadorCarrinho()
    
     },
-
-
 }
