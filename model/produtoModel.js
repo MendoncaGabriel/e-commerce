@@ -1,6 +1,6 @@
 const executeSql = require('../utilities/executarSql')
 const fs = require('fs');
-const path = require('path')
+const path = require('path');
 
 module.exports = {
     novoProduto: async (data) => {
@@ -20,14 +20,21 @@ module.exports = {
     },
     pegarProdutoId: async (id) => {
         try {
-
-            const sql = `
-                SELECT produtos.*, variantes.*
-                FROM produtos
-                JOIN variantes ON produtos.produto_id = variantes.variante_id;
-            `
+            const sql = "SELECT * FROM produtos WHERE produtos.produto_id = ?"
             const values = [id]
+            const result = await executeSql(sql, values)
+            return result
 
+            
+        } catch (error) {
+            console.log(error)
+            throw new Error("Erro ao pegar produto", error)
+        }
+    },
+    pegarVarianteDoProduto: async (id) => {
+        try {
+            const sql = "SELECT * FROM variantes WHERE variantes.produto_id = ?"
+            const values = [id]
             const result = await executeSql(sql, values)
             return result
 
@@ -109,63 +116,127 @@ module.exports = {
         }
     },
     atualizarVariante: async (id, data, imagem) => {
+        if (!id) return console.log('Sem id');
+        if (!data) return console.log('Sem data');
+        if (!imagem) return console.log('Sem imagem');
+    
         try {
-            //BUSCAR VARIANTE
-            const variante = await executeSql(`
-                SELECT * FROM variantes WHERE variante_id = ${id};
-            `)
-
-            //VERIFICAR SE IMAGEM ANTIGA EXISTE, E APAGAR
-            if(imagem && variante.length > 0 && variante[0].imagem){
+            // BUSCAR VARIANTE
+            const variante = await executeSql(`SELECT * FROM variantes WHERE variante_id = ${id};`);
+    
+            if (variante.length === 0) {
+                console.log('Variante não encontrada');
+                return; // Se a variante não for encontrada, não há nada a ser atualizado
+            }
+    
+            // VERIFICAR SE IMAGEM ANTIGA EXISTE, E APAGAR
+            if (imagem && variante[0].imagem) {
                 const caminho = path.resolve('public', 'images', variante[0].imagem);
                 fs.access(caminho, fs.constants.F_OK, (erro) => {
-                    if(erro){
-                        console.log('Sem imagem antiga')
-                    }else{
-                        console.log('Imagem antiga encontradada, apagar!')
+                    if (erro) {
+                        console.log('Sem imagem antiga');
+                    } else {
+                        console.log('Imagem antiga encontrada, apagar!');
                         fs.unlink(caminho, (err) => {
-                            if(err){
-                                console.log('erro ao excluir imagem')
-                            }else{
-                                console.log('imagem antiga excluida!')
+                            if (err) {
+                                console.log('Erro ao excluir imagem antiga:', err);
+                            } else {
+                                console.log('Imagem antiga excluída!');
                             }
+                        });
+                    }
+                });
+            } else {
+                console.log('Sem imagem anterior para apagar');
+            }
+    
+            const sql = `
+                UPDATE variantes SET
+                preco = ?,
+                tamanho = ?,
+                quantidade = ?,
+                referencia = ?,
+                ean = ?,
+                estoque = ?,
+                custo = ?
+                ${imagem ? ', imagem = ?' : ''}
+                WHERE variante_id = ?;
+            `;
+
+    
+            const values = [
+                data.preco,
+                data.tamanho,
+                data.quantidade,
+                data.referencia,
+                data.ean,
+                data.estoque,
+                data.custo,
+            ];
+    
+            // Adicionar a imagem apenas se ela não for nula ou indefinida
+            if (imagem) {
+                values.push(imagem);
+            }
+    
+            // Adicionar o ID da variante
+            values.push(id);
+    
+            const result = await executeSql(sql, values);
+    
+            return result;
+        } catch (error) {
+            console.log('Erro ao atualizar variante:', error);
+            throw new Error("Erro ao atualizar variante", error);
+        }
+    },
+    
+    removerVariante: async (id) => {
+        try {
+
+            console.log(id)
+            // buscando produto 
+            const variante = await  executeSql(`
+                SELECT * FROM variantes WHERE variante_id = ?;
+            `, [id])
+
+
+            
+            // verificar se existe imagem
+            if(variante[0].imagem){
+                const caminho = path.resolve('public', 'images', variante[0].imagem)
+
+                fs.access(caminho, fs.constants.F_OK, (erro) => {
+                    if(erro){
+                        console.log('arquivo não existe')
+                    }else{
+                        console.log('arquivo existe, excluir')
+    
+                        //excluir arquivos
+                        fs.unlink(caminho, (err)=>{
+                            if(err){
+                                console.log('erro ao excluir imagem', caminho)
+                            }else{
+                                console.log('arquivo excluido com sucesso!', caminho)
+                            }
+    
                         })
+    
                     }
                 })
             }
 
+            
 
-            let updateFields = '';
-            const values = []
 
-            // SE TIVER IMAGEM, ATUALIZA CAMPO COM NOME DO ARQUIVO
-            if (imagem) {
-                updateFields += `imagem = ?, `;
-                values.push(imagem[0]); 
-            }
+            const result = await executeSql('DELETE FROM variantes WHERE variante_id = ?', [id])
+           
 
-            // MONTA SET DE ATUALIZAÇÃO
-            for (const key in data) {
-                if (Object.hasOwnProperty.call(data, key)) {
-                    updateFields += `${key} = ?, `;
-                    values.push(data[key]);
-                }
-            }
-
-            values.push(Number(id));
-            updateFields = updateFields.slice(0, -2);
-
-            // ATUALIZA VARIANTE
-            const sql = `
-                UPDATE variantes
-                    SET ${updateFields}
-                WHERE variante_id = ?;
-            `;
-            const result = await  executeSql(sql, values)
             return result
+
         } catch (error) {
             console.log(error)
-            throw new Error("Erro ao atualizar variante", error)
+            throw new Error("Erro ao remover variante")
         }
     },
     removerProduto: async (id) => {

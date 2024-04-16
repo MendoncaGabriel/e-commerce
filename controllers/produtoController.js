@@ -4,7 +4,6 @@ module.exports = {
     novoProduto: async (req, res) => {
       
         try {
-
             const produto = JSON.parse(req.body.produto)
             const variantes = JSON.parse(req.body.variantes)
             const result = await produtoModel.novoProduto(produto)
@@ -79,17 +78,38 @@ module.exports = {
     },
     atualizarProduto: async (req, res) => {
         try {
-            const id = req.params.id
-            const data = req.body
-            const result = await produtoModel.atualizarProduto(id, data)
-
-            res.status(200).json({msg: "Produto atualizado com sucesso!", result})
-
+            const id = req.params.id; //id de produto
+            const produto = JSON.parse(req.body.produto);
+            const variantes = JSON.parse(req.body.variantes);
+    
+            // Verificar se imagens foram enviadas no corpo da requisição
+            const imagens = req.imagens;
+    
+            // Atualizar o produto
+            await produtoModel.atualizarProduto(id, produto);
+    
+            // Atualizar as variantes
+            await Promise.all(variantes.map(async (variante, index) => {
+                // Verificar se imagens foram fornecidas e se é um array
+                if (imagens) {
+                    // Verificar se há uma imagem correspondente para esta variante
+                    variante.imagem = imagens[index] !== undefined ? imagens[index] : null;
+                    console.log(variante)
+                } else {
+                    console.error('sem imagens para atualizar');
+                }
+    
+                // Atualizar a variante
+                await produtoModel.atualizarVariante(variante.variante_id, variante, variante.imagem);
+            }));
+    
+            res.status(200).json({ msg: "Produto atualizado com sucesso!" });
         } catch (error) {
-            console.log(error)
-            res.status(500).json({msg: 'Erro interno no servidor'})
+            console.error(error);
+            res.status(500).json({ msg: 'Erro interno no servidor' });
         }
     },
+    
     removerProduto: async (req, res) => {
         try {
             const id = req.params.id
@@ -101,15 +121,21 @@ module.exports = {
             res.status(500).json('Erro interno no servidor')
         }
     },
-    atualizarVariante: async (req, res) => {
+    removerVariante: async (req, res) => {
         try {
             const id = req.params.id
-            const data = req.body
-            const result = await produtoModel.atualizarVariante(id, data, req.imagens)
-            res.status(200).json({msg: 'Variante atualizada com sucesso!', result})
+    
+
+            console.log('################################################')
+            console.log('iniciando')
+            const result = await produtoModel.removerVariante(id)
+            console.log(result)
+
+            res.status(200).json({msg: "Variante deletada com sucesso!", result})
         } catch (error) {
             console.log(error)
-            res.status(500).json({msg: 'Erro interno no servidor'})
+            res.status(500).json('Erro interno no servidor')
         }
-    }
+    },
+
 }

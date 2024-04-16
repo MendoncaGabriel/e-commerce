@@ -6,7 +6,6 @@ const helpRouter = require('./help')
 // MIDDLEWARE
 const  upload = require('../middlewares/multer')
 
-
 //HELP
 router.use('/help', helpRouter)
 
@@ -19,11 +18,11 @@ router.get('/produto/:id', produtoController.pegarProdutoId)
 router.get('/produto/lista/:pg', produtoController.listaProdutos)
 
 //ATUALIZAR
-router.patch('/produto/:id', produtoController.atualizarProduto)
-router.patch('/variante/:id', upload.array('imagens'), produtoController.atualizarVariante)
+router.patch('/produto/:id', upload.array('imagens'), produtoController.atualizarProduto)
 
 
 //DELETAR
+router.delete('/variante/:id', produtoController.removerVariante)
 router.delete('/produto/:id', produtoController.removerProduto)
 
 
