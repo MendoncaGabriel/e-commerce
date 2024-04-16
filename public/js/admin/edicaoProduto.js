@@ -151,9 +151,7 @@ const Variante = {
             <!-- formulario variantes -->
             <div class="grid grid-cols-2  w-full col-span-2">
                 <div class="text-gray-700 space-y-5" name="variante">
-                    <div class="opacity-0 h-0">
-                        <input type="text" name="variante_id" value="<%= e.variante_id ?? '' %>" >
-                    </div>       
+
                     <div>
                         <label for="">Preço</label>
                         <input type="text" placeholder="preco"  name="preco"     class="px-4 py-2 border w-full" >
