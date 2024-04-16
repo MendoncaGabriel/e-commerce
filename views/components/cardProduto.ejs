@@ -8,6 +8,8 @@
     <img 
         src="<%= typeof data.imagem !== 'undefined' && data.imagem ? '/images/' + data.imagem : '' %>" 
         alt="imagem do produto"
+        onerror="this.src='/produto-default.png'"
+        
         class="w-full aspect-square object-cover"
     >
     <div class="p-4 flex flex-col items-center justify-around">
