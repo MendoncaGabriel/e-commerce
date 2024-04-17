@@ -8,7 +8,9 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         const extensao = path.extname(file.originalname);
-        const nomeArquivo = file.fieldname + '-' + Date.now() + extensao;
+        // const nomeArquivo = file.fieldname + '-' + Date.now() + extensao;
+        const nomeArquivo = file.originalname; //não alterar nome do aquivo
+        console.log('===> nome do aquivo: ', nomeArquivo)
         req.imagens = req.imagens || [];
         req.imagens.push(nomeArquivo);
         cb(null, nomeArquivo);

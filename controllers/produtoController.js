@@ -4,14 +4,15 @@ module.exports = {
     novoProduto: async (req, res) => {
       
         try {
+            // Salvando produto
             const produto = JSON.parse(req.body.produto)
-            const variantes = JSON.parse(req.body.variantes)
             const result = await produtoModel.novoProduto(produto)
+
+            // Salvando Variante
+            const variantes = JSON.parse(req.body.variantes)
             const produto_id = result.insertId
      
-            
             if (variantes.length > 0) {
-                // Mapeie as variantes para promessas de inserção e aguarde todas elas serem resolvidas
                 await Promise.all(variantes.map(async (variante, index) => {
                     variante.produto_id = Number(produto_id);
                     variante.preco = parseFloat(variante.preco.replace(',', '.')); 
@@ -20,16 +21,9 @@ module.exports = {
                     variante.ean = variante.ean || null;
                     variante.quantidade = parseInt(variante.quantidade) || 0;
                     variante.estoque = parseInt(variante.estoque) || 0;
-                    variante.custo = parseFloat(variante.custo.replace(',', '.')) || null;
-                    // variante.imagem = req.imagens[index] != "undefined" ? req.imagens[index] : null;
+                    variante.custo = parseFloat(variante.custo) || null;
                     variante.vendas = 0;
-                    if (req.imagens && Array.isArray(req.imagens)) {
-                        // Aqui você pode usar req.imagens[index] com segurança
-                        variante.imagem = req.imagens[index] !== undefined ? req.imagens[index] : null;
-                    } else {
-                        // Se req.imagens não estiver definido ou não for um array, você pode lidar com isso de acordo com a lógica do seu aplicativo
-                        console.error('req.imagens não está definido ou não é um array');
-                    }
+                    
                     
                     // Aguarde a inserção da variante
                     await produtoModel.novaVariante(variante);
@@ -78,31 +72,32 @@ module.exports = {
     },
     atualizarProduto: async (req, res) => {
         try {
+            console.log('==============================================================')
             const id = req.params.id; //id de produto
             const produto = JSON.parse(req.body.produto);
+            console.log('===> produto', produto)
             const variantes = JSON.parse(req.body.variantes);
-    
-            // Verificar se imagens foram enviadas no corpo da requisição
-            const imagens = req.imagens;
-    
+            console.log('===> variantes', variantes)
+            console.log('===> imagens enviadas', req.imagens)
+
             // Atualizar o produto
             await produtoModel.atualizarProduto(id, produto);
-    
+
             // Atualizar as variantes
             await Promise.all(variantes.map(async (variante, index) => {
-                // Verificar se imagens foram fornecidas e se é um array
-                if (imagens) {
-                    // Verificar se há uma imagem correspondente para esta variante
-                    variante.imagem = imagens[index] !== undefined ? imagens[index] : null;
-                    console.log(variante)
-                } else {
-                    console.error('sem imagens para atualizar');
+                if(variante.variante_id == 'novo'){
+                    console.log('===> Criando nova variante')
+                    const novaVariante = variante
+                    novaVariante.produto_id = id
+                    delete novaVariante.variante_id
+                    const result = await produtoModel.novaVariante(novaVariante)
+                    console.log('===> nova variante criada!', result)
                 }
-    
-                // Atualizar a variante
-                await produtoModel.atualizarVariante(variante.variante_id, variante, variante.imagem);
+                await produtoModel.atualizarVariante(variante.variante_id, variante);
             }));
-    
+
+            console.log('==============================================================')
+
             res.status(200).json({ msg: "Produto atualizado com sucesso!" });
         } catch (error) {
             console.error(error);

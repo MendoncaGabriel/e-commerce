@@ -4,10 +4,9 @@ const tituloVariante = document.getElementById('tituloVariante')
 
 const Cadastro = {
     salvar: async () => {
-        const formulariosVariantes = document.querySelectorAll('[name=variante]')
-        const variantes = []
-        const objetos = [];
-    
+        const formData = new FormData();
+
+        // Produto
         const produto = {
             nome_produto: document.querySelector('[name=nome_produto]').value,
             descricao_produto: document.querySelector('[name=descricao_produto]').value,
@@ -16,56 +15,39 @@ const Cadastro = {
             marca: document.querySelector('[name=marca]').value, 
             categoria: document.querySelector('[name=categoria]').value
         }
-    
-       for (let i = 0; i < formulariosVariantes.length; i++) {
-            const precoInput = document.querySelectorAll('[name=preco]')[i];
-            const tamanhoInput = document.querySelectorAll('[name=tamanho]')[i];
-            const quantidadeInput = document.querySelectorAll('[name=quantidade]')[i];
-            const referenciaInput = document.querySelectorAll('[name=referencia]')[i];
-            const eanInput = document.querySelectorAll('[name=ean]')[i];
-            const estoqueInput = document.querySelectorAll('[name=estoque]')[i];
-            const custoInput = document.querySelectorAll('[name=custo]')[i];
-    
-    
-    
-            // Verifique se todos os inputs estão definidos antes de criar o objeto
-            if (precoInput && tamanhoInput && quantidadeInput && referenciaInput && eanInput && estoqueInput && custoInput ) {
-                const objeto = {
-                    preco: precoInput.value,
-                    tamanho: tamanhoInput.value,
-                    quantidade: quantidadeInput.value,
-                    referencia: referenciaInput.value,
-                    ean: eanInput.value,
-                    estoque: estoqueInput.value,
-                    custo: custoInput.value,
-                };
-    
-                objetos.push(objeto);
-            }
-        }
-        variantes.push(...objetos);
-     
-    
-    
-    
-        const formData = new FormData();
         formData.append('produto', JSON.stringify(produto));
-    
-        // Adicione cada arquivo 'imagem' ao FormData
-        document.querySelectorAll('[name=imagem]').forEach(input => {
-            formData.append('imagens', input.files[0]);
-        });
-        
-        // Adicione o array de variantes ao FormData
+
+        // Variantes
+        const variantes = []
+        const formulariosVariantes = document.querySelectorAll('[name=varianteElement]')
+        for (let i = 0; i < formulariosVariantes.length; i++) {
+            const variante = {
+                preco: document.querySelectorAll('[name=preco]')[i].value,
+                tamanho: document.querySelectorAll('[name=tamanho]')[i].value,
+                quantidade: document.querySelectorAll('[name=quantidade]')[i].value,
+                referencia: document.querySelectorAll('[name=referencia]')[i].value,
+                ean: document.querySelectorAll('[name=ean]')[i].value,
+                estoque: document.querySelectorAll('[name=estoque]')[i],
+                custo: document.querySelectorAll('[name=custo]')[i]
+            };
+            // Imagens
+            var fileInput = document.querySelectorAll('[name=imagem]')[i].files[0];
+            var imageName = fileInput ? fileInput.name : null;
+            if(imageName) {
+                formData.append('imagens', fileInput);
+                variante.imagem = imageName
+                console.log(imageName)
+            }
+
+            variantes.push(variante)
+        }
         formData.append('variantes', JSON.stringify(variantes));
-    
+
         // Enviar os dados para o servidor
         const res = await fetch('/api/produto', {
             method: 'POST',
             body: formData
         });
-    
-        // Lidar com a resposta do servidor
         console.log(res);
     }
 }
@@ -77,16 +59,10 @@ const Variante = {
     },
 
     adicionar: () => {
-        //exibir titulo
         tituloVariante.classList.remove('hidden')
-
-        // Cria um novo elemento div para envolver os campos da variante
         const divVariante = document.createElement('div');
-        divVariante.setAttribute('name', 'variante');
-
-        // Adiciona os campos da variante ao novo elemento div
         divVariante.innerHTML = `
-        <div class="col-span-2  border shadow-lg p-5 bg-gray-50  ">
+        <div name="varianteElement" class="col-span-2  border shadow-lg p-5 bg-gray-50  ">
             <button onclick="Variante.remover(this)" class="bg-red-500 ml-auto text-white px-4 py-2 w-32 flex items-center justify-center space-x-2 ">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
                     <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
