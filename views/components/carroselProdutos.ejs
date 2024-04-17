@@ -25,22 +25,11 @@
     
 
     <div id="<%= id  %>" class="flex p-5 w-full space-x-5 overflow-x-auto snap-x snap-mandatory duration-300">
-        
-
-        <% if (typeof produtos != "undefined" && produtos) { %>
-            <!-- filtrar 1 item por variante -->
-            <%
-                const filtro = produtos.filter((obj, index) => {
-                    return index === produtos.findIndex((t) => t.produto_id === obj.produto_id);
-                });
-
-            %>
-            <% filtro.forEach(e => { %>
-                <% console.log(e) %>
-                <%- include('cardProduto', {data: e}) %>
-                
-            <% }) %>
-        <% } %>
+    
+        <% data.forEach(e => { %>
+            <%- include('cardProduto', {data: e}) %>
+        <% }) %>
+      
     </div>
 </section>
 

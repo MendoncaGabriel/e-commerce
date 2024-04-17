@@ -36,13 +36,14 @@ const Edicao = {
 
         // Produto
         const produto = {
-            nome_produto: document.querySelector('[name=nome_produto]').value,
-            descricao_produto: document.querySelector('[name=descricao_produto]').value,
-            modelo_produto: document.querySelector('[name=modelo_produto]').value,
+            nome: document.querySelector('[name=nome]').value,
+            descricao: document.querySelector('[name=descricao]').value,
+            modelo: document.querySelector('[name=modelo]').value,
             marca: document.querySelector('[name=marca]').value,
             categoria:  document.querySelector('[name=categoria]').value,
-            status_produto: true
+            ativo: document.querySelector('[name=ativo]').checked ? 1 : 0
         }
+ 
         formData.append('produto',  JSON.stringify(produto));
 
 
@@ -83,7 +84,7 @@ const Edicao = {
     
         console.log(res);
         HandleBtnAtualizar.pararLoad()
-        alert('Produto foi arualizado com sucesso!')
+        alert('Produto foi atualizado com sucesso!')
         window.location.href = "/admin/lista/produto"
     }
 }

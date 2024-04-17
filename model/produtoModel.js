@@ -5,10 +5,10 @@ const path = require('path');
 module.exports = {
     novoProduto: async (data) => {
         try {
-            const sql = `INSERT INTO produtos ( nome_produto, descricao_produto, status_produto, modelo_produto, marca, categoria)
+            const sql = `INSERT INTO produtos ( nome, descricao, ativo, modelo, marca, categoria)
             VALUES (?, ?, ?, ?, ?, ?);`;
 
-            const values = [data.nome_produto, data.descricao_produto, data.status_produto, data.modelo_produto, data.marca, data.categoria]
+            const values = [data.nome, data.descricao, data.ativo, data.modelo, data.marca, data.categoria]
 
             const result = await  executeSql(sql, values)
             return result
@@ -82,10 +82,12 @@ module.exports = {
             const pagina = pg || 1;
             const offset = (pagina - 1) * limit;
             const sql = `
-                SELECT p.*, v.*
-                FROM produtos p
-                LEFT JOIN variantes v ON p.produto_id = v.produto_id
-                ORDER BY p.produto_id
+                SELECT p.*, v.* FROM 
+                    produtos p
+                LEFT JOIN 
+                    variantes v ON p.produto_id = v.produto_id
+                ORDER BY 
+                    p.produto_id
                 LIMIT ?, ?;
             `
             const values = [offset, limit];
@@ -176,7 +178,6 @@ module.exports = {
             throw new Error("Erro ao atualizar variante", error);
         }
     },
-
     removerVariante: async (id) => {
         try {
 
@@ -300,7 +301,7 @@ module.exports = {
             SELECT p.*, v.*
             FROM produtos p
             LEFT JOIN variantes v ON p.produto_id = v.produto_id
-            WHERE LOWER (REPLACE(p.nome_produto, ' ', '-') = ?);
+            WHERE LOWER (REPLACE(p.nome, ' ', '-') = ?);
             `
             let nomeLoweCase = nome.toLowerCase()
             const values = [nomeLoweCase]

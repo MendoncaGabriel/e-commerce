@@ -6,8 +6,18 @@ module.exports = {
     home: async (req, res) => {
         try {
             const produtos = await produtoModel.listaProdutos(1)
-            const categorias = await categoriaModel.categoriasMenu()
-            res.render('ecommerce/home', {produtos, categorias})
+
+            const  produtosFiltrados = produtos.filter((e)=>{
+               return e.ativo == 1 && e.imagem !== null && e.estoque > 0
+            })
+
+            console.log(produtosFiltrados)
+            const categorias = await categoriaModel.categorias()
+            res.render('ecommerce/home', {
+                carrosel_1_titulo: 'Novidades', 
+                carrosel_1_data: produtosFiltrados, 
+                categorias
+            })
         } catch (error) {
             console.log(error)
         }

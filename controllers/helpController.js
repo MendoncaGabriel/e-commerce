@@ -7,10 +7,10 @@ module.exports = {
                     endpoint: '/produto/novo',
                     metodo: 'post',
                     esperado_body: {
-                        nome_produto: "", 
-                        descricao_produto: "", 
-                        status_produto: true, 
-                        modelo_produto: "", 
+                        nome: "", 
+                        descricao: "", 
+                        ativo: true, 
+                        modelo: "", 
                         marca: "", 
                         categoria: ""
                     }
@@ -59,10 +59,10 @@ module.exports = {
                     endpoint: '/api/produto/:id',
                     metodo: 'patch',
                     esperado_body: {
-                        nome_produto: "", 
-                        descricao_produto: "", 
-                        status_produto: true, 
-                        modelo_produto: "", 
+                        nome: "", 
+                        descricao: "", 
+                        ativo: true, 
+                        modelo: "", 
                         marca: "", 
                         categoria: ""
                     }, 

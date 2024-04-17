@@ -2,7 +2,7 @@
 const executeSql = require('../utilities/executarSql')
 
 module.exports = {
-    categoriasMenu: async () => {
+    categorias: async () => {
         try {
             const sql = "select * from categorias"
             const result = await executeSql(sql)

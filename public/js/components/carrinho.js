@@ -30,7 +30,7 @@ const Carrinho = {
                 Carrinho.subtotal += Number(e.preco * e.qtdProduto)
                 lista += `
                 <li class=" text-left bg-gray-50 my-2 text-sm p-5 relative shadow-sm">
-                    <p><b>Produto:</b> ${e.nome_produto}</p>
+                    <p><b>Produto:</b> ${e.nome}</p>
                     <hr class="my-2">
                     <p><b>Quantidade:</b> ${e.quantidade}</p>
                     <p><b>Valor:</b> <span class=" font-semibold">R$${e.preco.replace('.', ',')}</span></p>

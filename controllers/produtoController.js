@@ -30,6 +30,14 @@ module.exports = {
                 }));
             }
 
+
+            //trocar nome de imagem no arquivo 
+
+            
+            //trocar nome de imagem no banco
+
+
+
             res.status(200).json({msg: "Novo produto criado com sucesso!", result})
         } catch (error) {
             console.log(error)
@@ -104,7 +112,6 @@ module.exports = {
             res.status(500).json({ msg: 'Erro interno no servidor' });
         }
     },
-    
     removerProduto: async (req, res) => {
         try {
             const id = req.params.id

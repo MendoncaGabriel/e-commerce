@@ -6,15 +6,19 @@
         <hr><br>
         <div class="grid grid-cols-2   gap-4   border shadow-lg p-5 bg-gray-50">
             <div class=" text-gray-700 space-y-5">
+                <div class="flex items-center mb-4">
+                    <input name="ativo"  <%= produto[0].ativo ? 'checked' : '' %> id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Produto Ativo</label>
+                </div>
                 
                 <div>
                     <label for="">Nome <span class="text-red-600">*</span></label><br>
-                    <input type="text"  class="px-4 py-2 border w-full" name="nome_produto" value="<%= produto[0].nome_produto ?? '' %>">
+                    <input type="text"  class="px-4 py-2 border w-full" name="nome" value="<%= produto[0].nome ?? '' %>">
                 </div>
                 
                 <div>
                     <label for="">Modelo </label><br>
-                    <input type="text"  class="px-4 py-2 border w-full" name="modelo_produto" value="<%= produto[0].modelo_produto ?? '' %>">
+                    <input type="text"  class="px-4 py-2 border w-full" name="modelo" value="<%= produto[0].modelo ?? '' %>">
                 </div>
                 
                 <div>
@@ -24,12 +28,23 @@
                 
                 <div>
                     <label for="">Categoria</label><br>
-                    <input type="text" class="px-4 py-2 border w-full" name="categoria" value="<%= produto[0].categoria ?? '' %>">
+                    <select name="categoria" id="" class="px-4 py-2 border w-full">
+                        <option value="" selected disabled>Selecione uma categoria</option>
+                        <% if (produto[0].categoria) { %>
+                            <option value="" selected><%= produto[0].categoria  %></option>
+                        <% } %>
+
+                        <!-- Categorias -->
+                        <% categorias.forEach(element => { %>
+                         <option value="<%= element.nome %>"><%= element.nome %></option>
+                        <% }) %>
+                        
+                    </select>
                 </div>
             </div>
             <div>
-                <label for="descricao_produto" class="text-gray-700">Descrição</label><br>
-                <textarea  name="descricao_produto" cols="30"   class=" border w-full p-5 max-h-[300px] min-h-[300px]" placeholder=""  rows="11" value="<%= produto[0].descricao_produto ?? '' %>"  ><%= produto[0].descricao_produto ?? '' %></textarea>
+                <label for="descricao" class="text-gray-700">Descrição</label><br>
+                <textarea  name="descricao" cols="30"   class=" border w-full p-5 max-h-[300px] min-h-[300px]" placeholder=""  rows="11" value="<%= produto[0].descricao ?? '' %>"  ><%= produto[0].descricao ?? '' %></textarea>
             </div>
         </div>
     </section>
