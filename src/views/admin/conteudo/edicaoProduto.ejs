@@ -3,7 +3,7 @@
 
     <!-- PRODUTO -->
     <section class="p-4">
-        <h2 class="col-span-2 text-gray-700 font-semibold text-2xl text-center p-4 ">Produto</h2>
+        <h2 class="col-span-2 text-gray-700 font-semibold text-2xl text-center p-4 ">Principal</h2>
         <hr><br>
         <div class="grid grid-cols-2   gap-4   border shadow-lg p-5 bg-gray-50">
             <div class=" text-gray-700 space-y-5">
@@ -49,7 +49,7 @@
 
     <!-- VARIANTES -->
     <section>
-        <h2 class="col-span-2 text-gray-700 font-semibold text-2xl text-center p-4" id="tituloVariante">Variantes</h2>
+        <h2 class="col-span-2 text-gray-700 font-semibold text-2xl text-center p-4" id="tituloVariante">Complemento</h2>
         <hr class="mb-2">
 
         <div  id="variantes" class="overflow-y-auto space-y-2 p-4">
@@ -65,9 +65,9 @@
                     <!-- formulario variantes -->
                     <div class="grid grid-cols-2  w-full col-span-2">
                         <div class="text-gray-700 space-y-5">
- 
                             <p name="variante_id"><%= e.variante_id ?? '' %></p>
-                  
+                
+
                             <div>
                                 <label for="">Preço</label>
                                 <input  type="text" placeholder="preco"  name="preco" mascara="moeda"   class=" px-4 py-2 border w-full" value="<%= e.preco ?? '' %>" >

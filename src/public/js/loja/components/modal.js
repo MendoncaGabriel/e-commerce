@@ -36,7 +36,7 @@ const Modal = {
         quantidade.value = 1
     },
     carregar: () =>{
-        imagemModal.src = '/images/' + Modal.item.imagem ?? ''
+        imagemModal.src = '/img/' + Modal.item.imagem ?? ''
         nomeModal.innerText = Modal.item.nome ?? ''
         valorModal.innerHTML = '<b>Valor:</b> R$' + Modal.item.preco.replace('.', ',')
         totalModal.innerHTML = '<b>Total:</b> R$' + String(Number(Modal.item.preco)  * Modal.item.qtdProduto).replace('.', ',')

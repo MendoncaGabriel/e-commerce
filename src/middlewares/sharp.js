@@ -2,25 +2,24 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
-
 async function compactar(caminhoDaImagem) {
     try {
-        // Verifica se o arquivo existe
         if (!fs.existsSync(caminhoDaImagem)) {
             throw new Error('O arquivo não existe');
         }
 
-        // Caminho para a pasta de imagens compactadas (substituídas)
-        const pastaCompactada = path.dirname(caminhoDaImagem);
-        const nomeArquivo = path.basename(caminhoDaImagem);
-        const caminhoImagemCompactada = path.resolve(pastaCompactada, 'compressed', nomeArquivo);
+        // Define o caminho para a imagem compactada
+        const caminhoImagemCompactada = caminhoDaImagem.replace('.png', '-compressed.png');
 
-        // Compacta a imagem
+        // Compacta a imagem e salva com um nome diferente
         await sharp(caminhoDaImagem)
-            .resize(500) // Define o tamanho desejado
+            .resize(500)
+            .jpeg({ quality: 80 }) // Define a qualidade para formatos JPEG (opcional)
+            .png({ compressionLevel: 8 }) // Define a compressão para formatos PNG (opcional)
+            .toColorspace('srgb') // Reduz o número de cores (opcional)
             .toFile(caminhoImagemCompactada);
 
-        // Move a imagem compactada para substituir a original
+        // Renomeia a imagem compactada para substituir a original
         fs.renameSync(caminhoImagemCompactada, caminhoDaImagem);
 
         console.log('Imagem compactada com sucesso:', caminhoDaImagem);
@@ -30,10 +29,15 @@ async function compactar(caminhoDaImagem) {
 }
 
 
+
 const compactarImagem = function (req, res, next) {
     console.log('===> req.file.filename: ',req.imagens)
+
+
+    console.log(req.body)
     if (!req.imagens) {
-        return next(new Error('Nenhuma imagem foi enviada'));
+        console.log('Nenhuma imagem foi enviada');
+        return next();
     }
 
     req.imagens.forEach(async imagem => {        

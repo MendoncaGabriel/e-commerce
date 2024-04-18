@@ -26,10 +26,9 @@ module.exports = {
     produto: async (req, res) => {
         try {
             const nome = req.params.nome
-            const categorias = await categoriaModel.categorias()
             const produto = await produtoModel.produtoComVariantes(nome)
             
-            res.render('loja/produtos', {produto, categorias})
+            res.render('loja/produtos', {produto})
         } catch (error) {
             console.log(error)
         }

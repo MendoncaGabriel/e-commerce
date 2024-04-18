@@ -97,6 +97,7 @@ module.exports = {
                     console.log('===> Criando nova variante')
                     const novaVariante = variante
                     novaVariante.produto_id = id
+                    typeof novaVariante.imagem !== "undefined" && novaVariante.imagem ?  novaVariante.imagem = variante.imagem.replace('.jpeg', '.png').replace('.jpg', '.png').replace('.webp', '.png') : ''
                     delete novaVariante.variante_id
                     const result = await produtoModel.novaVariante(novaVariante)
                     console.log('===> nova variante criada!', result)
