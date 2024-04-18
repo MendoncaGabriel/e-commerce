@@ -4,7 +4,7 @@ const path = require('path');
 // Configuração do multer para salvar os arquivos na pasta desejada
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.resolve('public', 'images')); 
+        cb(null, path.resolve('src', 'public', 'img')); 
     },
     filename: function (req, file, cb) {
         const extensao = path.extname(file.originalname);

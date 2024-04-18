@@ -1,3 +1,4 @@
+
 <section class="space-y-2 relative p-4">
 
     <!-- PRODUTO -->
@@ -10,22 +11,18 @@
                     <input name="ativo"  <%= produto[0].ativo ? 'checked' : '' %> id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Produto Ativo</label>
                 </div>
-                
                 <div>
                     <label for="">Nome <span class="text-red-600">*</span></label><br>
                     <input type="text"  class="px-4 py-2 border w-full" name="nome" value="<%= produto[0].nome ?? '' %>">
                 </div>
-                
                 <div>
                     <label for="">Modelo </label><br>
                     <input type="text"  class="px-4 py-2 border w-full" name="modelo" value="<%= produto[0].modelo ?? '' %>">
                 </div>
-                
                 <div>
                     <label for="">Marca</label><br>
                     <input type="text"  class="px-4 py-2 border w-full" name="marca" value="<%= produto[0].marca ?? '' %>">
                 </div>
-                
                 <div>
                     <label for="">Categoria</label><br>
                     <select name="categoria" id="" class="px-4 py-2 border w-full">
@@ -36,7 +33,7 @@
 
                         <!-- Categorias -->
                         <% categorias.forEach(element => { %>
-                         <option value="<%= element.nome %>"><%= element.nome %></option>
+                            <option value="<%= element.nome %>"><%= element.nome %></option>
                         <% }) %>
                         
                     </select>
@@ -103,8 +100,7 @@
         
                         <!-- input de imagem  -->
                         <div class="p-10 flex flex-col items-center" >
-                            <img onerror="this.src='/produto-default.png'" src="/images/<%= e.imagem ?? '' %>" alt="imagem do produto" class="w-80 aspect-square  m-auto rounded-lg shadow-md object-cover">
-        
+                            <img onerror="this.src='/assets/produto-default.png'" src="/img/<%= e.imagem ?? '' %>" alt="imagem do produto" class="w-80 aspect-square  m-auto rounded-lg shadow-md object-cover">
                             <div class="m-auto   p-5 flex flex-col items-center">
                                 <label for="">Imagem</label><br>
                                 <input type="file" placeholder="imagem" class="px-6 py-4 border-2 border-gray-300 border-dashed rounded-lg  bg-white inputImage" name="imagem">
@@ -114,14 +110,11 @@
                     </div>
                 <div>
 
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function() {
-                            Variante.imagemInput();
-                        });
-                    </script>
-                    
-
-                    
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Variante.imagemInput();
+                    });
+                </script>
             <% }) %>
         </div>  
     </section>
