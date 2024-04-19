@@ -1,0 +1,22 @@
+<% 
+    function tratarNome(nome) {
+        return nome.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, '-');
+    }
+%>
+
+<nav class="border-t-2 border-b-2 border-gray-200 p-2 text-gray-700">
+    <ul class="flex items-center justify-around space-x-5 overflow-x-auto  pb-2 snap-x snap-mandatory ">
+
+        <% if (typeof data != 'undefined' && data) { %>
+
+            <% data.forEach(e => { %>
+                <li class="flex-none snap-start">
+                    <a href="/categoria/<%= tratarNome(e.nome)  %>"><%= e.nome  %></a>
+                </li>
+             
+            <% }) %>
+         
+        <% } %>
+
+    </ul>
+</nav>
