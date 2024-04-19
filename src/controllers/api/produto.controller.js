@@ -2,7 +2,6 @@ const produtoModel = require('../../model/produto.model')
 
 module.exports = {
     novoProduto: async (req, res) => {
-      
         try {
             // Salvando produto
             const produto = JSON.parse(req.body.produto)
@@ -23,21 +22,10 @@ module.exports = {
                     variante.estoque = parseInt(variante.estoque) || 0;
                     variante.custo = parseFloat(variante.custo) || null;
                     variante.vendas = 0;
-                    
-                    
-                    // Aguarde a inserção da variante
+        
                     await produtoModel.novaVariante(variante);
                 }));
             }
-
-
-            //trocar nome de imagem no arquivo 
-
-            
-            //trocar nome de imagem no banco
-
-
-
             res.status(200).json({msg: "Novo produto criado com sucesso!", result})
         } catch (error) {
             console.log(error)
@@ -58,7 +46,6 @@ module.exports = {
             const data = req.body
             const result = await produtoModel.novaVariante(data)
             res.status(200).json({msg: 'Nova variante de produto criada com sucesso!', result})
-
         } catch (error) {
             console.log(error)
             res.status(500).json({msg: 'Erro interno no servidor'})
@@ -69,9 +56,7 @@ module.exports = {
             const pg = req.params.pg
             const limit = Number(req.query.limit || 20)
             const result = await produtoModel.listaProdutos(pg, limit)
-
             res.status(200).json({msg: "Lista de produtos resgatada com sucesso!", result})
-            
         } catch (error) {
             console.log(error)
             res.status(500).json({msg: 'Erro interno no servidor'})
@@ -80,13 +65,9 @@ module.exports = {
     },
     atualizarProduto: async (req, res) => {
         try {
-            console.log('==============================================================')
             const id = req.params.id; //id de produto
             const produto = JSON.parse(req.body.produto);
-            console.log('===> produto', produto)
             const variantes = JSON.parse(req.body.variantes);
-            console.log('===> variantes', variantes)
-            console.log('===> imagens enviadas', req.imagens)
 
             // Atualizar o produto
             await produtoModel.atualizarProduto(id, produto);
@@ -94,18 +75,14 @@ module.exports = {
             // Atualizar as variantes
             await Promise.all(variantes.map(async (variante, index) => {
                 if(variante.variante_id == 'novo'){
-                    console.log('===> Criando nova variante')
                     const novaVariante = variante
                     novaVariante.produto_id = id
                     typeof novaVariante.imagem !== "undefined" && novaVariante.imagem ?  novaVariante.imagem = variante.imagem.replace('.jpeg', '.png').replace('.jpg', '.png').replace('.webp', '.png') : ''
                     delete novaVariante.variante_id
                     const result = await produtoModel.novaVariante(novaVariante)
-                    console.log('===> nova variante criada!', result)
                 }
                 await produtoModel.atualizarVariante(variante.variante_id, variante);
             }));
-
-            console.log('==============================================================')
 
             res.status(200).json({ msg: "Produto atualizado com sucesso!" });
         } catch (error) {
@@ -117,7 +94,6 @@ module.exports = {
         try {
             const id = req.params.id
             const result = await produtoModel.removerProduto(Number(id))
-
             res.status(200).json({msg: "Produto deletado com sucesso!", result})
         } catch (error) {
             console.log(error)
@@ -127,13 +103,7 @@ module.exports = {
     removerVariante: async (req, res) => {
         try {
             const id = req.params.id
-    
-
-            console.log('################################################')
-            console.log('iniciando')
             const result = await produtoModel.removerVariante(id)
-            console.log(result)
-
             res.status(200).json({msg: "Variante deletada com sucesso!", result})
         } catch (error) {
             console.log(error)
