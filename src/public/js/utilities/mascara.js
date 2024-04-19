@@ -15,10 +15,10 @@ const moeda = document.querySelectorAll('[mascara=moeda]')
 moeda.forEach((element) => {
     element.addEventListener('input', (event)=>{
         if(event.data != null){
-            console.log
+       
             mascara('##,##', element)
             element.setAttribute('maxlength', '5')
         }
-        console.log(event)
+
     })
 })

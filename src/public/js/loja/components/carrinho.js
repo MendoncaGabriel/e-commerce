@@ -93,9 +93,6 @@ function salvarCarrinhoCookie(item){
         variante_id: item.variante_id,
         qtdProduto: item.qtdProduto
     }
-
-    console.log('===> produto: ', item)
-
     const carrinho = getCookie('carrinho')
     if(carrinho && carrinho != '[]' && carrinho != '' && carrinho != null){
         const produtosDoCarrinho = JSON.parse(carrinho)

@@ -70,8 +70,7 @@
 <script>
 
     const produtoJSON = JSON.parse('<%- JSON.stringify(produto) %>');
-  
-    console.log(produtoJSON[0])
+
     const item = {
         variante_id: "",
         preco: Number( produtoJSON[0].preco),
@@ -144,9 +143,6 @@
 
         
 
-
-
-        console.log(item)
     }
 
     document.getElementById('tamanho').addEventListener('change', function() {
