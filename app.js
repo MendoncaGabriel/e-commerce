@@ -1,14 +1,16 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors')
 
 const apiRouter = require('./src/routes/api/api.router');
 const pagesRouterLoja = require('./src/routes/loja/loja.page.router')
 const pageRouterAdmin = require('./src/routes/admin/admin.pages.router')
 
 var app = express();
+app.use(cors())
 // arquivos estativos
 app.use('/css', express.static(path.join(__dirname, 'src/public/css')));
 app.use('/js', express.static(path.join(__dirname, 'src/public/js')));
