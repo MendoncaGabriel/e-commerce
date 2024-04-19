@@ -297,6 +297,7 @@ module.exports = {
     },
     produtoComVariantes: async (nome) => {
         try {
+            if(!nome) throw new Error('nome não espesicifaco ')
             const sql = `
             SELECT p.*, v.*
             FROM produtos p
@@ -309,7 +310,7 @@ module.exports = {
             return result
         } catch (error) {
             console.log(error)
-            throw new Error("Erro ao pegar produto", error)
+            throw new Error("Erro no modulo produtoComVariantes ao pegar produto", error)
         }
     }
 }
