@@ -11,7 +11,7 @@ const totalModal = document.getElementById('totalModal')
 const Modal = {
     item: {},
     abrir: (data) => {
-        const obj = JSON.parse(data)
+        let obj = JSON.parse(data)
         obj.qtdProduto = 1
         Modal.item = obj
         Modal.carregar()
@@ -39,7 +39,9 @@ const Modal = {
         imagemModal.src = '/img/' + Modal.item.imagem ?? ''
         nomeModal.innerText = Modal.item.nome ?? ''
         valorModal.innerHTML = '<b>Valor:</b> R$' + Modal.item.preco.replace('.', ',')
-        totalModal.innerHTML = '<b>Total:</b> R$' + String(Number(Modal.item.preco)  * Modal.item.qtdProduto).replace('.', ',')
+        let total = Number(Modal.item.preco) * Number(Modal.item.qtdProduto)
+        let totalEmMoeda = String(total.toFixed(2)).replace('.', ',')
+        totalModal.innerHTML = '<b>Total:</b> R$' + totalEmMoeda
         quantidade.value = Modal.item.qtdProduto
     },
     maisQtd: () => {

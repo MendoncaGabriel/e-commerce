@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop dos Balões</title>
-    <link rel="stylesheet" href="/css/output.css">
+    <!-- BOOTSTRAP ICONS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-
+    <!-- TAILWINDCSS -->
+    <link rel="stylesheet" href="/css/output.css">
 </head>
 <body class="max-w-screen-md m-auto relative">
     <%- include('components/aviso') %>
@@ -16,14 +17,18 @@
     <%- include('components/carrinho') %>
     <%- include('components/categorias', {data: categorias}) %>
     <%- include('components/carroselBanner') %>
-    <%- include('components/carroselProdutos', {titulo: carrosel_1_titulo, data: carrosel_1_data,}) %>
+    <%- include('components/carroselProdutos', {titulo: carrosel_1_titulo, data: carrosel_1_data}) %>
     <%- include('components/newsletter') %>
     <%- include('components/sigaNoInstagram') %>
-    <%- include('components/footer') %>
+    <%- include('components/footer', {data: dadosEmpresa}) %>
+
+    <!-- BTN WHATSAPP -->
+    <% if (typeof dadosEmpresa[0].whatsapp != "undefined" && dadosEmpresa[0].whatsapp ) { %>
+        <%- include('components/btnWhatsapp', {whatsapp: dadosEmpresa[0].whatsapp}) %>
+    <% } %>
 </body>
 </html>
 
+<script src="/js/utilities/cookie.js"></script>
 <script src="/js/loja/components/carrinho.js"></script>
 <script src="/js/loja/components/modal.js"></script>
-
-

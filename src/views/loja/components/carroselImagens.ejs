@@ -1,18 +1,11 @@
-<section class="w-full aspect-square p-5 flex overflow-x-auto space-x-5 snap-x snap-mandatory">
-
-    <% produto.forEach(e => { %>
-
-        <% if (typeof e.imagem != "undefined" && e.imagem != null && e.imagem) { %>
-         
-            <img 
-                src="<%= '/img/' +  e.imagem %>" 
-                alt="imagem do produto"
-                class="w-full rounded-xl overflow-hidden object-cover aspect-square flex-none snap-center border"
-            >
-        <% } %>
-    <% }) %>
-
-    
-        
-
+<section class="w-full aspect-square p-5 flex overflow-x-auto space-x-5 snap-x snap-proximity">
+  <% produto.forEach(e => { %>
+    <% if (typeof e.imagem != "undefined" && e.imagem != null && e.imagem) { %>
+      <img 
+        src="<%= '/img/' +  e.imagem %>" 
+        alt="imagem do produto"
+        class="w-full rounded-xl overflow-hidden object-cover aspect-square flex-none snap-center border"
+      >
+    <% } %>
+  <% }) %>
 </section>

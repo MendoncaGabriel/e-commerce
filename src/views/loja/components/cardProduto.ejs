@@ -1,6 +1,11 @@
 <% 
     function tratarNome(nome) {
-        return nome.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, '-');
+        if(typeof nome != "undefined" && nome){
+            return nome.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, '-');
+        }else{
+            console.log('Erro ao tratar nome')
+            return ''
+        }
     }
 %>
 
@@ -21,8 +26,10 @@
                 VER PRODUTO
             </a>
 
-
-            <button onclick="Modal.abrir('<%= JSON.stringify(data) %>')" class="bg-white hover:bg-blue-400 border border-blue-400 hover:border-none p-2 rounded-full h-10 w-10 text-blue-400 hover:text-white leading-3 text-xl">
+           
+            <% let item = data %>
+            <% delete item.descricao %>
+            <button onclick="Modal.abrir('<%= JSON.stringify(item) %>')" class="bg-white hover:bg-blue-400 border border-blue-400 hover:border-none p-2 rounded-full h-10 w-10 text-blue-400 hover:text-white leading-3 text-xl">
                 <i class="bi bi-cart-plus"></i>
             </button>
         </div>
