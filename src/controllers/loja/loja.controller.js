@@ -45,7 +45,7 @@ module.exports = {
     },
     criarConta: async (req, res) => {
         try{
-           res.send('criarConta')
+           res.render('loja/criarConta')
         }catch(error){
             console.log(error)
             res.status(500).send('Erro Interno no servidor!')
