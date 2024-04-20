@@ -8,9 +8,9 @@ module.exports = {
             const produtos = await produtoModel.listaProdutos(1)
             const dadosEmpresa = await empresa.dados()
       
-            // filtrar produtos
+            // Filtrar produtos a serem enviados
             const  produtosFiltrados = produtos.filter((e)=>{
-               return e.ativo == 1 && e.imagem !== null && e.estoque > 0
+               return e.ativo == 1 && e.imagem !== null && e.estoque > 0 
             })
 
             const categorias = await categoriaModel.categorias()
@@ -30,7 +30,7 @@ module.exports = {
             const produto = await produtoModel.produtoComVariantes(nome)
             const dadosEmpresa = await empresa.dados()
             
-            res.render('loja/produtos', {produto, dadosEmpresa})
+            res.render('loja/produto', {produto, dadosEmpresa})
         } catch (error) {
             console.log(error)
         }

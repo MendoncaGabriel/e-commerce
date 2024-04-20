@@ -1,11 +1,28 @@
-<section class="w-full aspect-square p-5 flex overflow-x-auto space-x-5 snap-mandatory snap-x">
-  <% produto.forEach(e => { %>
-    <% if (typeof e.imagem != "undefined" && e.imagem != null && e.imagem) { %>
-      <img 
-        src="<%= '/img/' +  e.imagem %>" 
-        alt="imagem do produto"
-        class="w-full rounded-xl overflow-hidden object-cover aspect-square flex-none snap-center border"
-      >
-    <% } %>
-  <% }) %>
+<section class="relative">
+  <div id="containerSlideProduto" class="relative w-full aspect-square  flex overflow-x-auto lg:overflow-x-hidden space-x-5 snap-mandatory snap-x  ">
+    <% produto.forEach(e => { %>
+      <% if (typeof e.imagem != "undefined" && e.imagem != null && e.imagem) { %>
+        <img 
+          src="<%= '/img/' +  e.imagem %>" 
+          alt="imagem do produto"
+          class="imagemSlideProduto"
+          class="w-full rounded-xl overflow-hidden object-cover aspect-square flex-none snap-center border "
+        >
+      <% } %>
+    <% }) %>
+  
+  </div>
+ 
+  <button onclick="voltarSlide()" class="h-full lg:px-5 px-2 hover:text-gray-400 duration-200  absolute top-0 left-0 focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-left focus:outline-none" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+    </svg>
+  </button>
+  <button onclick="passarSlide()" class="h-full lg:px-5 px-2 hover:text-gray-400 duration-200  absolute top-0 right-0 focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+    </svg>
+  </button>
+ 
 </section>
+<script src="/js/loja/components/carroselImagens.js"></script>

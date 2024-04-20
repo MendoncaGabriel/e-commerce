@@ -82,13 +82,16 @@ module.exports = {
             const pagina = pg || 1;
             const offset = (pagina - 1) * limit;
             const sql = `
-                SELECT p.*, v.* FROM 
-                    produtos p
-                LEFT JOIN 
-                    variantes v ON p.produto_id = v.produto_id
-                ORDER BY 
-                    p.produto_id
-                LIMIT ?, ?;
+            SELECT p.*, v.* 
+            FROM produtos p
+            LEFT JOIN (
+                SELECT *
+                FROM variantes
+                GROUP BY produto_id
+            ) v ON p.produto_id = v.produto_id
+            ORDER BY p.produto_id
+            LIMIT ?, ?;
+            
             `
             const values = [offset, limit];
             const result = await  executeSql(sql, values)
