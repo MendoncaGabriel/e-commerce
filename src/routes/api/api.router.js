@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const produtoController = require('../../controllers/api/produto.controller')
 const pagamentoController = require('../../controllers/api/pagamento.controller')
+const usuarioController = require('../../controllers/api/usuario.controller')
 
 // MIDDLEWARE
 const  upload = require('../../middlewares/multer')
@@ -23,9 +24,12 @@ router.patch('/produto/:id', upload.array('imagens'), compactarImagem, produtoCo
 router.delete('/variante/:id', produtoController.removerVariante)
 router.delete('/produto/:id', produtoController.removerProduto)
 
-
+//PAGAMENTO
 router.post('/pagamento/qrcodepix', pagamentoController.gerarQrCodePix)
 
+
+//USUARIOS
+router.post('/usuario/novo', usuarioController.novoUsuario )
 
 
 

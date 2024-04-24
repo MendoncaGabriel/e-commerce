@@ -315,5 +315,53 @@ module.exports = {
             console.log(error)
             throw new Error("Erro no modulo produtoComVariantes ao pegar produto", error)
         }
+    },
+    processarCheckOut: async (carrinho) => {
+
+        const mapaItens = new Map();
+        carrinho.forEach(item => {
+            const chave = `${item.produto_id}-${item.variante_id}`;
+            if (mapaItens.has(chave)) {
+                // Se o item já existir no mapa, adicione a quantidade
+                mapaItens.get(chave).qtdProduto += item.qtdProduto;
+            } else {
+                // Se o item não existir no mapa, adicione-o
+                item.qtdProduto = item.qtdProduto
+                mapaItens.set(chave, { ...item });
+            }
+        });
+
+        // Converter o mapa de volta para um array
+        const itensAgrupados = Array.from(mapaItens.values());
+      
+        console.log('===> itensAgrupados: ', itensAgrupados);
+        const itens = []
+    
+        for (const e of itensAgrupados) {
+      
+            try {
+                const item = await executeSql(`SELECT v.*, p.nome AS nome_produto
+                FROM variantes v
+                JOIN produtos p ON v.produto_id = p.produto_id
+                WHERE v.variante_id = ? AND p.produto_id = ?;
+                `, [e.variante_id, e.produto_id])
+                
+                item[0].qtdProduto = e.qtdProduto
+                itens.push(item[0]);
+            } catch (error) {
+                console.error('Erro ao executar a consulta SQL:', error);
+            }
+        }
+        
+        let total = 0
+        itens.forEach(e =>{
+            let valor = e.preco * e.qtdProduto
+            total = total + valor
+        })
+
+        total = String(total).replace('.', ',')
+
+        //calcular total
+        return {itens, total}
     }
 }

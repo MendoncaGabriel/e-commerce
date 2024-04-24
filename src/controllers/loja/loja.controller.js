@@ -2,6 +2,7 @@ const produtoModel = require('../../model/produto.model')
 const categoriaModel = require('../../model/categoria.model')
 const empresa = require('../../model/config.model')
 
+
 module.exports = {
     home: async (req, res) => {
         try {
@@ -37,8 +38,16 @@ module.exports = {
     },
     checkout: async (req, res) => {
         try {
+
+
+
+
+            const carrinho = JSON.parse(req.cookies.carrinho)
+            const itensProcessados = await produtoModel.processarCheckOut(carrinho)
+            console.log('===> itensProcessados: ', itensProcessados)
+
                
-            res.render('loja/checkout')
+            res.render('loja/checkout', {itensProcessados})
         } catch (error) {
             console.log(error)
         }

@@ -12,30 +12,35 @@
 <body class="bg-gradient-to-r from-blue-400 to-blue-500 flex items-center justify-center h-screen relative" >
     <div style="background-image: url('/assets/papel-de-parede.png'); background-size: 50%;" class="w-screen h-screen absolute z-0"></div>
 
-    <form action="" class="bg-white rounded-lg shadow-2xl w-full   max-w-96 lg:max-w-[700px] p-5 text-gray-700   z-10 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-5">
+    <div  class="bg-white md:rounded-lg shadow-2xl w-full   max-w-96 lg:max-w-[700px] p-5 text-gray-700   z-10 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-5">
         <div class="space-y-2">
             <div>
                 <img src="/assets/logo.png" alt="" class="w-52 m-auto">
-                <h2 class="text-xl text-gray-700 font-semibold pb-2 text-center">CRIAR CONTA</h2>
+                <h2 class="text-xl text-gray-600 font-semibold pb-2 text-center">Preencha seus dados</h2>
             </div>
             <div class="flex flex-col">
-                <label for="" class="text-sm">Nome: <span class="text-red-400">*</span> </label>
-                <input required type="text" class="px-4 py-2 focus:outline-none bg-gray-100">
+                <label for="nome" class="text-sm">Nome: <span class="text-red-400">*</span></label>
+                <input id="nome" required type="text" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="name">
             </div>
             <div class="flex flex-col">
-                <label for="" class="text-sm">Email: <span class="text-red-400">*</span></label>
-                <input required type="email" class="px-4 py-2 focus:outline-none bg-gray-100 ">
+                <label for="telefone" class="text-sm">Telefone: <span class="text-red-400">*</span></label>
+                <input id="telefone" required type="text" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="tel">
             </div>
             <div class="flex flex-col">
-                <label for="" class="text-sm">Senha: <span class="text-red-400">*</span></label>
-                <input required type="password" class="px-4 py-2 focus:outline-none bg-gray-100 ">
+                <label for="email" class="text-sm">Email: </label>
+                <input id="email"  type="email" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="email">
             </div>
             <div class="flex flex-col">
-                <label for="" class="text-sm">Confirmar Senha: <span class="text-red-400">*</span></label>
-                <input required type="password" class="px-4 py-2 focus:outline-none bg-gray-100 ">
+                <label for="senha" class="text-sm">Senha: <span class="text-red-400">*</span></label>
+                <input id="senha" required type="password" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="new-password">
             </div>
+            <div class="flex flex-col">
+                <label for="confirmarSenha" class="text-sm">Confirmar Senha: <span class="text-red-400">*</span></label>
+                <input id="confirmarSenha" required type="password" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="new-password">
+            </div>
+            
             <div class="pt-2">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 w-full text-white font-semibold">Salvar</button>
+                <button onclick="enviar()" id="criarContaBtn" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 w-full text-white font-semibold">CRIAR CONTA</button>
             </div>
         </div>
 
@@ -57,43 +62,77 @@
             >
         </div>
         
-        <script>
-            window.addEventListener('DOMContentLoaded', (event) => {
-                animacao();
-            });
-        
-            function animacao() {
-                const container = document.getElementById('container');
-                const images = container.querySelectorAll('img');
-                const duration = 1500; // Duração da animação em milissegundos
-                const pauseDuration = 4000; // Duração da pausa em milissegundos
-                const imageWidth = images[0].offsetWidth; // Largura de cada imagem
-                let index = 0; // Índice da imagem atual
-        
-                function animate() {
-                    // Calcular a posição de rolagem para a próxima imagem
-                    const nextScrollLeft = index * imageWidth;
-        
-                    // Rolar suavemente para a próxima imagem
-                    container.scrollTo({
-                        left: nextScrollLeft,
-                        behavior: 'smooth'
-                    });
-        
-                    // Atualizar o índice para a próxima imagem
-                    index = (index + 1) % images.length;
-        
-                    // Agendar a próxima animação após a pausa
-                    setTimeout(animate, pauseDuration);
-                }
-        
-                // Iniciar a animação
-                animate();
-            }
-        </script>
-        
-        
-    </form>
 
+    </div>
 </body>
 </html>
+
+<script>
+
+
+
+    function enviar(){
+        if(document.getElementById('senha').value != document.getElementById('confirmarSenha').value){
+            document.getElementById('confirmarSenha').value = ''
+            document.getElementById('senha').style.border = '2px solid #EF4947'
+            document.getElementById('confirmarSenha').style.border = '2px solid #EF4947'
+            document.getElementById('senha').addEventListener('click', ()=> document.getElementById('senha').style.border = 'none')
+            document.getElementById('confirmarSenha').addEventListener('click', ()=> document.getElementById('confirmarSenha').style.border = 'none')
+            alert('Senhas Não conferem!')
+            return
+        }
+
+        fetch('/api/usuario/novo', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                nome: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                senha: document.getElementById('senha').value,
+                telefone: document.getElementById('telefone').value
+            })
+        })
+        .then(res => res.json())
+        .then(res => {
+            window.location.href = '/checkout'
+            console.log(res)
+        })
+    }
+
+
+</script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        animacao();
+    });
+
+    function animacao() {
+        const container = document.getElementById('container');
+        const images = container.querySelectorAll('img');
+        const duration = 1500; // Duração da animação em milissegundos
+        const pauseDuration = 4000; // Duração da pausa em milissegundos
+        const imageWidth = images[0].offsetWidth; // Largura de cada imagem
+        let index = 0; // Índice da imagem atual
+
+        function animate() {
+            // Calcular a posição de rolagem para a próxima imagem
+            const nextScrollLeft = index * imageWidth;
+
+            // Rolar suavemente para a próxima imagem
+            container.scrollTo({
+                left: nextScrollLeft,
+                behavior: 'smooth'
+            });
+
+            // Atualizar o índice para a próxima imagem
+            index = (index + 1) % images.length;
+
+            // Agendar a próxima animação após a pausa
+            setTimeout(animate, pauseDuration);
+        }
+
+        // Iniciar a animação
+        animate();
+    }
+</script>

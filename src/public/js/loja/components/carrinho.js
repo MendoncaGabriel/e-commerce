@@ -64,9 +64,10 @@ const Carrinho = {
             carrinho.push(item)
             localStorage.carrinho = JSON.stringify(carrinho)
         }
-        salvarCarrinhoCookie({produto_id:item.produto_id, variante_id:item.variante_id, qtdProduto:item.qtdProduto})
+        
         Carrinho.fechar()
         Carrinho.caregar()
+        atualizarCarrinhoCookie()
         carregarIndicadorCarrinho()
     },
     remover: (id,index) => {
@@ -76,36 +77,38 @@ const Carrinho = {
         localStorage.carrinho = JSON.stringify(novoCarrinho)
     
         Carrinho.caregar()
+        atualizarCarrinhoCookie()
         carregarIndicadorCarrinho()
    
     },
     finalizarCompra: () => {
-        //verificar se usuarios esta logado
-        const usuarioLogado = verificarLogin()
-        if(usuarioLogado == false) window.location.href = '/criar-conta'
-        if(usuarioLogado == true) window.location.href = '/checkout'
+        window.location.href = '/checkout'
     }
 }
 
-function salvarCarrinhoCookie(item){
-    const produto = {
-        produto_id: item.produto_id,
-        variante_id: item.variante_id,
-        qtdProduto: item.qtdProduto
-    }
-    const carrinho = getCookie('carrinho')
-    if(carrinho && carrinho != '[]' && carrinho != '' && carrinho != null){
-        const produtosDoCarrinho = JSON.parse(carrinho)
-        produtosDoCarrinho.push(produto)
-        setCookie('carrinho', JSON.stringify(produtosDoCarrinho), 30)
-    }else{
-        setCookie('carrinho', JSON.stringify([produto]), 30)
+function atualizarCarrinhoCookie(item){
+
+    if(localStorage.carrinho){
+        const carrinhoCookie = [];
+        const carrinhoJson = JSON.parse(localStorage.carrinho)
+        carrinhoJson.forEach(e => {
+            carrinhoCookie.push({
+                produto_id: e.produto_id,
+                variante_id: e.variante_id,
+                qtdProduto: e.qtdProduto,
+            })
+        })
+        console.log(carrinhoCookie)
+        setCookie('carrinho', JSON.stringify(carrinhoCookie), 30)
     }
 
+    
 }
+
+
 
 function verificarLogin(){
-    if(!getCookie('tokenLogin') || getCookie('tokenLogin') == null){
+    if(!getCookie('token') || getCookie('token') == null){
         return false
     }
     return true

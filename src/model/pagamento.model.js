@@ -5,6 +5,8 @@ module.exports = {
         if (!valor || valor <= 0) {
             throw new Error('Valor inválido');
         }
+        console.log('===> token: ', token)
+        console.log('===> valor: ', valor)
         
         return new Promise((resolve, reject) => {
             const url = process.env.API_QRCODEPIX;
@@ -12,12 +14,12 @@ module.exports = {
             fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                     'seller_id': process.env.ID_VENDEDOR //id do vendedor sandbox
                 },
                 body: JSON.stringify({
-                    "amount": valor,
+                    "amount": parseInt(valor),
                     "currency": "BRL",
                     "order_id": "DEV-1608748980", //id do pedido
                     "customer_id": "string"

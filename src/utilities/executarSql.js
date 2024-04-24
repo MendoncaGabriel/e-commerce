@@ -4,12 +4,22 @@ function executeSql(sql, values){
     return new Promise((resolve, reject) => {
         db.query(sql, values, (error, data) => {
             if(error){
-                let resumoErro = {
-                    sqlState: error.sqlState || '?',
-                    sqlMessage: error.message || ""
-                } 
-                console.log(resumoErro)
-                reject(new Error("Erro ao executar SQL!", {error: resumoErro || error}))
+
+                let msg = ''
+                if (error.sqlState === '23000') {
+                    msg = "Dados já foram cadastrados";
+                } else if (error.sqlState === '42S02') {
+                    msg = "Tabela não encontrada";
+                } else if (error.sqlState === '42000') {
+                    msg = "Erro de sintaxe SQL";
+                } else {
+                    msg = "Ocorreu um erro desconhecido";
+                    console.log({
+                        sqlState: error.sqlState,
+                        sqlMessage: error.message
+                    })
+                }
+                reject(msg)
             }else{
                 resolve(data)
             }

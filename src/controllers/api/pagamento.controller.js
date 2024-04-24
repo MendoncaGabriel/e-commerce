@@ -7,6 +7,10 @@ module.exports = {
             const {valor} = req.body
             const auth = await pagamentoModel.auth()
             const pix = await pagamentoModel.gerarQrCodePix(auth.access_token, valor)
+
+            console.log('===> valor: ', valor)
+            console.log('===> auth: ', auth)
+            console.log('===> pix: ', pix)
           
             res.status(200).json(pix)
         } catch (error) {
