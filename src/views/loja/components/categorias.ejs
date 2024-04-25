@@ -4,13 +4,13 @@
     }
 %>
 
-<nav class="border-t-2 border-b-2 border-gray-200 p-2 text-gray-700">
-    <ul class="flex items-center justify-around space-x-5 overflow-x-auto  pb-2 snap-x snap-mandatory ">
+<nav class=" border-gray-200 p-2 text-gray-700">
+    <ul class="flex items-center justify-around  col-span-2 md:space-x-4 overflow-x-auto  pb-2 snap-x snap-mandatory md:max-w-screen-xl m-auto">
 
         <% if (typeof data != 'undefined' && data) { %>
 
             <% data.forEach(e => { %>
-                <li class="flex-none snap-start">
+                <li class="flex-none snap-start hover:bg-pink-300 hover:shadow-md hover:text-white md:text-lg font-medium px-4 md:px-8 md:py-2 py-1 rounded-full ">
                     <a href="/categoria/<%= tratarNome(e.nome)  %>"><%= e.nome  %></a>
                 </li>
              

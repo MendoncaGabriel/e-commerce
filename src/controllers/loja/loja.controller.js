@@ -30,7 +30,7 @@ module.exports = {
             const nome = req.params.nome
             const produto = await produtoModel.produtoComVariantes(nome)
             const dadosEmpresa = await empresa.dados()
-            
+
             res.render('loja/produto', {produto, dadosEmpresa})
         } catch (error) {
             console.log(error)

@@ -9,7 +9,8 @@
     <!-- TAILWINDCSS -->
     <link rel="stylesheet" href="/css/output.css">
 </head>
-<body class="max-w-screen-md m-auto relative">
+<body class="max-w-screen-md md:max-w-none m-auto relative">
+
     <%- include('components/aviso') %>
     <%- include('components/navbar') %>
     <%- include('components/modal') %>
@@ -26,6 +27,7 @@
     <% if (typeof dadosEmpresa[0].whatsapp != "undefined" && dadosEmpresa[0].whatsapp ) { %>
         <%- include('components/btnWhatsapp', {whatsapp: dadosEmpresa[0].whatsapp}) %>
     <% } %>
+
 </body>
 </html>
 

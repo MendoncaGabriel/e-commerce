@@ -1,0 +1,20 @@
+
+<div>
+    <label for="<%= id %>" class="text-sm text-gray-600"><%= titulo  %></label>
+    <select  id="<%= id %>" class="px-4  py-2 w-full border-2 border-blue-500  focus:outline-none rounded-lg">
+        <option value="" selected disabled>Selecione o tamanho do produto</option>
+    
+        <% opcoes.forEach(item => { %>
+            <% if (item != '' && item != null ) { %>
+                <% 
+                    let texto = ''    
+                    texto += typeof item.tamanho != "undefined" && item.tamanho ? `Tamanho: ${item.tamanho}` : ''
+                    texto +=  typeof item.quantidade != "undefined" && item.quantidade ? ` -- Pacote com: ${item.quantidade}` : ''
+                %>
+                <option estoque="<%= item.estoque ?? 0 %>" value="<%= item.variante_id %>" class="w-full bg-white block shadow-sm">
+                    <%= texto %>
+                </option>
+            <% } %>
+        <% }); %>
+    </select>
+</div>

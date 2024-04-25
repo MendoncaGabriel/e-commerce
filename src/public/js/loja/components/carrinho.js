@@ -106,7 +106,6 @@ function atualizarCarrinhoCookie(item){
 }
 
 
-
 function verificarLogin(){
     if(!getCookie('token') || getCookie('token') == null){
         return false
