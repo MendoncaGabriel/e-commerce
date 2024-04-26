@@ -4,7 +4,7 @@
 <div id="modalContainer" class=" hidden w-screen h-screen border fixed z-50 top-0 lef-0 duration-200">
 
     <div id="modal"  class="bg-white duration-300 px-10 py-5 opacity-100  absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-full rounded-lg w-[85%] max-w-[350px]">
-        <button onclick="Modal.fechar()" class="absolute top-1 right-2 ">
+        <button onclick="modal.fechar()" class="absolute top-1 right-2 ">
             <i class="bi bi-x-circle  text-3xl text-red-700"></i>
         </button>   
         <br>
@@ -30,14 +30,14 @@
 
                 <label for="" class="text-sm text-gray-600">Quantidade</label><br>
                 <div class="border w-28 rounded-lg border-blue-400 flex items-center justify-around">
-                    <button onclick="Modal.menosQtd()"  class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-dash-circle leading-3 text-blue-400"></i></button>
+                    <button onclick="modal.menosQtd()"  class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-dash-circle leading-3 text-blue-400"></i></button>
                     <input id="quantidade" type="number" value="1" class="border-b text-center text-xl w-10 focus:outline-none text-gray-700">
-                    <button onclick="Modal.maisQtd()"  class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-plus-circle-fill leading-3 text-blue-400"></i></button>
+                    <button onclick="modal.maisQtd()"  class="text-3xl w-10 h-10  flex items-center justify-center"><i class="bi bi-plus-circle-fill leading-3 text-blue-400"></i></button>
                 </div>
             </div>
         </div>
 
-        <button onclick="Modal.adicionar()" class="bg-blue-400 px-4 py-2 w-full mt-2 text-white hover:bg-blue-500">ADICIONAR</button>
-        <button onclick="Modal.finalizar()" class="border border-blue-400 hover:border-blue-500 px-4 py-2 w-full mt-2 text-blue-400 ">FINALIZAR</button>
+        <button onclick="modal.adicionarAoCarrinho()" class="bg-blue-400 px-4 py-2 w-full mt-2 text-white hover:bg-blue-500">ADICIONAR</button>
+        <a href="/checkout"  class="border border-blue-400 hover:border-blue-500 px-4 py-2 w-full mt-2 text-blue-400 block text-center ">FINALIZAR</a>
     </div>
 </div>

@@ -1,4 +1,4 @@
-const modal = document.getElementById('modal')
+const modalComponent = document.getElementById('modal')
 const modalContainer = document.getElementById('modalContainer')
 const shadowModal = document.getElementById('shadowModal')
 const quantidade = document.getElementById('quantidade')
@@ -7,66 +7,111 @@ const nomeModal = document.getElementById('nomeModal')
 const valorModal = document.getElementById('valorModal')
 const totalModal = document.getElementById('totalModal')
 
+class Modal {
+    constructor(){
+        this.produtos = JSON.parse(localStorage.produtos);
+        this.produto = {};
+    };
+    atualizarCompos(){
+        imagemModal.src = '/img/'+ this.produto.imagem;
+        nomeModal.innerText = this.produto.nome;
+        quantidade.value = this.produto.qtdProduto ?? 1;
+        valorModal.innerHTML = '<b>Valor:</b> R$' + this.produto.preco.replace('.', ',');
+        let total = Number(this.produto.preco) * Number(this.produto.qtdProduto ?? 1);
+        let totalEmMoeda = String(total.toFixed(2)).replace('.', ',');
+        totalModal.innerHTML = '<b>Total:</b> R$' + totalEmMoeda;
+    };
+    abrir(id){
+        // salvando produto do modal
+        this.produto = this.produtos.find(e =>  e.variante_id == id);
+        if(!this.produto.qtdProduto && this.produto.estoque > 0) this.produto.qtdProduto = 1;
+        this.atualizarCompos();
 
-const Modal = {
-    item: {},
-    abrir: (data) => {
-        let obj = JSON.parse(data)
-        obj.qtdProduto = 1
-        Modal.item = obj
-        Modal.carregar()
-        modalContainer.classList.remove('hidden')
-        shadowModal.classList.remove('hidden')
-        modal.classList.remove('hidden')
+        // animação de abertura
+        modalContainer.classList.remove('hidden');
+        shadowModal.classList.remove('hidden');
+        modalComponent.classList.remove('hidden');
         setTimeout(() => {
-            modal.classList.replace('translate-y-full', '-translate-y-1/2')
+            modalComponent.classList.replace('translate-y-full', '-translate-y-1/2');
         }, 10);
-    },
-    fechar: () => {
-        modal.classList.replace('-translate-y-1/2', 'translate-y-full')
-
+    };
+    fechar(){
+        modalComponent.classList.replace('-translate-y-1/2', 'translate-y-full');
         setTimeout(() => {
-            modal.classList.add('hidden')
-            modalContainer.classList.add('hidden')
-            shadowModal.classList.add('hidden')
+            modalComponent.classList.add('hidden');
+            modalContainer.classList.add('hidden');
+            shadowModal.classList.add('hidden');
         }, 200);
-            
-        // reset do modal
-        item = {}
-        quantidade.value = 1
-    },
-    carregar: () =>{
-        imagemModal.src = '/img/' + Modal.item.imagem ?? ''
-        nomeModal.innerText = Modal.item.nome ?? ''
-        valorModal.innerHTML = '<b>Valor:</b> R$' + Modal.item.preco.replace('.', ',')
-        let total = Number(Modal.item.preco) * Number(Modal.item.qtdProduto)
-        let totalEmMoeda = String(total.toFixed(2)).replace('.', ',')
-        totalModal.innerHTML = '<b>Total:</b> R$' + totalEmMoeda
-        quantidade.value = Modal.item.qtdProduto
-    },
-    maisQtd: () => {
-        if(Modal.item.qtdProduto < Modal.item.estoque){
-            Modal.item.qtdProduto++
-            Modal.carregar()
-        }
-    },
-    menosQtd: () => {
-        if(Modal.item.qtdProduto > 1){
-            Modal.item.qtdProduto--
-            Modal.carregar()
-        }
-    },
-    adicionar: () =>{
-        Carrinho.adicionar(Modal.item)
-        Modal.fechar()
-    },
-    finalizar: () => {
-        Carrinho.adicionar(Modal.item)
-        Modal.fechar()
+    };
+    maisQtd(){
+        // criar um incremento para considerar o que ja esta no carrinho
+        let incremento = 0;
+        if(localStorage.carrinho){
+            const carrinho = JSON.parse(localStorage.carrinho) ?? [];
+            const produto = carrinho.find(e => e.variante_id == this.produto.variante_id) ?? {};
+            incremento = produto.qtdProduto ?? 0;
+        };
+  
 
-        setTimeout(() => {
-            Carrinho.abrir()
-        }, 300);
+        // aqui eu limito a quantidade maxima para respeitar o estoque
+        !this.produto.qtdProduto ? this.produto.qtdProduto = 1: '';
+        if((this.produto.qtdProduto + incremento ) <  this.produto.estoque){
+            this.produto.qtdProduto = this.produto.qtdProduto + 1 ;
+            this.atualizarCompos();
+        };
+    };
+    menosQtd(){
+        //aqui temos uma pequena validação para qtdProduto nao for menor ou igual a 0
+        if(this.produto.qtdProduto > 1){
+            this.produto.qtdProduto = this.produto.qtdProduto - 1;
+        };
+        this.atualizarCompos();
+    };
+    alertaQTD(){
+        if(localStorage.carrinho && localStorage.carrinho != '[]'){
+            const carrinho = JSON.parse(localStorage.carrinho);
+            const qtd = carrinho.length;
+            itensNoCarrinho.innerText = qtd;
+            itensNoCarrinho.classList.replace('hidden', 'flex');
+        }else{
+            itensNoCarrinho.classList.replace('flex','hidden');
+        };
+    };
+    adicionarAoCarrinho(){
+        
+        if(!localStorage.carrinho || localStorage.carrinho == '[]' ){
+            localStorage.carrinho = JSON.stringify([this.produto]); 
+            this.alertaQTD();
+            this.fechar();
+            return 
+        } ;
+
+        const carrinho = JSON.parse(localStorage.carrinho);
     
-    }
+        carrinho.forEach(element => {
+            if(element.produto_id == this.produto.produto_id && element.variante_id == this.produto.variante_id){
+                console.log('produto ja esta no carrinho');
+
+                // antes de incrementar verifica se a quantidade que ja esta no carrinho somado com o novo acrecimo e menor que o estoque
+                if((element.qtdProduto + this.produto.qtdProduto) < element.estoque){
+                    element.qtdProduto = element.qtdProduto + this.produto.qtdProduto
+                    console.log('adicionando qtd')
+                }else{
+                    // se não for seta a quantidade para o valor maximo igual o estoque
+                    element.qtdProduto = element.estoque;
+                    console.log('setando estoque maximo');
+                    alert('Todo estoque disponivel ja esta no seu carrinho!');
+                };
+
+            }else{
+                carrinho.push(this.produto);
+            };
+        });
+
+
+        localStorage.carrinho = JSON.stringify(carrinho);
+        this.alertaQTD();
+        this.fechar();
+    };
 }
+const modal = new Modal();

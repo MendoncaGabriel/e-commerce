@@ -26,12 +26,34 @@
                 VER PRODUTO
             </a>
 
-           
-            <% let item = data %>
-            <% delete item.descricao %>
-            <button onclick="Modal.abrir('<%= JSON.stringify(item) %>')" class="bg-white hover:bg-blue-400 border border-blue-400 hover:border-none p-2 rounded-full h-10 w-10 text-blue-400 hover:text-white leading-3 text-xl">
+    
+            <button 
+                class="bg-white hover:bg-blue-400 border border-blue-400 hover:border-none p-2 rounded-full h-10 w-10 text-blue-400 hover:text-white leading-3 text-xl"
+                onclick="modal.abrir('<%= data.variante_id%>')" 
+            >
                 <i class="bi bi-cart-plus"></i>
             </button>
         </div>
     </div>
 </div>
+
+
+<!-- }
+    produto_id: 15,
+    nome: 'Produto de Teste nome do produto e muito grande',
+    ativo: 1,
+    produto: null,
+    categoria: '',
+    marca: 'maraca a',
+    modelo: 'modelo a',
+    variante_id: 21,
+    preco: '10.99',
+    tamanho: '9 pol',
+    quantidade: '25',
+    referencia: '',
+    vendas: 0,
+    ean: '1231231231231',
+    estoque: 3,
+    custo: '0.00',
+    imagem: 'Coelhos-de-Pascoa-com-IA-Fazendo-a-Nossa-Festa-3.png'
+}  -->

@@ -8,6 +8,13 @@
     const right =  gerarIdAleatorio()
 %>
 
+<!-- salvar produtos no localstorage -->
+<script>
+   const produtosSemQuebraDeLinha = `<%- JSON.stringify(data).replace(/[\n\r]/g, '').replace(/\\/g, '\\\\') %>`;
+    const produtosJson = JSON.parse(produtosSemQuebraDeLinha);
+    localStorage.produtos = JSON.stringify( produtosJson );
+</script>
+
 <section class="py-5 relative lg:px-14 ">
     <% if (typeof titulo != "undefined" && titulo) { %>
         <h2 class="text-2xl text-center font-semibold text-gray-700">
@@ -31,7 +38,6 @@
          
         <% if (typeof data != 'undefined' && data) { %>
             <% data.forEach(produto => { %>
-               
                 <%- include('cardProduto',  {data:produto}) %>
             <% }) %>
         <% } %>
