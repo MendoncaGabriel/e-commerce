@@ -78,13 +78,12 @@ class Modal {
         };
     };
     adicionarAoCarrinho(){
-        
         if(!localStorage.carrinho || localStorage.carrinho == '[]' ){
             localStorage.carrinho = JSON.stringify([this.produto]); 
             this.alertaQTD();
             this.fechar();
             return 
-        } ;
+        };
 
         const carrinho = JSON.parse(localStorage.carrinho);
     
@@ -112,6 +111,42 @@ class Modal {
         localStorage.carrinho = JSON.stringify(carrinho);
         this.alertaQTD();
         this.fechar();
+    };
+    finalizarCompra(){
+        console.log(this.produto)
+
+        if(!localStorage.carrinho || localStorage.carrinho){
+            localStorage.carrinho = JSON.stringify([this.produto]);
+        }else{
+            const carrinho = JSON.parse(localStorage.carrinho);
+            carrinho.push(this.produto);
+            localStorage.carrinho = JSON.stringify(carrinho);
+        };
+        this.adicionarAoCarrinho();
+        this.fechar();
+        const abrirCarrinho = new Carrinho()
+        abrirCarrinho.abrir()
+
+
+        return
+        if(!localStorage.carrinho || localStorage.carrinho == '[]'){
+            alert('Seu carrinho está vazio!')
+        };
+          
+        const carrinho = JSON.parse(localStorage.carrinho);
+        const cookie = [];
+        carrinho.forEach(e => {
+            cookie.push({
+                produto_id: e.produto_id, 
+                variante_id: e.variante_id, 
+                qtdProduto: e.qtdProduto
+            });
+        });
+
+        console.log(cookie)
+        this.setCookie('carrinho', cookie, 30);
+        
+        window.location.href = '/checkout';
     };
 }
 const modal = new Modal();

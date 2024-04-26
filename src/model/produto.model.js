@@ -317,7 +317,7 @@ module.exports = {
         }
     },
     processarCheckOut: async (carrinho) => {
-
+        
         const mapaItens = new Map();
         carrinho.forEach(item => {
             const chave = `${item.produto_id}-${item.variante_id}`;

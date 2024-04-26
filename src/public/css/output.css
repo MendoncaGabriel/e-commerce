@@ -1157,6 +1157,10 @@ video {
   max-width: 768px;
 }
 
+.max-w-screen-sm {
+  max-width: 640px;
+}
+
 .flex-none {
   flex: none;
 }

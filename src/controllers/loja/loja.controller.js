@@ -38,10 +38,6 @@ module.exports = {
     },
     checkout: async (req, res) => {
         try {
-
-
-
-
             const carrinho = JSON.parse(req.cookies.carrinho)
             const itensProcessados = await produtoModel.processarCheckOut(carrinho)
             console.log('===> itensProcessados: ', itensProcessados)

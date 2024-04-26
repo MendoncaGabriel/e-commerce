@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 class Utilitarios {
-    static #chaveSecreta  = process.env.ASSINATURA_TOKEN
+    static #chaveSecreta  = process.env.ASSINATURA_TOKEN;
 
     static verificarToken(token) {
         try {
@@ -14,9 +14,9 @@ class Utilitarios {
         } catch (error) {
             console.error('Token inválido:', error.message);
             throw new Error('Token inválido');
-        }
-    }
-}
+        };
+    };
+};
 
 router.get('/',  lojaController.home)
 router.get('/produto/:nome',  lojaController.produto)
