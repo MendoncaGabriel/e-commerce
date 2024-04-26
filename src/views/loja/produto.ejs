@@ -18,12 +18,16 @@
     <%- include('components/carroselImagens', {produto} ) %>
     <%- include('components/descricaoProduto') %>
 
-    <!-- recomendados -->
-    <%- include('components/carroselProdutos', {titulo: 'Veja Tambem!'}) %>
 
+    <!-- BTN WHATSAPP -->
+    <% if (typeof dadosEmpresa[0].whatsapp != "undefined" && dadosEmpresa[0].whatsapp ) { %>
+        <%- include('components/btnWhatsapp', {whatsapp: dadosEmpresa[0].whatsapp}) %>
+    <% } %>
 
     <%- include('components/footer', {data: dadosEmpresa}) %>
 </body>
 </html>
+<script src="/js/loja/components/modal.js"></script>
 <script src="/js/utilities/cookie.js"></script>
 <script src="/js/loja/components/carrinho.js"></script>
+<script src="/js/loja/produto.js"></script>

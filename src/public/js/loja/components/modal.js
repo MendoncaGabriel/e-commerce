@@ -12,6 +12,14 @@ class Modal {
         this.produtos = JSON.parse(localStorage.produtos);
         this.produto = {};
     };
+
+    get getProduto(){
+        return this.produto;
+    };
+    set setProduto(valor){
+        this.produto = valor;
+    };
+
     atualizarCompos(){
         imagemModal.src = '/img/'+ this.produto.imagem;
         nomeModal.innerText = this.produto.nome;
@@ -112,6 +120,26 @@ class Modal {
         this.alertaQTD();
         this.fechar();
     };
+    
+    setCookie(name, value, days) {
+        if (typeof name !== 'string' || typeof days !== 'number' || days <= 0) {
+            console.error('Parâmetros inválidos para setCookie.');
+            return;
+        }
+        if(typeof value !== 'string'){
+            value = JSON.stringify(value);
+        };
+
+        const expires = new Date();
+        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/`;
+        return {
+            msg: 'Item salvo em Cookies',
+            name: name, 
+            value: value
+        }
+    };
+
     finalizarCompra(){
         console.log(this.produto)
 
@@ -122,13 +150,12 @@ class Modal {
             carrinho.push(this.produto);
             localStorage.carrinho = JSON.stringify(carrinho);
         };
+
         this.adicionarAoCarrinho();
         this.fechar();
         const abrirCarrinho = new Carrinho()
         abrirCarrinho.abrir()
 
-
-        return
         if(!localStorage.carrinho || localStorage.carrinho == '[]'){
             alert('Seu carrinho está vazio!')
         };
@@ -142,8 +169,6 @@ class Modal {
                 qtdProduto: e.qtdProduto
             });
         });
-
-        console.log(cookie)
         this.setCookie('carrinho', cookie, 30);
         
         window.location.href = '/checkout';
