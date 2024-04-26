@@ -1,3 +1,5 @@
-<div class="bg-pink-300 p-2 text-sm text-white text-center">
-    <p>Aviso</p>
-</div>
+<% if (typeof aviso != "undefined" && aviso) { %>
+    <div class=" bg-gradient-to-tr from-pink-400 to-pink-300 p-2 text-sm text-white text-center">
+        <p class="font-semibold drop-shadow-md"><%= aviso %></p>
+    </div>
+<% } %>
