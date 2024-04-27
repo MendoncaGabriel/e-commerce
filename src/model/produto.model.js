@@ -333,8 +333,6 @@ module.exports = {
 
         // Converter o mapa de volta para um array
         const itensAgrupados = Array.from(mapaItens.values());
-      
-        console.log('===> itensAgrupados: ', itensAgrupados);
         const itens = []
     
         for (const e of itensAgrupados) {

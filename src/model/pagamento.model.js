@@ -5,8 +5,6 @@ module.exports = {
         if (!valor || valor <= 0) {
             throw new Error('Valor inválido');
         }
-        console.log('===> token: ', token)
-        console.log('===> valor: ', valor)
         
         return new Promise((resolve, reject) => {
             const url = process.env.API_QRCODEPIX;

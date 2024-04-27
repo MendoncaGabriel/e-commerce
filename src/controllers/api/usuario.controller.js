@@ -20,5 +20,30 @@ module.exports = {
             console.log(error)
             res.status(500).json(error);
         };
+    },
+    endereco: async (req, res) => {
+        try {
+            const tokenUsuario = req.cookies.token;
+            const {rua, numero, bairro, cidade, uf, pontoReferencia, tel1, tel2} = req.body;
+            const enderecoUsuario = await  usuarioModel.atualizarendereco(rua, numero, bairro, cidade, uf, pontoReferencia, tel1, tel2, tokenUsuario);
+
+            res.status(200).json(enderecoUsuario);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(error);
+        }
+    },
+    pedido: async (req, res) => {
+        try {
+            const tokenUsuario = req.cookies.token;
+            const pedido = req.body;
+            console.log('===> pedido: ',pedido)
+            
+            
+            const result = await usuarioModel.registarPedido(pedido, tokenUsuario)
+        } catch (error) {
+            console.log(error);
+            res.status(500).json(error);
+        }
     }
 };

@@ -30,6 +30,10 @@ router.post('/pagamento/qrcodepix', pagamentoController.gerarQrCodePix)
 
 //USUARIOS
 router.post('/usuario/novo', usuarioController.novoUsuario )
+router.patch('/usuario/endereco', usuarioController.endereco )
+
+//PEDIDOS
+router.post('/usuario/pedido', usuarioController.pedido)
 
 
 

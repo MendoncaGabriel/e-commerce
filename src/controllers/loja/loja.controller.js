@@ -1,7 +1,7 @@
 const produtoModel = require('../../model/produto.model')
 const categoriaModel = require('../../model/categoria.model')
 const empresa = require('../../model/config.model')
-
+const usuarioModel = require('../../model/usuario.model');
 
 module.exports = {
     home: async (req, res) => {
@@ -40,10 +40,19 @@ module.exports = {
         try {
             const carrinho = JSON.parse(req.cookies.carrinho)
             const itensProcessados = await produtoModel.processarCheckOut(carrinho)
-            console.log('===> itensProcessados: ', itensProcessados)
+            const pedido = [];
 
+            itensProcessados.itens.forEach(element => {
+                pedido.push({
+                    produto_id: element.produto_id, 
+                    variante_id: element.variante_id, 
+                    qtdProduto: element.qtdProduto
+                });
+            });
+          
+            const endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token)
                
-            res.render('loja/checkout', {itensProcessados})
+            res.render('loja/checkout', {itensProcessados, endereco, pedido})
         } catch (error) {
             console.log(error)
         }

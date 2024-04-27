@@ -45,8 +45,7 @@ class Utilitarios {
             throw new Error('Token inválido');
         }
     }
-}
-
+};
 
 class Usuario {
     constructor(nome, email, senha, telefone){
@@ -85,21 +84,86 @@ class Usuario {
 
 module.exports = {
     novoUsuario: async (nome, email, senha, telefone) => {
-        const usuario = new Usuario(nome, email, senha, telefone)
-        usuario.senha = await Utilitarios.criptografarSenha(senha)
-        usuario.token = await Utilitarios.gerarToken({nome, email, senha, telefone})
-
-
+        const usuario = new Usuario(nome, email, senha, telefone);
+        usuario.senha = await Utilitarios.criptografarSenha(senha);
+    
         const sql = 'INSERT INTO usuarios (nome, email, senha, telefone) VALUES (?, ?, ?, ?);';
         const values = [usuario.nome, usuario.email, usuario.senha, usuario.telefone];
-
+    
         return new Promise(async (resolve, reject) => {
             try {
                 const result = await executarSql(sql, values);
-                resolve({ msg: 'Usuário criado com sucesso!', id: result.insertId, token: usuario.token });
+                const id = result.insertId;
+    
+                // Adiciona o ID ao token do usuário
+                usuario.token = await Utilitarios.gerarToken({ id, nome, email, senha, telefone });
+    
+                resolve({ msg: 'Usuário criado com sucesso!', id, token: usuario.token });
             } catch (error) {
                 reject({ msg: 'Erro ao salvar usuário!', error });
             }
         });
+    },
+    atualizarendereco: async (rua, numero, bairro, cidade, uf, pontoReferencia, tel1, tel2, tokenUsuario) => {
+    
+        const sql = `
+        UPDATE usuarios 
+        SET rua = ?, numero = ?, bairro = ?, cidade = ?, uf = ?, pontoReferencia = ?, tel1 = ?, tel2 = ?
+        WHERE idusuarios = ?;
+        `;
+
+        const usuarioId = await Utilitarios.verificarToken(tokenUsuario).id
+        const values = [rua, numero, bairro, cidade, uf, pontoReferencia, tel1, tel2, usuarioId];
+
+        return new Promise (async (resolve, reject) => {
+            try {
+                const result = await executarSql(sql, values);
+                console.log(result);
+                resolve({ msg: 'Endereço do usuário atualizado!'});
+            } catch (error) {
+                reject({ msg: 'Erro ao atualizar endereço do usuario', error });
+            };
+        });
+    },
+    pegarEnderecoUsuario: async (tokenUsuario) => {
+        const sql = `
+        SELECT rua, numero, bairro, cidade, uf, pontoReferencia, tel1, tel2 
+        FROM usuarios 
+        WHERE idusuarios = ?;
+        `;
+    
+        // Obtém o ID do usuário a partir do token
+        const { id } = await Utilitarios.verificarToken(tokenUsuario);
+    
+        // Prepara os valores para a consulta SQL
+        const values = [id];
+    
+        return new Promise(async (resolve, reject) => {
+            try {
+                // Executa a consulta SQL
+                const result = await executarSql(sql, values);
+                resolve(result[0]);
+            } catch (error) {
+                reject({ msg: 'Erro ao pegar endereço do usuário', error });
+            }
+        });
+    },
+    registarPedido: async (pedido, tokenUsuario) => {
+        const { id } = await Utilitarios.verificarToken(tokenUsuario);
+        const sql = "INSERT INTO pedidos (status, qtdProduto, usuarios_idusuarios, produtos_produto_id, variantes_variante_id, data) VALUES (?, ?, ?, ?, ?, ?);"
+     
+        try {
+            await Promise.all(pedido.map(async element => {
+                let data = new Date()
+                const values = ['Aguardando Pagamento', element.qtdProduto, id, element.produto_id, element.variante_id, data ];
+                const result = await executarSql(sql, values);
+                console.log(result);
+            }));
+        } catch (error) {
+            console.error("Erro ao registrar pedido:", error);
+        }
     }
+    
+    
+
 }

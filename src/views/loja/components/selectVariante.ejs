@@ -9,7 +9,7 @@
                 <% 
                     let texto = ''    
                     texto += typeof item.tamanho != "undefined" && item.tamanho ? `Tamanho: ${item.tamanho}` : ''
-                    texto +=  typeof item.quantidade != "undefined" && item.quantidade ? ` -- Pacote com: ${item.quantidade}` : ''
+                    texto +=  typeof item.quantidade != "undefined" && item.quantidade ? ` / Pct.: ${item.quantidade}` : ''
                 %>
                 <option estoque="<%= item.estoque ?? 0 %>" value="<%= item.variante_id %>" class="w-full bg-white block shadow-sm">
                     <%= texto %>

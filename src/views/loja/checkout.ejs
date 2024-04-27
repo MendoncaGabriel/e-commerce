@@ -9,19 +9,38 @@
         <!-- TAILWINDCSS -->
         <link rel="stylesheet" href="/css/output.css">
 </head>
-<body>
-    <style>
-        #listaProdutosCarrinho {
-            max-height: calc(100vh - 339px);
-            overflow-y: auto; 
-        }
-    </style>
-    <section id="carrinho" class=" m-auto   w-[90%] z-50 duration-300  bg-white flex flex-col justify-between max-w-screen-md ">
-        <div class="text-right text-gray-700 text-xl flex flex-col">
-            <h2 class="w-full p-4 text-2xl text-center font-light">LISTA DE PRODUTOS</h2>
+<style>
+    #listaProdutosCarrinho {
+        max-height: calc(100vh - 339px);
+        overflow-y: auto; 
+    }
+    .progress-bar {
+        --progress: 100;
+        height: 25px;
+        border-radius: 25px;
+        background-color: #dfdfdf;
+        display: flex;
+    }
+    .progress-bar::before {
+        border-radius: 25px;
+        content: "";
 
-            <!-- LISTA DE PRODUTOS NO CARRINHO -->
-            <ul id="listaProdutosCarrinho" class="overflow-y-auto h-screen shadow-lg text-xl text-left p-4 bg-gray-50 rounded-lg">
+        width: calc(var(--progress) * 1%);
+        background-color: hsl(calc(var(--progress) * 1.2), 80%, 50%);
+        transition: all 1s linear;
+    }
+</style>
+<body class="bg-gray-100">
+    <script>
+        window.pedido = `<%- JSON.stringify(pedido).replace(/[\n\r]/g, '').replace(/\\/g, '\\\\') %>`;
+    </script>
+
+    <!-- FORMULARIOS -->
+    <section id="carrinho" class=" m-auto w-[90%] z-50 duration-300 flex flex-col justify-between max-w-screen-md space-y-4 pt-5 ">
+        <!-- LISTA DE PRODUTOS NO CARRINHO -->
+        <div class="text-right text-gray-700 text-xl flex flex-col border-2 border-blue-500 rounded-lg bg-white shadow-md">
+            <ul id="listaProdutosCarrinho" class="overflow-y-auto h-screen  text-xl text-left p-4  ">
+                <h2 class="w-full p-4 pt-0 text-lg text-center font-light">LISTA DE PRODUTOS</h2>
                 <% if (typeof itensProcessados.itens != 'undefined' && itensProcessados.itens) { %>                 
                     <% itensProcessados.itens.forEach(e => { %>
                         <li class="border-b-2 border-blue-500 text-gray-700 flex items-center justify-between border-dashed pb-2  gap-2 ">
@@ -41,68 +60,73 @@
             </ul>
         </div>
 
-        <div>
+        <!-- ENDEREÇO DE ENTREGA -->
+        <div class="text-xl text-left p-4 bg-white rounded-lg  border-2 border-blue-500 shadow-md">
+            <h2 class="w-full p-4 pt-0 text-lg text-center font-light">ENDEREÇO DE ENTREGA</h2>
+            
+            <div class="text-gray-700 text-sm   m-auto space-y-2 ">
+
+                <div class="flex justify-between items-center space-x-4">
+                    <div class="w-full">
+                        <label for="">Rua: <span class="text-red-400">*</span></label><br>
+                        <input id="rua" maxlength="45" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.rua ?? ''  %>">
+                    </div>
+                    <div>
+                        <label for="">Numero: <span class="text-red-400">*</span></label><br>
+                        <input autocomplete="address-line2" id="numero" type="text" maxlength="5" class="bg-gray-100 focus:outline-none focus:border-blue-500 px-2 py-1 w-20" value="<%= endereco.numero ?? ''  %>">
+                    </div>
+                </div>
+
+                <div class="w-full">
+                    <label for="">Bairro: <span class="text-red-400">*</span></label><br>
+                    <input autocomplete="address-level3" id="bairro" maxlength="30" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.bairro ?? ''  %>">
+                </div>
+
+                <div class="flex justify-between items-center space-x-4">
+                    <div class="w-full">
+                        <label for="">Cidade:</label><br>
+                        <select id="cidade" class="px-2 py-1 w-full  bg-gray-100" value="<%= endereco.cidade ?? ''  %>">
+                            <option value="Manaus" >Manaus</option>
+                        </select>
+                    </div>
+                    <div class="w-20 ">
+                        <label for="">UF:</label><br>
+                        <select id="uf" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.ud ?? ''  %>">
+                            <option value="AM" >AM</option>
+                        </select>
+                    </div>
+        
+                </div>
+
+                <div class="w-full">
+                    <label for="">Ponto de referência:</label><br>
+                    <input autocomplete="landmark" maxlength="45" id="pontoReferencia" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.pontoReferencia ?? ''  %>">
+                </div>
+
+                <div class="w-full">
+                    <label for="">Telefone 1: <span class="text-red-400">*</span></label><br>
+                    <input autocomplete="tel" onkeypress="mascara(this, '(##) #####-####')" maxlength="15" id="tel1" type="tel" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.tel1 ?? ''  %>">
+                </div>
+                <div class="w-full">
+                    <label autocomplete="tel-national" for="">Telefone 2: </label><br>
+                    <input onkeypress="mascara(this, '(##) #####-####')" maxlength="15" id="tel2" type="tel" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.tel2 ?? ''  %>">
+                </div>
+                <div class="pt-2 " >
+
+                    <button onclick="salvarFormulario()" id="btnSalvarEndereco" class="hidden py-2 px-4 text-white bg-green-500 duration-200 text-lg w-full ">SALVAR </button>
+                </div>
+            </div>
+        </div>
+            
+        <!-- PAGAMENTO -->
+        <div class="text-xl text-left p-4 bg-white rounded-lg  border-2 border-blue-500 shadow-md">
+            <h2 class="w-full p-4 pt-0 text-lg text-center font-light">PAGAMENTO</h2>
+
             <div class="flex justify-between items-center font-semibold text-gray-700">
                 <h2 class="p-4 text-xl " >TOTAL: </h2>
                 <h2 class="p-4 text-xl " id="subtotal">R$ <%= itensProcessados.total  %></h2>
             </div>
             <% const valorTotalAPagar = Number(itensProcessados.total.replace(',', '.')) %>
-
-            <!-- Endereço de entreha -->
-            <section class="bg-gray-100 rounded-lg shadow-md p-4 my-5">
-                <h2 class="w-full p-4 pt-0 text-lg text-center font-light">Conferir endereço de entrega</h2>
-
-                <div class="text-gray-700 text-sm   m-auto space-y-2 ">
-
-                    <div class="flex justify-between items-center space-x-4">
-                        <div class="w-full">
-                            <label for="">Rua: <span class="text-red-400">*</span></label><br>
-                            <input type="text" class="px-2 py-1 w-full">
-                        </div>
-                        <div>
-                            <label for="">Numero: <span class="text-red-400">*</span></label><br>
-                            <input type="text" class="px-2 py-1 w-20">
-                        </div>
-                    </div>
-
-                    <div class="w-full">
-                        <label for="">Bairro: <span class="text-red-400">*</span></label><br>
-                        <input type="text" class="px-2 py-1 w-full">
-                    </div>
-
-                    <div class="flex justify-between items-center space-x-4">
-                        <div class="w-full">
-                            <label for="">Cidade:</label><br>
-                            <select class="px-2 py-1 w-full bg-white">
-                                <option value="Manaus" >Manaus</option>
-                            </select>
-                        </div>
-                        <div class="w-20 ">
-                            <label for="">UF:</label><br>
-                            <select class="px-2 py-1 w-full bg-white">
-                                <option value="AM" >AM</option>
-                            </select>
-                        </div>
-           
-                    </div>
-
-                    <div class="w-full">
-                        <label for="">Ponto de referência:</label><br>
-                        <input type="text" class="px-2 py-1 w-full">
-                    </div>
-
-                    <div class="w-full">
-                        <label for="">Telefone 1: <span class="text-red-400">*</span></label><br>
-                        <input type="text" class="px-2 py-1 w-full">
-                    </div>
-                    <div class="w-full">
-                        <label for="">Telefone 2: </label><br>
-                        <input type="text" class="px-2 py-1 w-full">
-                    </div>
-                    
-
-                </div>
-            </section>
 
 
             <button onclick="gerarPixQrCode(this, '<%= valorTotalAPagar%>')" class="bg-gradient-to-l from-blue-400 to-blue-500 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
@@ -113,27 +137,8 @@
         </div>
     </section>
 
-    <!-- Barra de progresso -->
-    <style>
-        .progress-bar {
-            --progress: 100;
-            height: 25px;
-            border-radius: 25px;
-            background-color: #dfdfdf;
-            display: flex;
-        }
-        .progress-bar::before {
-            border-radius: 25px;
-            content: "";
-  
-            width: calc(var(--progress) * 1%);
-            background-color: hsl(calc(var(--progress) * 1.2), 80%, 50%);
-            transition: all 1s linear;
-        }
-    </style>
-
-    <!-- card de pagamento -->
-    <section id="sectionPix" class="hidden  max-w-screen-sm fixed top-1/2 left-1/2 p-10 bg-gradient-to-r from-cyan-100 to-blue-200 transform -translate-x-1/2 -translate-y-1/2 space-y-5 shadow-lg w-full ">
+    <!-- POPUP PAGAMENTO COM PIX -->
+    <section id="sectionPix" class="hidden  max-w-screen-sm fixed top-1/2 left-1/2 p-10 bg-gradient-to-r from-cyan-100 to-blue-200 transform -translate-x-1/2 -translate-y-1/2 space-y-5  w-full ">
        <div class="flex items-center space-x-4 pt-5">
            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart-check-fill text-blue-500" viewBox="0 0 16 16">
                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708"/>

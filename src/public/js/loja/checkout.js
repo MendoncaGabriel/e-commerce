@@ -1,11 +1,116 @@
 let tentativas = 0;
 let textoQRCode = ''
+const rua = document.getElementById('rua');
+const numero = document.getElementById('numero');
+const bairro = document.getElementById('bairro');
+const cidade = document.getElementById('cidade');
+const uf = document.getElementById('uf');
+const pontoReferencia = document.getElementById('pontoReferencia');
+const tel1 = document.getElementById('tel1');
+const tel2 = document.getElementById('tel2');
+const btnSalvarEndereco = document.getElementById('btnSalvarEndereco');
+
+function exibirBtnSalvar(){
+    btnSalvarEndereco.classList.replace('hidden', 'block');
+};
+function esconderBtnSalvar(){
+    btnSalvarEndereco.classList.replace('block', 'hidden');
+};
+function salvarFormulario(){
+    if(!validarFormulario()) return;
+    fetch('/api/usuario/endereco', {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            rua: document.getElementById('rua').value || '',
+            numero: document.getElementById('numero').value || '',
+            bairro: document.getElementById('bairro').value || '',
+            cidade: document.getElementById('cidade').value || '',
+            uf: document.getElementById('uf').value || '',
+            pontoReferencia: document.getElementById('pontoReferencia').value || '',
+            tel1: document.getElementById('tel1').value || '',
+            tel2: document.getElementById('tel2').value || ''
+        })
+    })
+    .then(res => res.json())
+    .then(res => {
+        btnSalvarEndereco.classList.replace('bg-green-500', 'bg-blue-500');
+        setTimeout(() => {
+            esconderBtnSalvar();
+            btnSalvarEndereco.classList.replace('bg-blue-500', 'bg-green-500');
+        }, 1000);
+        console.log(res)
+    })
+    .catch((erro)=>{
+        btnSalvarEndereco.classList.replace('bg-green-500', 'bg-red-500');
+        setTimeout(() => {
+            esconderBtnSalvar();
+            btnSalvarEndereco.classList.replace('bg-red-500', 'bg-green-500');
+        }, 1000);
+    })
+};
+
+//DETECTAR ALTERAÇÃO
+rua.addEventListener('input', ()=> exibirBtnSalvar());
+numero.addEventListener('input', ()=> exibirBtnSalvar());
+bairro.addEventListener('input', ()=> exibirBtnSalvar());
+cidade.addEventListener('input', ()=> exibirBtnSalvar());
+uf.addEventListener('input', ()=> exibirBtnSalvar());
+pontoReferencia.addEventListener('input', ()=> exibirBtnSalvar());
+tel1.addEventListener('input', ()=> exibirBtnSalvar());
+tel2.addEventListener('input', ()=> exibirBtnSalvar());
+
+
+function validarFormulario(){
+    let time = 2000;
+    if(rua.value.length == 0 ) { 
+        rua.classList.add('border-2', 'border-red-500'), setTimeout(() => {rua.classList.remove('border-2', 'border-red-500')}, time); return false;
+    }
+    else if(numero.value.length == 0 ) { 
+        numero.classList.add('border-2', 'border-red-500'), setTimeout(() => {numero.classList.remove('border-2', 'border-red-500')}, time); return false;
+    }
+    else if(bairro.value.length == 0 ) { 
+        bairro.classList.add('border-2', 'border-red-500'), setTimeout(() => {bairro.classList.remove('border-2', 'border-red-500')}, time); return false;
+    }
+    else if(cidade.value.length == 0 ) { 
+        cidade.classList.add('border-2', 'border-red-500'), setTimeout(() => {cidade.classList.remove('border-2', 'border-red-500')}, time); return false;
+    }
+    else if(uf.value.length == 0 ) { 
+        uf.classList.add('border-2', 'border-red-500'), setTimeout(() => {uf.classList.remove('border-2', 'border-red-500')}, time); return false;
+    }
+    else if(tel1.value.length == 0 ) { 
+        tel1.classList.add('border-2', 'border-red-500'), setTimeout(() => {tel1.classList.remove('border-2', 'border-red-500')}, time); return false;
+    }
+    else{
+        return true;
+    }
+};
+function mascara(src, mascara) {
+    const campo = src.value.length;
+    const texto = mascara.substring(campo);
+    if (texto.charAt(0) !== '#') {
+        src.value += texto.charAt(0);
+        // Verifica se o próximo caractere na máscara é um espaço
+        if (texto.charAt(1) === ' ') {
+            src.value += ' ';
+        }
+    }
+};
 
 function gerarPixQrCode(btn, valor) {
+    if (!validarFormulario()) return;
+    const pedido = JSON.parse(window.pedido);
+    if (!pedido) {
+        alert('Erro: Pedidos não foram registrados...');
+        window.location.reload();
+        return;
+    }
+
     // Remover função do botão
     btn.onclick = null;
     console.log(Number(valor));
 
+    // GERAR PIX
     fetch('/api/pagamento/qrcodepix', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -18,7 +123,7 @@ function gerarPixQrCode(btn, valor) {
                 gerarPixQrCode(btn, valor);
             }, 500);
             throw new Error('Erro na resposta da requisição.');
-        }else if(!res.ok){
+        } else if (!res.ok) {
             alert('Erro ao gerar pix, vamos tentar novamente!')
             window.location.reload()
         }
@@ -31,12 +136,23 @@ function gerarPixQrCode(btn, valor) {
             indicadorDeProgresso();
             textoQRCode = res.additional_data.qr_code;
             motrarModalQrCode(res.additional_data.qr_code);
+
+            // REGISTRAR PEDIDO após gerar o QR Code
+            return fetch('/api/usuario/pedido', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(pedido)
+            });
         } else {
             alert('Erro ao gerar pix, vamos tentar novamente!')
             window.location.reload()
             throw new Error('QR Code não encontrado na resposta.');
-        };
-
+        }
+    })
+    .then(res => res.json())
+    .then(res => {
+        console.log(res);
+        // Aqui você pode adicionar qualquer tratamento adicional após registrar o pedido, se necessário.
     })
     .catch(error => {
         console.error('Erro na requisição:', error);
