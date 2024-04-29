@@ -15,13 +15,15 @@
     localStorage.produtos = JSON.stringify( produtosJson );
 </script>
 
-<section class="py-5 relative lg:px-14 ">
+
+<section class="py-5 relative lg:px-14 flex items-start justify-center flex-col ">
     <% if (typeof titulo != "undefined" && titulo) { %>
-        <h2 class="text-2xl text-center font-semibold text-gray-700">
+        <h2 class="text-2xl text-center font-semibold text-gray-700 block m-auto">
             <%= titulo  %>
         </h2>
     <% } %>
 
+    <!-- BOTÕES -->
     <button id="<%= left %>" class=" absolute top-0 left-0 px-2  h-full  flex items-center justify-center text-4xl opacity-75 text-gray-500 hover:text-black ">
         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-left focus:outline-none" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
@@ -34,15 +36,16 @@
     </button>
     
 
-    <div id="<%= id  %>" class="flex p-5 w-full space-x-5 overflow-x-auto snap-x snap-mandatory duration-300">
+    <div id="<%= id  %>" class="flex p-5 md:p-0 w-full space-x-5 overflow-x-auto snap-x snap-mandatory duration-300">
          
         <% if (typeof data != 'undefined' && data) { %>
             <% data.forEach(produto => { %>
                 <%- include('cardProduto',  {data:produto}) %>
             <% }) %>
         <% } %>
-      
     </div>
+
+    <a href="#" class="pt-4 pl-5 hover:underline  text-lg text-blue-500" >Ver mais</a>
 </section>
 
 <script>

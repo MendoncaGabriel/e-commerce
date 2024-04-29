@@ -1,0 +1,56 @@
+<!-- salvar produto no localstorage -->
+<script>
+    const produtosSemQuebraDeLinha = `<%- JSON.stringify(produto).replace(/[\n\r]/g, '').replace(/\\/g, '\\\\') %>`;
+    const produtosJson = JSON.parse(produtosSemQuebraDeLinha);
+    localStorage.paginaProduto = JSON.stringify( produtosJson );
+</script>
+
+<section class="p-5 text-gray-700">
+    <h2 class=" text-2xl leading-7 font-bold"><%=typeof produto[0] != "undefined" && produto[0] ? produto[0].nome : ""  %></h2>
+
+    <!-- NOME DE PREÇO -->
+    <div class="p-2 space-x-2">
+        <span class="text-3xl text-blue-500 font-semibold text-center block " id="preco">R$ <%= produto[0].preco.replace('.', ',') ?? ""  %></span>
+    </div>
+
+    <!-- MEIOS DE PAGAMENTO -->
+    <div class="p-2 text-gray-500 ">
+        <div>
+            <i class="bi bi-credit-card-2-front mr-1"></i>
+            <span class="font-semibold ">3x de R$3,66 sem juros</span>
+        </div>
+        <div>
+            <i class="bi bi-cash"></i>
+            <span class="font-semibold ">2% de desconto Pagando com Pix</span>
+        </div>
+    </div>
+
+
+    <!-- SELEÇÃO DE VARIANTES -->
+    <div class="space-y-2 my-2">
+        <% if (produto) { %>
+            <%- include('./selectVariante', {titulo: 'OPÇÕES', opcoes: produto, id: 'variantesSelect'}) %>
+        <% } %>
+    </div>
+
+    <!-- Controle de quantidade -->
+    <div class="flex items-center   text-blue-500 my-5 " style="height: 50px;">
+        <div class="flex items-center justify-around rounded-tl-lg rounded-bl-lg border-2 border-blue-500 " style="height: 100%;">
+            <button onclick="produto.maisQTD()"  class="text-3xl w-10 h-9 flex items-center justify-center"><i class="bi bi-plus-circle-fill leading-3"></i></button>
+            <input readonly id="quantidadeProduto" type="number" value="1" class="text-xl w-10 lg:pl-3 focus:outline-none text-center">
+
+            <button onclick="produto.menosQTD()"  class="text-3xl w-10 h-9 flex items-center justify-center"><i class="bi bi-dash-circle leading-3"></i></button>
+        </div>
+        <button onclick="produto.finalizarCompra()" class="w-full bg-blue-500 px-4 font-bold text-white block h-full rounded-br-lg rounded-tr-lg">COMPRAR</button>
+    </div>
+
+    <div>
+        <button id="btnAdicionarProdutoAoCarrinho" onclick="produto.adicionarAoCarrinho()" class="bg-blue-500  duration-200 text-white px-4 py-2 w-full rounded-lg flex items-center space-x-2 justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart-plus " viewBox="0 0 16 16">
+                <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z"/>
+                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+            </svg>
+            <p>Adicionar ao Carrinho</p>
+        </button>
+    </div>
+</section>

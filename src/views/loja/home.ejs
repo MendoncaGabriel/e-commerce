@@ -20,7 +20,7 @@
     <%- include('components/carroselBanner') %>
     <%- include('components/carroselProdutos', {titulo: carrosel_1_titulo, data: carrosel_1_data}) %>
     <%- include('components/newsletter') %>
-    <%- include('components/sigaNoInstagram') %>
+    <%- include('components/sigaNoInstagram', {data: dadosEmpresa[0].instagram}) %>
     <%- include('components/footer', {data: dadosEmpresa}) %>
 
     <!-- BTN WHATSAPP -->

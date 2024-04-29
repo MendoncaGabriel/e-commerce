@@ -1,8 +1,8 @@
-<footer class="w-full p-5 md:p-8 lg:p-16 bg-yellow-100 aspect-square" style="background-image: url('/assets/fundo sb.png');">
-    <div class="m-auto max-w-screen-2xl">
+<footer class="w-full p-5 md:p-8 lg:p-16 bg-yellow-100 " style="background-image: url('/assets/fundo sb.png');">
+    <div class="m-auto max-w-screen-lg">
         <!-- PAGINAS -->
         <h2 class="text-center text-xl font-semibold mb-5 text-gray-50 bg-pink-400 px-10 m-auto py-2 rounded-full w-40">Páginas</h2>
-        <div class="bg-gray-50 p-4 rounded-lg">
+        <div class="bg-gray-50 p-4 rounded-xl">
             <ul class="space-y-1 text-gray-700 text-md lg:text-lg ">
                 <li>
                     <a href="#" class="flex items-center space-x-2">
@@ -60,7 +60,7 @@
     
 
         <h2 class="text-center text-xl font-semibold mb-5 text-gray-50 bg-pink-400 px-10 m-auto py-2 rounded-full w-52">Fale Conosco</h2>
-        <div class="bg-gray-50 p-4 rounded-lg">
+        <div class="bg-gray-50 p-4 rounded-xl">
             <ul class="space-y-2 ">
                 <!-- EMAIL -->
                 <% if (typeof data[0].email != "undefined" && data[0].email) { %>
@@ -84,64 +84,63 @@
                     <%- include('maps', {maps_iframe: data[0].maps_iframe}) %>
                 <% } %>
             </ul>
-        </div>
-    
-        <br><hr class="border border-blue-300"><br>
-    
-        <!-- REDES SOCIAIS -->
-        <h2 class="text-center text-xl font-semibold mb-5 text-gray-50 bg-pink-400 px-10 m-auto py-2 rounded-full w-72">Siga nas redes sociais</h2>
-        <div  class="bg-gray-50 p-4 rounded-lg">
-            <div class="flex space-x-4">
-                <!-- FACEBOOK -->
-                <% if (typeof data[0].facebook != "undefined" && data[0].facebook) { %>         
-                    <a href="<%= data[0].facebook  %>" target="_blank" >
-                        <img src="/assets/facebook.png" alt="" class="w-14 h-14 aspect-square  object-cover rounded-full hover:scale-110 duration-200">
-                    </a>
-                <% } %>
-        
-                <!-- INSTAGRAM -->
-                <% if (typeof data[0].instagram != "undefined" && data[0].instagram) { %>
-                    <a href="<%= data[0].instagram %>"  target="_blank">
-                        <img src="/assets/instagram.png" alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
-                    </a>
-                <% } %>
-        
-                <!-- WHATSAPP -->
-                <% if (typeof data[0].whatsapp != "undefined" && data[0].whatsapp) { %>         
-                    <a href="https://api.whatsapp.com/send?phone=<%= data[0].whatsapp %>" target="_blank">
-                        <img src="/assets/whatsapp2.png"  alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
-                    </a>
-                <% } %>
-        
-                <!-- TIKTOK -->
-                <% if (typeof data[0].tiktok != "undefined" && data[0].tiktok) { %>         
-                    <a href="<%= ata[0].tiktok %>" target="_blank">
-                        <img src="/assets/tiktok.png"  alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
-                    </a>
-                <% } %>
-        
-                <!-- PINTEREST -->
-                <% if (typeof data[0].pinterest != "undefined" && data[0].pinterest) { %>         
-                    <a href="<%= data[0].pinterest %>" target="_blank">
-                        <img src="/assets/pinterest.png"  alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
-                    </a>
-                <% } %>
-            </div>
-        </div>
-    
-        <br><hr class="border border-blue-300"><br>
-        <h2 class="text-center text-xl font-semibold mb-5 text-gray-50 bg-pink-400 px-10 m-auto py-2 rounded-full w-72">Meios de pagamento</h2>
 
-        
-        <div class="bg-gray-50 p-4 rounded-lg flex flex-wrap space-x-2 space-y-2 items-center justify-around">
-            <img src="/icons/amex@2x.png"       class="w-16 h-8 object-cover" alt="icone">
-            <img src="/icons/aura@2x.png"       class="w-16 h-8 object-cover" alt="icone">
-            <img src="/icons/discover@2x.png"   class="w-16 h-8 object-cover" alt="icone">
-            <img src="/icons/elo@2x.png"        class="w-16 h-8 object-cover" alt="icone">
-            <img src="/icons/hipercard@2x.png"  class="w-16 h-8 object-cover" alt="icone">
-            <img src="/icons/mastercard@2x.png" class="w-16 h-8 object-cover" alt="icone">
-            <img src="/icons/pix@2x.png"        class="w-16 h-8 object-cover" alt="icone">
-            <img src="/icons/visa@2x.png"       class="w-16 h-8 object-cover" alt="icone">
+            <div  class="pt-4 rounded-lg">
+                <div class="flex space-x-4">
+                    <!-- FACEBOOK -->
+                    <% if (typeof data[0].facebook != "undefined" && data[0].facebook) { %>         
+                        <a href="<%= data[0].facebook  %>" target="_blank" >
+                            <img src="/assets/facebook.png" alt="" class="w-14 h-14 aspect-square  object-cover rounded-full hover:scale-110 duration-200">
+                        </a>
+                    <% } %>
+            
+                    <!-- INSTAGRAM -->
+                    <% if (typeof data[0].instagram != "undefined" && data[0].instagram) { %>
+                        <a href="<%= data[0].instagram %>"  target="_blank">
+                            <img src="/assets/instagram.png" alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
+                        </a>
+                    <% } %>
+            
+                    <!-- WHATSAPP -->
+                    <% if (typeof data[0].whatsapp != "undefined" && data[0].whatsapp) { %>         
+                        <a href="https://api.whatsapp.com/send?phone=<%= data[0].whatsapp %>" target="_blank">
+                            <img src="/assets/whatsapp2.png"  alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
+                        </a>
+                    <% } %>
+            
+                    <!-- TIKTOK -->
+                    <% if (typeof data[0].tiktok != "undefined" && data[0].tiktok) { %>         
+                        <a href="<%= ata[0].tiktok %>" target="_blank">
+                            <img src="/assets/tiktok.png"  alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
+                        </a>
+                    <% } %>
+            
+                    <!-- PINTEREST -->
+                    <% if (typeof data[0].pinterest != "undefined" && data[0].pinterest) { %>         
+                        <a href="<%= data[0].pinterest %>" target="_blank">
+                            <img src="/assets/pinterest.png"  alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+            
+        </div>
+
+    
+        <!-- desativado tempora -->
+        <div class="hidden">
+            <br><hr class="border border-blue-300"><br>
+            <h2 class="text-center text-xl font-semibold mb-5 text-gray-50 bg-pink-400 px-10 m-auto py-2 rounded-full w-72">Meios de pagamento</h2>
+            <div class="bg-gray-50 p-4 rounded-lg  flex-wrap space-x-2 space-y-2 items-center justify-around flex"> 
+                <img src="/icons/amex@2x.png"       class="w-16 h-8 object-contain" alt="icone">
+                <img src="/icons/aura@2x.png"       class="w-16 h-8 object-contain" alt="icone">
+                <img src="/icons/discover@2x.png"   class="w-16 h-8 object-contain" alt="icone">
+                <img src="/icons/elo@2x.png"        class="w-16 h-8 object-contain" alt="icone">
+                <img src="/icons/hipercard@2x.png"  class="w-16 h-8 object-contain" alt="icone">
+                <img src="/icons/mastercard@2x.png" class="w-16 h-8 object-contain" alt="icone">
+                <img src="/icons/pix@2x.png"        class="w-16 h-8 object-contain" alt="icone">
+                <img src="/icons/visa@2x.png"       class="w-16 h-8 object-contain" alt="icone">
+            </div>
         </div>
     
         <br><hr class="border border-blue-300"><br>
@@ -154,7 +153,7 @@
     
     
         <% if ( nome_fantasia != ''  ) { %>
-            <p class="text-sm text-gray-600 pt-10 pb-1 text-center">Copyright <%= nome_fantasia  %> - <%= data_criacao %> <br> <%= 'CNPJ: ' + cnpj %> <br> Todos os direitos reservados.</p>
+            <p class="text-sm text-gray-600 pt-5 pb-1 text-center">Copyright <%= nome_fantasia  %> - <%= data_criacao %> <br> <%= 'CNPJ: ' + cnpj %> <br> Todos os direitos reservados.</p>
         <% } %>
     </div>
 
