@@ -3,30 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop dos Balões</title>
+    <title><%= titulo ?? '' %></title>
     <!-- BOOTSTRAP ICONS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <!-- TAILWINDCSS -->
     <link rel="stylesheet" href="/css/output.css">
 </head>
-<body class="max-w-screen-md md:max-w-none m-auto relative">
 
+<body class="max-w-screen-md md:max-w-none m-auto relative">
     <%- include('components/aviso', {aviso: "VENDAS SOMENTE PARA REGIÃO NORTE"}) %>
     <%- include('components/navbar') %>
     <%- include('components/modal') %>
     <%- include('components/menu') %>
     <%- include('components/carrinho') %>
     <%- include('components/categorias', {data: categorias}) %>
-    <%- include('components/carroselBanner') %>
-    <%- include('components/carroselProdutos', {titulo: carrosel_1_data[0].categoria, data: carrosel_1_data}) %>
-    <%- include('components/newsletter') %>
-    <%- include('components/sigaNoInstagram', {data: dadosEmpresa[0].instagram}) %>
-    <%- include('components/footer', {data: dadosEmpresa}) %>
-
-    <!-- BTN WHATSAPP -->
-    <% if (typeof dadosEmpresa[0].whatsapp != "undefined" && dadosEmpresa[0].whatsapp ) { %>
-        <%- include('components/btnWhatsapp', {whatsapp: dadosEmpresa[0].whatsapp}) %>
-    <% } %>
+    
+    <section class="border max-w-screen-md m-auto grid grid-cols-2 justify-center items-center  gap-y-3 py-2">
+        <% for( let i = 0; i < produtosCategoria.length; i++ ) { %>
+            <!-- PRODUTO CARD -->
+            <%- include('./components/cardProduto', { data: produtosCategoria[i] }) %>
+        <% } %>
+    </section>
 
 </body>
 </html>

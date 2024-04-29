@@ -34,6 +34,15 @@
     <script>
         window.pedido = `<%- JSON.stringify(pedido).replace(/[\n\r]/g, '').replace(/\\/g, '\\\\') %>`;
     </script>
+    <% 
+        function stringParaReal(string) {
+            let number = typeof string == 'string'? Number(string) : string;
+            let fixed = typeof number == "number" ? number.toFixed(2): number
+            let string2 = typeof fixed != "string" ? String(fixed) : fixed
+            let real = typeof string2 == 'string' ? string2.replace('.', ',') : string2
+            return real;
+        }
+    %>
 
     <!-- FORMULARIOS -->
     <section id="carrinho" class=" m-auto w-[90%] z-50 duration-300 flex flex-col justify-between max-w-screen-md space-y-4 pt-5 ">
@@ -48,11 +57,10 @@
                                 <%= e.nome_produto %>
                             </span> 
 
-                            <% let totalUnidade = Number(e.preco) *  Number(e.qtdProduto)  %>
+                            <% let totalUnidade =   stringParaReal(e.preco)  %>
                             <span class="text-right text-md w-24  flex-none text-sm ">
-                                
-                                R$ <%= e.preco %> x  <%= e.qtdProduto %> <br>
-                                = R$ <%= totalUnidade %>
+                                R$ <%= stringParaReal(e.preco) %> x  <%= stringParaReal(e.qtdProduto) %> <br>
+                                <span class="px-2  rounded-full bg-blue-500 text-white  leading-5">= R$ <%= totalUnidade %></span>
                             </span>
                         </li>
                     <% }) %>
@@ -121,15 +129,15 @@
         <!-- PAGAMENTO -->
         <div class="text-xl text-left p-4 bg-white rounded-lg  border-2 border-blue-500 shadow-md">
             <h2 class="w-full p-4 pt-0 text-lg text-center font-light">PAGAMENTO</h2>
+            <% console.log(itensProcessados.total) %>
+            <% const valorTotalAPagar = typeof itensProcessados.total != "string" ? stringParaReal(itensProcessados.total) : itensProcessados.total  %>
 
             <div class="flex justify-between items-center font-semibold text-gray-700">
                 <h2 class="p-4 text-xl " >TOTAL: </h2>
-                <h2 class="p-4 text-xl " id="subtotal">R$ <%= itensProcessados.total  %></h2>
+                <h2 class="p-4 text-xl " id="subtotal">R$ <%= valorTotalAPagar %></h2>
             </div>
-            <% const valorTotalAPagar = Number(itensProcessados.total.replace(',', '.')) %>
 
-
-            <button onclick="gerarPixQrCode(this, '<%= valorTotalAPagar%>')" class="bg-gradient-to-l from-blue-400 to-blue-500 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
+            <button onclick="gerarPixQrCode(this, '<%= valorTotalAPagar %>')" class="bg-gradient-to-l from-blue-400 to-blue-500 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
                 <img src="/icons/logo-pix-520x520.png" alt="" class="w-10">
                 <p class="text-xl leading-none ">PAGAR COM PIX</p>
             </button>

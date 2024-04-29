@@ -90,9 +90,7 @@ module.exports = {
                 GROUP BY produto_id
             ) v ON p.produto_id = v.produto_id
             ORDER BY p.produto_id
-            LIMIT ?, ?;
-            
-            `
+            LIMIT ?, ?;`;
             const values = [offset, limit];
             const result = await  executeSql(sql, values)
             return  result
@@ -361,5 +359,18 @@ module.exports = {
 
         //calcular total
         return {itens, total}
+    },
+    getProdutosCategoria: async (categoria) => {
+        //console.log('===> categoria: ', categoria);
+        //buscar protudutos por categoria e juntar com variantes que possuem mesmo produto_id
+        const sql = `
+        SELECT produtos.*, variantes.*
+        FROM produtos 
+        JOIN variantes ON produtos.produto_id = variantes.produto_id
+        WHERE produtos.categoria = ?`;
+
+        const values = [categoria];
+        const result = await  executeSql(sql, values);
+        return result;
     }
 }

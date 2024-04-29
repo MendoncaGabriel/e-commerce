@@ -4,7 +4,6 @@ const caregoriaModel = require('../../model/categoria.model')
 module.exports = {
     home: (req, res) => {
         res.render('admin/layout', {titulo: 'home'});
-
     },
     cadastroProduto: async (req, res) => {
         const categorias = await caregoriaModel.categorias()
@@ -32,7 +31,6 @@ module.exports = {
             conteudo: './conteudo/listaProduto', 
             produtos: produtos
         })
-
     },
     categorias: async (req, res) => {
         const categorias = await caregoriaModel.categorias()

@@ -1,32 +1,21 @@
-<% 
-    function tratarNome(nome) {
-        if(typeof nome != "undefined" && nome){
-            return nome.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, '-');
-        }else{
-            console.log('Erro ao tratar nome')
-            return ''
-        }
-    }
-%>
-
-<div class="border w-56 h-96 rounded-2xl overflow-hidden text-gray-700 flex-none snap-center">
+<% function tratarNome(nome) {
+    return nome.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, '-');
+}%>
+<% console.log(data.nome) %>
+<div class="border w-44 md:w-56 md:h-96 h-80 rounded-2xl overflow-hidden text-gray-700 flex-none snap-center m-auto ">
     <img 
         src="<%= typeof data.imagem !== 'undefined' && data.imagem ? '/img/' + data.imagem : '' %>" 
         alt="imagem do produto"
-        onerror="this.src='assets/produto-default.png'"
+        onerror="this.src='/assets/produto-default.png'"
         class="w-full aspect-square object-cover border-b"
     >
-    <div class="p-4 flex flex-col items-center justify-around">
+    <div class="md:p-4 p-1 flex flex-col items-center justify-around">
         <h2 class="h-[50px] overflow-hidden text-sm"><%= data.nome ?? '' %></h2>
         <h2 class="text-2xl text-gray-700 font-semibold text-center">R$ <%= typeof data.preco != 'undefine' && data.preco ? String(data.preco).replace('.', ',') : ''  %></h2>
-
         <div class="text-sm font-semibold font-white py-2 flex items-center justify-around w-full space-x-4 z-40">
-            
-            <a href="/produto/<%= tratarNome(data.nome)  %>" class="bg-blue-400 px-5 py-2 rounded-full  text-sm text-white  h-10 flex items-center justify-center">
+            <a href="/produto/<%= tratarNome(data.nome)  %>" class="bg-blue-400 md:px-5 px-3 py-2 rounded-full text-xs md:text-sm text-white  h-10 flex items-center justify-center">
                 VER PRODUTO
             </a>
-
-    
             <button 
                 class="bg-white hover:bg-blue-400 border border-blue-400 hover:border-none p-2 rounded-full h-10 w-10 text-blue-400 hover:text-white leading-3 text-xl"
                 onclick="modal.abrir('<%= data.variante_id%>')" 
@@ -36,24 +25,3 @@
         </div>
     </div>
 </div>
-
-
-<!-- }
-    produto_id: 15,
-    nome: 'Produto de Teste nome do produto e muito grande',
-    ativo: 1,
-    produto: null,
-    categoria: '',
-    marca: 'maraca a',
-    modelo: 'modelo a',
-    variante_id: 21,
-    preco: '10.99',
-    tamanho: '9 pol',
-    quantidade: '25',
-    referencia: '',
-    vendas: 0,
-    ean: '1231231231231',
-    estoque: 3,
-    custo: '0.00',
-    imagem: 'Coelhos-de-Pascoa-com-IA-Fazendo-a-Nossa-Festa-3.png'
-}  -->
