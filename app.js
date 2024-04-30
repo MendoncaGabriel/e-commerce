@@ -3,12 +3,20 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
+const session = require('express-session');
 
 const apiRouter = require('./src/routes/api/api.router');
 const pagesRouterLoja = require('./src/routes/loja/loja.page.router')
 const pageRouterAdmin = require('./src/routes/admin/admin.pages.router')
 
 var app = express();
+
+// Express Session 
+app.use(session({
+    secret: process.env.ASSINATURA_TOKEN, 
+    resave: false,
+    saveUninitialized: true
+}));
 
 // arquivos estativos
 app.use('/css', express.static(path.join(__dirname, 'src/public/css')));

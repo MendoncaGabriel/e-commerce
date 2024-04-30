@@ -1,7 +1,7 @@
 <% function tratarNome(nome) {
     return nome.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, '-');
 }%>
-<% console.log(data.nome) %>
+
 <div class="border w-44 md:w-56 md:h-96 h-80 rounded-2xl overflow-hidden text-gray-700 flex-none snap-center  ">
     <a href="/produto/<%= tratarNome(data.nome)  %>">
         <img 
@@ -20,7 +20,7 @@
             </a>
             <button 
                 class="bg-white hover:bg-blue-400 border border-blue-400 hover:border-none p-2 rounded-full h-10 w-10 text-blue-400 hover:text-white leading-3 text-xl"
-                onclick="modal.abrir('<%= data.variante_id%>')" 
+                onclick="modal.abrir('<%= data.variante_id %>')" 
             >
                 <i class="bi bi-cart-plus"></i>
             </button>

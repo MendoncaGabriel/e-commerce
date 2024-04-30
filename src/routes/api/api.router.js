@@ -15,6 +15,7 @@ router.post('/variante', produtoController.novaVariante)
 
 //LER
 router.get('/produto/:id', produtoController.pegarProdutoId)
+router.get('/variante/:id', produtoController.pegarVarianteId)
 router.get('/produto/lista/:pg', produtoController.listaProdutos)
 
 //ATUALIZAR

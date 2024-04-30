@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+
 const lojaController = require('../../controllers/loja/loja.controller')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
@@ -18,6 +19,7 @@ class Utilitarios {
     };
 };
 
+  
 router.get('/',  lojaController.home)
 router.get('/produto/:nome',  lojaController.produto)
 router.get('/criar-conta',  lojaController.criarConta)

@@ -18,6 +18,19 @@ module.exports = {
             throw new Error("Erro ao salvar novo produto", error)
         }
     },
+    pegarVarianteId: async (id) => {
+        try {
+            const sql = "SELECT * FROM variantes WHERE variante_id = ?"
+            const values = [id]
+            const result = await executeSql(sql, values)
+            return result
+
+            
+        } catch (error) {
+            console.log(error)
+            throw new Error("Erro ao pegar variante", error)
+        }
+    },
     pegarProdutoId: async (id) => {
         try {
             const sql = "SELECT * FROM produtos WHERE produtos.produto_id = ?"
