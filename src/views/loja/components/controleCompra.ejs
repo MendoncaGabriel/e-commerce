@@ -3,6 +3,7 @@
     const produtosSemQuebraDeLinha = `<%- JSON.stringify(produto).replace(/[\n\r]/g, '').replace(/\\/g, '\\\\') %>`;
     const produtosJson = JSON.parse(produtosSemQuebraDeLinha);
     localStorage.paginaProduto = JSON.stringify( produtosJson );
+    window.carrinho = produtosJson;
 </script>
 
 <section class="p-5 text-gray-700">

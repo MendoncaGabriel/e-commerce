@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <!-- TAILWINDCSS -->
     <link rel="stylesheet" href="/css/output.css">
-
 </head>
 <body class="relative">
     <%- include('components/aviso', {aviso: "VENDAS SOMENTE PARA REGIÃO NORTE"}) %>
@@ -17,12 +16,11 @@
     <%- include('components/carrinho') %>
 
     <div class=" lg:grid lg:grid-cols-2 max-w-screen-xl m-auto md:gap-5" >
-        <%- include('components/carroselImagens', {produto} ) %>
+        <%- include('components/carroselImagens', { produto } ) %>
         <%- include('components/controleCompra') %>
-        
     </div>
-    <%- include('components/descricaoProduto') %>
 
+    <%- include('components/descricaoProduto') %>
 
     <!-- BTN WHATSAPP -->
     <% if (typeof dadosEmpresa[0].whatsapp != "undefined" && dadosEmpresa[0].whatsapp ) { %>
@@ -32,6 +30,7 @@
     <%- include('components/footer', {data: dadosEmpresa}) %>
 </body>
 </html>
+
 <script src="/js/loja/components/modal.js"></script>
 <script src="/js/utilities/cookie.js"></script>
 <script src="/js/loja/components/carrinho.js"></script>

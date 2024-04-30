@@ -99,17 +99,18 @@ class Produto {
 
     adicionarAoCarrinho(){
         if(this.alertaSelecioneVariante() == false) return;
+        
+        //pegar produtodo carrinho
+        console.log(window.carrinho)
 
-        if(!localStorage.carrinho || localStorage.carrinho != '[]'){
-            localStorage.carrinho = JSON.stringify([this.produto]);
-        }else{
-            const produtosNoCarrinho = JSON.parse(localStorage.carrinho);
-            produtosNoCarrinho.push(this.produto);
-            localStorage.carrinho = JSON.stringify(produtosNoCarrinho);
-        };
+        //pegar produto a ser adicionado
+        const produtoSelecionado = {
+            idVariante: variantesSelect.value,
+            qtdProduto: quantidadeProduto.value
+        }
 
-        const carrinho = new Carrinho();
-        carrinho.abrir();
+        console.log(produtoSelecionado)
+
         
     }
 };

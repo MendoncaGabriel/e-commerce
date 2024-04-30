@@ -12,14 +12,13 @@ class Modal {
         this.produtos = JSON.parse(localStorage.produtos);
         this.produto = {};
     };
-
     get getProduto(){
         return this.produto;
     };
     set setProduto(valor){
         this.produto = valor;
     };
-
+    
     atualizarCompos(){
         imagemModal.src = '/img/'+ this.produto.imagem;
         nomeModal.innerText = this.produto.nome;
@@ -90,26 +89,24 @@ class Modal {
             localStorage.carrinho = JSON.stringify([this.produto]); 
             this.alertaQTD();
             this.fechar();
-            return 
+            return;
         };
 
         const carrinho = JSON.parse(localStorage.carrinho);
-    
         carrinho.forEach(element => {
             if(element.produto_id == this.produto.produto_id && element.variante_id == this.produto.variante_id){
                 console.log('produto ja esta no carrinho');
 
                 // antes de incrementar verifica se a quantidade que ja esta no carrinho somado com o novo acrecimo e menor que o estoque
                 if((element.qtdProduto + this.produto.qtdProduto) < element.estoque){
-                    element.qtdProduto = element.qtdProduto + this.produto.qtdProduto
-                    console.log('adicionando qtd')
+                    element.qtdProduto = element.qtdProduto + this.produto.qtdProduto;
+                    console.log('adicionando qtd');
                 }else{
                     // se não for seta a quantidade para o valor maximo igual o estoque
                     element.qtdProduto = element.estoque;
                     console.log('setando estoque maximo');
                     alert('Todo estoque disponivel ja esta no seu carrinho!');
                 };
-
             }else{
                 carrinho.push(this.produto);
             };

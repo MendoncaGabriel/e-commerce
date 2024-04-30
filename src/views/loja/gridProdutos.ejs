@@ -21,7 +21,9 @@
     <section class="border max-w-screen-md m-auto grid grid-cols-2 justify-center items-center  gap-y-3 py-2">
         <% for( let i = 0; i < produtosCategoria.length; i++ ) { %>
             <!-- PRODUTO CARD -->
-            <%- include('./components/cardProduto', { data: produtosCategoria[i] }) %>
+            <div class="m-auto">
+                <%- include('./components/cardProduto', { data: produtosCategoria[i] }) %>
+            </div>
         <% } %>
     </section>
 
