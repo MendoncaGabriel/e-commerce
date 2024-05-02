@@ -25,13 +25,14 @@ function converterEmRealCarrinho(precoString){
     return formatoMoeda.format(precoNumero);
 };
 
-const carrinhovazio = () => ` <li class="py-2 px-4 border border-blue-500 rounded-full text-blue-500 flex items-center justify-between space-x-2 w-[80%] m-auto ">
+const carrinhovazio = () => ` 
+<li class="py-2 px-4 border border-blue-500 rounded-full text-blue-500 flex items-center  space-x-2 w-[80%] m-auto ">
 <i class="bi bi-exclamation-circle leading-3"></i>
 <p class="text-sm">O carrinho de compras esta vazio</p>
 </li>`
 
 const itemCarrinho = (imagem, quantidade, preco, variante_id) => `
-<li class="bg-gray-100 p-2 border grid grid-cols-10 ">
+<li id="li${variante_id}" class="bg-gray-100 p-2 border grid grid-cols-10  duration-300">
     <div class="col-span-3 aspect-square  border-red-600 ">
         <img 
             src="/img/${imagem}" 
@@ -49,15 +50,15 @@ const itemCarrinho = (imagem, quantidade, preco, variante_id) => `
 
     <div class="col-span-10  border-red-600  flex justify-between pt-2">
         <!-- Setar Quantidade -->
-        <div class="border w-24 rounded-lg border-blue-400 flex items-center justify-around bg-white">
-            <button onclick="menosQtdCarrinho(${variante_id})"  class="text-3xl    flex items-center justify-center"><i class="bi bi-dash-circle leading-3 text-blue-400"></i></button>
-            <input readonly id="qtdCarrinho${variante_id}" type="number" value="${quantidade}" class="border-b text-center text-xl w-5 focus:outline-none text-gray-700">
-            <button onclick="maisQtdCarrinho(${variante_id})"  class="text-3xl   flex items-center justify-center"><i class="bi bi-plus-circle-fill leading-3 text-blue-400"></i></button>
+        <div class="border w-24 md:w-full md:max-w-[140px] rounded-lg border-blue-400 flex items-center justify-around bg-white">
+            <button onclick="menosQtdCarrinho(${variante_id})"  class="text-3xl    flex items-center justify-center"><i class="bi bi-dash-circle leading-3 text-blue-400 hover:text-blue-500 duration-100"></i></button>
+            <input readonly id="qtdCarrinho${variante_id}" type="number" value="${quantidade}" class=" text-center text-xl w-5 md:w-10 flex items-center justify-center  focus:outline-none text-gray-700">
+            <button onclick="maisQtdCarrinho(${variante_id})"  class="text-3xl   flex items-center justify-center"><i class="bi bi-plus-circle-fill leading-3 text-blue-400 hover:text-blue-500 duration-100"></i></button>
         </div>
 
         <!-- Remover -->
         <button class="" onclick="removerCarrinho(${variante_id})">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-trash text-red-400" viewBox="0 0 16 16">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-trash text-red-400 hover:text-red-500 duration-100" viewBox="0 0 16 16">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
             </svg>
@@ -107,16 +108,23 @@ function maisQtdCarrinho(variante_id){
 }
 
 
-function removerCarrinho(variante_id){
-    if(localStorage.carrinho){
+function removerCarrinho(variante_id) {
+    if (localStorage.carrinho) {
         const carrinho = JSON.parse(localStorage.carrinho);
         const itemRemovido = carrinho.filter(e => e.variante_id != variante_id);
+        const li = document.getElementById(`li${variante_id}`);
+        li.classList.add('transform', 'ease-linear', '-translate-x-full', 'opacity-0');
 
-        localStorage.carrinho = JSON.stringify(itemRemovido);
-        carregarCarrinho()
-
+        setTimeout(() => {
+            li.classList.add('h-5');
+            li.remove();
+            localStorage.carrinho = JSON.stringify(itemRemovido);
+            carregarCarrinho();
+  
+        }, 250); 
     }
 }
+
 
 
 

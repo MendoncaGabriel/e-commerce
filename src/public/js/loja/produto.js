@@ -116,8 +116,6 @@ class Produto {
 };
 
 
-
-
 const produto = new Produto();
 
 
