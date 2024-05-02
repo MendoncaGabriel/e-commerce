@@ -1,95 +1,104 @@
-const modalComponent = document.getElementById('modal')
-const shadowModal = document.getElementById('shadowModal')
-const quantidade = document.getElementById('quantidade')
-const imagemModal = document.getElementById('imagemModal')
-const nomeModal = document.getElementById('nomeModal')
-const valorModal = document.getElementById('valorModal')
-const totalModal = document.getElementById('totalModal')
+const shadowModal = document.getElementById('shadowModal');
+const modalComponent = document.getElementById('modal');
+const nomeModal = document.getElementById('nomeModal');
+const imagemModal = document.getElementById('imagemModal');
+const quantidade = document.getElementById('quantidade');
+const valorModal = document.getElementById('valorModal');
+const totalModal = document.getElementById('totalModal');
 
-class ControlesModal {
-    constructor(){
-        this.modal = [];
-    }
-    async abrir(vaivariante_id){
-        //buscar dados da variante
-        const response = await axios.get('/api/variante/' + vaivariante_id );
-        const variante = response.data.result;
-        this.carregar(variante[0]);
 
-        shadowModal.classList.replace('hidden', 'flex')
-        modalComponent.classList.replace('hidden', 'fixed')
-        setTimeout(() => {
-            modalComponent.classList.replace('top-[150%]', 'top-1/2')
-        }, 10);
+notificarItemCarrinho()
+
+//ULTILITARIOS
+function converterEmReal(precoString){
+    const precoNumero = parseFloat(precoString);
+
+    const formatoMoeda = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+
+    return formatoMoeda.format(precoNumero);
+};
+function atualizarTotalModal(){
+    totalModal.innerText = 'Total: ' +  converterEmReal(Number(window.modalItem.preco) * Number(quantidade.value));
+    window.modalItem.qtd = Number(quantidade.value);
+    notificarItemCarrinho()
+};
+
+//ABRIR E FECHAR
+function abrirModal(){
+   shadowModal.classList.replace('hidden', 'block');
+   modalComponent.classList.replace('hidden', 'block');
+   setTimeout(()=> modalComponent.classList.replace('top-[150%]', 'top-1/2'), 50)
+};
+function fecharModal(){
+   modalComponent.classList.replace('top-1/2', 'top-[150%]')
+   setTimeout(()=>{
+        shadowModal.classList.replace( 'block', 'hidden');
+        modalComponent.classList.replace('block', 'hidden');
+   }, 250)
+};
+
+//CARREGAR MODAL
+function carregarItemModal(data){
+    window.modalItem = JSON.parse(data);
+
+    //se item ja estiver no carrinho, atualiza o modal com suas informações
+    let resetarValoresInput = true;
+    if(localStorage.carrinho){
+        const carrinho = JSON.parse(localStorage.carrinho);
+        carrinho.forEach(e => {
+            if(e.variante_id == window.modalItem.variante_id){
+                quantidade.value = e.qtd;
+                window.modalItem.qtd = e.qtd;
+                resetarValoresInput = false;
+            };
+        })
     }
-    fechar(){
-        modalComponent.classList.replace('top-1/2', 'top-[150%]')
-        setTimeout(() => {
-            shadowModal.classList.replace('flex', 'hidden')
-            modalComponent.classList.replace('fixed', 'hidden')
-        }, 200);
+
+    //se não reset o mocal q quantidade
+    if(resetarValoresInput){
+        quantidade.value = 1;
+        window.modalItem.qtd = 1;
     }
-    carregar(data){
-        this.modal = data;
-        imagemModal.src ='/img/' + data.imagem
-        valorModal.innerText = 'Valor: R$'+ data.preco
-        totalModal.innerText = 'Total: R$'+ data.preco
-    }
-    atualizar(){
-        quantidade.value = this.modal.qtd
-        let total = this.modal.qtd * this.modal.preco
-        totalModal.innerText = 'Total: R$'+ total
-    }
-    maisQtd(){
-        if(!this.modal.qtd){
-            this.modal.qtd = 2;
-        }else if(this.modal.estoque > this.modal.qtd){
-            this.modal.qtd++;
+
+    imagemModal.src = '/img/' + window.modalItem.imagem;
+    nomeModal.innerText = window.modalItem.nome;
+    valorModal.innerText = 'Valor: ' +  converterEmReal(window.modalItem.preco);
+    totalModal.innerText = 'Total: ' +  converterEmReal(Number(window.modalItem.preco) * Number(quantidade.value));
+};
+
+//MUDAR QUANTIDADE MODAL
+function maisQtd(){
+   if(quantidade.value < window.modalItem.estoque) quantidade.value++;  atualizarTotalModal();
+};
+function menosQtd(){
+    if(quantidade.value > 1) quantidade.value--; atualizarTotalModal();
+};
+
+//ADICIONAR AO CARRINHO
+function adicionarAoCarrinho(){
+    if(!localStorage.carrinho){
+        localStorage.carrinho = JSON.stringify([window.modalItem]);
+    }else{
+        const carrinho = JSON.parse(localStorage.carrinho);
+        let pushNoCarrinho = true;
+
+        //se item ja estiver no carrinho atualizar
+        carrinho.forEach(e => {
+            if(e.variante_id == window.modalItem.variante_id){
+                pushNoCarrinho = false;
+                e.qtd = window.modalItem.qtd;
+            };
+        });
+        //se não estiver no carrinho, adicionar
+        if(pushNoCarrinho){
+            carrinho.push(window.modalItem);
         };
-        this.atualizar()
-    }
-    menosQtd(){
-        if(!this.modal.qtd){
-            this.modal.qtd = 1;
-        }else if(this.modal.qtd > 1){
-            this.modal.qtd--
-        };
-        this.atualizar()
-    }
+        localStorage.carrinho = JSON.stringify(carrinho);
+    };
+    fecharModal();
+    notificarItemCarrinho()
+    
 }
-class Modal extends ControlesModal{
-    async adicionarAoCarrinho(){
-        const id = this.modal.variante_id;
-        const carrinho = window.carrinho.get();
-        console.log('===> carrinho:', carrinho)
-
-        if(carrinho){
-            console.log('Temitem no carrinho')
-            //verifixar se item esta no carrinho
-            const index = carrinho.findIndex(e => e.variante_id == id)
-            //item ja esta no carrinho, incrementar
-            if(index){
-                console.log('item ja esta no carrinho, incrementar')
-                if((carrinho[index].qtd + this.modal.qtd) <= this.modal.estoque){
-                    //verificar se e possivel adicionar, qtd menor igual a estoque
-                    carrinho[index].qtd = (carrinho[index].qtd + this.modal.qtd)
-                    //salvar
-                    window.carrinho.set(carrinho);
-                }else{
-                    alert('Carrinho Cheio!')
-                }
-            }
-            
-        }else{
-            //item não esta no carrinho, adicionar
-            console.log('item não esta no carrinho, adicionar')
-            if(!this.modal.qtd) this.modal.qtd = 1;
-            window.carrinho.set(this.modal)
-            this.modal = [];
-            this.fechar()
-        }
-
-    }
-}
-window.modal = new Modal
-

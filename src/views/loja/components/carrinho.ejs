@@ -1,7 +1,8 @@
-<section id="carrinho" class="fixed top-0 shadow-xl shadow-black  left-[-100%] h-screen w-[90%] z-50 duration-300  bg-white flex flex-col justify-between max-w-screen-sm ">
+<section id="carrinho" class="hidden fixed top-0 shadow-xl shadow-black  left-[-100%] h-screen w-[90%] z-50 duration-300  bg-white flex-col justify-between max-w-screen-sm ">
     <div class="text-right text-gray-700 text-xl flex flex-col">
         <!-- BTN FECHAR -->
-        <button onclick="carrinho.fechar()" class="border-b p-2 pr-5 w-full text-right" >
+
+    <button onclick="fecharCarrinho()" class="border-b p-2 pr-5 w-full text-right" >
             <i class="bi bi-x  text-4xl text-gray-700"></i>
         </button>
 
@@ -9,7 +10,7 @@
         <h2 class="w-full p-4 text-2xl text-center">MEU CARRINHO</h2>
 
         <!-- LISTA DE PRODUTOS NO CARRINHO -->
-        <ul id="listaProdutosCarrinho" class="overflow-y-auto h-screen  max-h-[calc(100vh-339px)] ">
+        <ul id="listaProdutosCarrinho" class="overflow-y-auto h-screen  max-h-[calc(100vh-339px)] space-y-2">
             <li class="py-2 px-4 border border-blue-500 rounded-full text-blue-500 flex items-center justify-between space-x-2 w-[80%] m-auto ">
                 <i class="bi bi-exclamation-circle leading-3"></i>
                 <p class="text-sm">O carrinho de compras esta vazio</p>
@@ -22,11 +23,11 @@
             <!-- SUBTOTAL -->
             <div class="flex justify-between items-center font-semibold">
                 <h2 class="p-4 text-xl " >Subtotal: </h2>
-                <h2 class="p-4 text-xl " id="subtotal">R$0,00</h2>
+                <h2 class="p-4 text-xl text-green-600" id="subtotal">R$0,00</h2>
             </div>
 
             <!-- BTN FINALIZAR COMPRA -->
-            <button onclick="carrinho.finalizarCompra()"  class="bg-blue-500 px-4 py-2 w-full font-semibold text-white my-2">FINALIZAR COMPRA</button>
+            <button onclick=""  class="bg-blue-500 px-4 py-2 w-full font-semibold text-white my-2">FINALIZAR COMPRA</button>
         </div>
 
         <!-- LOGO -->

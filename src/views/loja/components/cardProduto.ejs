@@ -5,6 +5,7 @@
 <div class="border w-44 md:w-56 md:h-96 h-80 rounded-2xl overflow-hidden text-gray-700 flex-none snap-center  ">
     <a href="/produto/<%= tratarNome(data.nome)  %>">
         <img 
+        <% console.log(data.estoque) %>
             src="<%= typeof data.imagem !== 'undefined' && data.imagem ? '/img/' + data.imagem : '' %>" 
             alt="imagem do produto"
             onerror="this.src='/assets/produto-default.png'"
@@ -18,9 +19,20 @@
             <a href="/produto/<%= tratarNome(data.nome) %>" class="bg-blue-400 md:px-5 px-3 py-2 rounded-full text-xs md:text-sm text-white  h-10 flex items-center justify-center">
                 VER PRODUTO
             </a>
-            <button 
+            <% 
+                let itemParametro = data;
+                delete itemParametro.descricao;
+                delete itemParametro.ativo;
+                delete itemParametro.produto;
+                delete itemParametro.marca;
+                delete itemParametro.referencia;
+                delete itemParametro.vendas;
+                delete itemParametro.ean;
+                delete itemParametro.custo;
+            %>
+            <button
+                onclick="carregarItemModal('<%= JSON.stringify(itemParametro) %>'), abrirModal()"
                 class="bg-white hover:bg-blue-400 border border-blue-400 hover:border-none p-2 rounded-full h-10 w-10 text-blue-400 hover:text-white leading-3 text-xl"
-                onclick="modal.abrir('<%= data.variante_id %>')" 
             >
                 <i class="bi bi-cart-plus"></i>
             </button>
