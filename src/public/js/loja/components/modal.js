@@ -102,3 +102,7 @@ function adicionarAoCarrinho(){
     notificarItemCarrinho()
     
 }
+
+function finalizarCompra(){
+    
+}

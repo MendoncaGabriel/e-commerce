@@ -109,6 +109,7 @@ function maisQtdCarrinho(variante_id){
 
 
 function removerCarrinho(variante_id) {
+    
     if (localStorage.carrinho) {
         const carrinho = JSON.parse(localStorage.carrinho);
         const itemRemovido = carrinho.filter(e => e.variante_id != variante_id);
@@ -120,6 +121,7 @@ function removerCarrinho(variante_id) {
             li.remove();
             localStorage.carrinho = JSON.stringify(itemRemovido);
             carregarCarrinho();
+            notificarItemCarrinho()
   
         }, 250); 
     }
@@ -130,7 +132,7 @@ function removerCarrinho(variante_id) {
 
 //CARREGAR
 function carregarCarrinho(){
-    notificarItemCarrinho()
+   
     if(!localStorage.carrinho){
         listaProdutosCarrinho.innerHTML = carrinhovazio();
         return;
@@ -151,6 +153,7 @@ function carregarCarrinho(){
     });
 
     subtotal.innerText = converterEmRealCarrinho(total);
+    notificarItemCarrinho()
     
   
 

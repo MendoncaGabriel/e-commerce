@@ -19,6 +19,7 @@ app.use(session({
 }));
 
 // arquivos estativos
+app.use('/banner', express.static(path.join(__dirname, 'src/public/banner')));
 app.use('/css', express.static(path.join(__dirname, 'src/public/css')));
 app.use('/js', express.static(path.join(__dirname, 'src/public/js')));
 app.use('/icons', express.static(path.join(__dirname, 'src/public/icons')));
