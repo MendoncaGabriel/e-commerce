@@ -2,40 +2,81 @@
     return nome.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, '-');
 }%>
 
-<div class="border w-44 md:w-56 md:h-96 h-80 rounded-2xl overflow-hidden text-gray-700 flex-none snap-center  ">
-    <a href="/produto/<%= tratarNome(data.nome)  %>">
-        <img 
-        <% console.log(data.estoque) %>
-            src="<%= typeof data.imagem !== 'undefined' && data.imagem ? '/img/' + data.imagem : '' %>" 
-            alt="imagem do produto"
-            onerror="this.src='/assets/produto-default.png'"
-            class="w-full aspect-square object-cover border-b"
-        >
-    </a>
-    <div class="md:p-4 p-1 flex flex-col items-center justify-around">
-        <h2 class="h-[50px] overflow-hidden text-sm"><%= data.nome ?? '' %></h2>
-        <h2 class="text-2xl text-gray-700 font-semibold text-center">R$ <%= typeof data.preco != 'undefine' && data.preco ? String(data.preco).replace('.', ',') : ''  %></h2>
-        <div class="text-sm font-semibold font-white py-2 flex items-center justify-around w-full space-x-4 z-30">
-            <a href="/produto/<%= tratarNome(data.nome) %>" class="bg-blue-400 md:px-5 px-3 py-2 rounded-full text-xs md:text-sm text-white  h-10 flex items-center justify-center">
-                VER PRODUTO
-            </a>
-            <% 
-                let itemParametro = data;
-                delete itemParametro.descricao;
-                delete itemParametro.ativo;
-                delete itemParametro.produto;
-                delete itemParametro.marca;
-                delete itemParametro.referencia;
-                delete itemParametro.vendas;
-                delete itemParametro.ean;
-                delete itemParametro.custo;
-            %>
+
+<% 
+    function converterEmReal(precoString){
+        const precoNumero = parseFloat(precoString);
+
+        const formatoMoeda = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
+        return formatoMoeda.format(precoNumero);
+    };
+%>
+
+<% 
+    let itemParametro = data;
+    delete itemParametro.descricao;
+    delete itemParametro.ativo;
+    delete itemParametro.produto;
+    delete itemParametro.marca;
+    delete itemParametro.referencia;
+    delete itemParametro.vendas;
+    delete itemParametro.ean;
+    delete itemParametro.custo;
+%>
+
+<div class="border w-44 lg:w-80 h-80  md:h-[520px] flex-none rounded-xl overflow-hidden text-gray-700 snap-center   hover:shadow-xl flex flex-col justify-between">
+    
+    <div class="">
+        <!-- IMAGEM -->
+        <a href="/produto/<%= tratarNome(data.nome)  %>">
+            <img 
+                src="<%= typeof data.imagem !== 'undefined' && data.imagem ? '/img/' + data.imagem : '' %>" 
+                alt="imagem do produto"
+                onerror="this.src='/assets/produto-default.png'"
+                class="w-full aspect-square object-cover border-b"
+            >
+        </a>
+        <div class="p-2 pb-0 lg:p-4 lg:pb-4 ">
+            <!-- NOME -->
+            <h2 class="h-[50px] overflow-hidden lg:text-xl max-h-[283px]">
+                <%= data.nome ?? '' %>
+            </h2>
+
+        </div>
+    </div>
+
+
+    <div class="text-sm   font-semibold font-white lg:py-2 pb-2  w-full  z-30 lg:space-y-4 space-y-2">
+        <!-- PREÇO -->
+        <h2 class="lg:text-3xl text-2xl font-semibold text-gray-700 lg:font-bold text-center flex-none">
+            <!-- preço antigo -->
+            <% if (typeof data.preco_antigo != "undefeined" && data.preco_antigo) { %>
+             <span class="font-normal lg:text-xl text-base line-through"><%= converterEmReal(data.preco_antigo) %></span>
+            <% } %>
+
+            <!-- preço atual -->
+            <% if (typeof data.preco != "undefeined" && data.preco) { %>
+                <span class="text-2xl lg:text-3xl"><%= converterEmReal(data.preco)  %></span>
+            <% } %>
+        </h2>
+
+        <div class="flex  items-center justify-between   lg:px-8 px-1  m-auto">
+            <!-- MODAL -->
             <button
                 onclick="carregarItemModal('<%= JSON.stringify(itemParametro) %>'), abrirModal()"
-                class="bg-white hover:bg-blue-400 border border-blue-400 hover:border-none p-2 rounded-full h-10 w-10 text-blue-400 hover:text-white leading-3 text-xl"
+                class="bg-white hover:bg-c1 border border-c1 hover:border-none p-2 rounded-full h-10 lg:h-12 w-10 lg:w-12 text-c1 hover:text-white leading-3 text-xl duration-200"
             >
                 <i class="bi bi-cart-plus"></i>
             </button>
+            <!-- VER PRODUTO -->
+            <a href="/produto/<%= tratarNome(data.nome) %>" class="bg-c1 hover:bg-c0 duration-100 ease-in lg:px-5  px-3 py-2 rounded-full text-sm lg:text-xl text-white hover:text-c1 border-2 border-transparent hover:border-c1  h-10 lg:h-12 flex items-center justify-center">
+                VER PRODUTO
+            </a>
         </div>
     </div>
+ 
 </div>

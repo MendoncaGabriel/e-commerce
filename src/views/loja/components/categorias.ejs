@@ -4,14 +4,19 @@
     }
 %>
 
-<nav class=" border-gray-200  text-gray-700 border">
-    <ul class="flex items-center justify-around md:p-2  col-span-2 md:space-x-4 overflow-x-auto  pb-2 snap-x snap-mandatory md:max-w-screen-xl m-auto">
+<nav class="    ">
+    <ul class="flex items-center justify-between md:p-2 space-x-4  col-span-2 md:space-x-4 overflow-x-auto  pb-2 snap-x snap-mandatory md:max-w-screen-2xl  m-auto">
 
         <% if (typeof data != 'undefined' && data) { %>
+            <%  let atual = true; %>
+            <% data.map((e, index) => { %>
+                <% 
+                   
+                    if(index > 0) atual = false;
 
-            <% data.forEach(e => { %>
-                <li class="flex-none snap-start duration-100 hover:bg-pink-300 hover:shadow-md hover:text-white md:text-lg font-medium px-4 md:px-8 md:py-2 py-1 rounded-full ">
-                    <a href="/categoria/<%= tratarNome(e.nome)  %>"><%= e.nome  %></a>
+                %>
+                <li class="<%= atual ? 'hover:bg-c0 bg-c1  hover:text-c1 text-c0' : 'hover:bg-c1  hover:text-white'%> hover:shadow-md flex-none snap-start duration-100 ease-in md:text-xl font-medium px-4 md:px-8 md:py-2 py-1 rounded-full ">
+                    <a href="/categoria/<%= tratarNome(e.nome)  %>" class="lg:text-2xl"><%= e.nome  %></a>
                 </li>
              
             <% }) %>

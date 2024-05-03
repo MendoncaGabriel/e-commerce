@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="/css/output.css">
     <!-- AXIOS -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+
 
 </head>
 <body class="max-w-screen-md md:max-w-none m-auto relative">
@@ -21,10 +23,26 @@
     <%- include('components/menu') %>
     <%- include('components/carrinho') %>
     <%- include('components/categorias', {data: categorias}) %>
-    <%- include('components/carroselBanner') %>
-    <%- include('components/carroselProdutos', {titulo: carrosel_1_data[0].categoria, data: carrosel_1_data}) %>
+
+    <!-- BANNERS -->
+    <% if (typeof banners != "undefined" && banners && banners.length > 0) { %>
+        <%- include('components/carroselBanner', {banners}) %>
+    <% } %>
+
+    <!-- CARROSEL DE PRODUTOS -->
+    <% if (carrosel_1_data[0]) { %>
+        <%- include('components/carroselProdutos', {titulo: carrosel_1_data[0].categoria, data: carrosel_1_data}) %>
+    <% } %>
+
+
+
     <%- include('components/newsletter') %>
-    <%- include('components/sigaNoInstagram', {data: dadosEmpresa[0].instagram}) %>
+
+    <% if (typeof dadosEmpresa.instagram != "undefined" && dadosEmpresa && dadosEmpresa.length > 0) { %>
+     
+        <%- include('components/sigaNoInstagram', {data: dadosEmpresa[0]}) %>
+    <% } %>
+
     <%- include('components/footer', {data: dadosEmpresa}) %>
 
     <!-- BTN WHATSAPP -->

@@ -4,8 +4,11 @@ module.exports = {
   theme: {
     extend: {
       colors:{
-        avisoG1: '#FF0000',
-        avisoG2: '#FF0000',
+        c0: "#FFFFFF",
+        c1: '#EC268F',
+        c2: '#D886C3',
+        c3: '#201E1E',
+        avisoG2: '#EC268F',
         newsletter: "#EC4899",
         sigaNoInstagram:"#FFFFFF",
         footer: "#FFF212"

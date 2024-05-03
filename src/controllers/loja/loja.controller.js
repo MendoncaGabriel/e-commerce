@@ -8,20 +8,24 @@ module.exports = {
     home: async (req, res) => {
         try {
             const produtos = await produtoModel.listaProdutos(1);
+         
             const dadosEmpresa = await empresa.dados();
+            const banners = await empresa.banners();
       
             // Filtrar produtos a serem enviados
             const  produtosFiltrados = produtos.filter((e)=>{
                return e.ativo == 1 && e.imagem !== null && e.estoque > 0 ;
             });
 
+            console.log(produtosFiltrados)
 
             const categorias = await categoriaModel.categorias();
             res.render('loja/home', {
                 carrosel_1_titulo: 'Novidades', 
                 carrosel_1_data: produtosFiltrados, 
                 categorias: categorias,
-                dadosEmpresa: dadosEmpresa
+                dadosEmpresa: dadosEmpresa,
+                banners: banners
             });
         } catch (error) {
             console.log(error)
