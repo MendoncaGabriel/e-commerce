@@ -16,10 +16,15 @@
 </script>
 
 
-<section class="py-5 relative lg:px-14 flex items-start justify-center flex-col ">
+<section class="py-5 relative lg:px-14 flex items-start justify-center flex-col  max-w-screen-2xl m-auto">
     <% if (typeof titulo != "undefined" && titulo) { %>
-        <h2 class="text-2xl text-center font-semibold text-gray-700 block m-auto">
-            <%= titulo  %>
+        <h2 class="text-2xl lg:text-3xl text-center block font-semibold text-gray-700 space-x-2  lg:my-5 ml-5 lg:ml-0">
+            <span><%= titulo  %></span>     
+            <% if (typeof titulo != "undefined" && titulo) { %>
+                <span class="text-c1">
+                    <a href="/galeria/<%= titulo ? titulo : '' %>" class=" hover:underline  text-lg " >Ver mais</a>
+                </span>
+            <% } %>
         </h2>
     <% } %>
 
@@ -43,9 +48,7 @@
             <% }) %>
         <% } %>
     </div>
-    <% if (typeof titulo != "undefined" && titulo) { %>
-        <a href="/galeria/<%= titulo ? titulo : '' %>" class="pt-4 pl-5 hover:underline  text-lg text-blue-500" >Ver mais</a>
-    <% } %>
+
 </section>
 
 <script>

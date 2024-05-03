@@ -21,6 +21,7 @@ module.exports = {
                     variante.quantidade = parseInt(variante.quantidade) || 0;
                     variante.estoque = parseInt(variante.estoque) || 0;
                     variante.custo = parseFloat(variante.custo) || null;
+                    variante.estoque = parseInt(variante.estoque) || null;
                     variante.vendas = 0;
         
                     await produtoModel.novaVariante(variante);

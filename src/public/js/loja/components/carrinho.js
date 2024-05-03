@@ -3,6 +3,7 @@ const listaProdutosCarrinho = document.getElementById('listaProdutosCarrinho');
 const subtotal = document.getElementById('subtotal');
 const itensNoCarrinho = document.getElementById('itensNoCarrinho');
 const btnFinalizarCompra = document.getElementById('btnFinalizarCompra');
+const contaionerFinalizarCarrinho = document.getElementById('contaionerFinalizarCarrinho');
 
 //ABRIR E FECHAR
 function abrirCarrinho(){
@@ -14,6 +15,7 @@ function fecharCarrinho(){
     carrinhoComponent.classList.replace('left-[0%]', 'left-[-100%]');
     setTimeout(()=> carrinhoComponent.classList.replace('flex', 'hidden') , 250);
 };
+
 function converterEmRealCarrinho(precoString){
     const precoNumero = parseFloat(precoString);
 
@@ -128,8 +130,6 @@ function removerCarrinho(variante_id) {
 }
 
 
-
-
 //CARREGAR
 function carregarCarrinho(){
    
@@ -142,6 +142,7 @@ function carregarCarrinho(){
     if(carrinho.length == 0){
         subtotal.innerText = 'R$ 00,00';
         listaProdutosCarrinho.innerHTML = carrinhovazio();
+        contaionerFinalizarCarrinho.classList.add('hidden');
         return;
     };
 
@@ -152,6 +153,8 @@ function carregarCarrinho(){
         listaProdutosCarrinho.innerHTML += itemCarrinho(item.imagem, item.qtd, item.preco, item.variante_id);
     });
 
+
+    contaionerFinalizarCarrinho.classList.remove('hidden');
     subtotal.innerText = converterEmRealCarrinho(total);
     notificarItemCarrinho()
     

@@ -1,9 +1,18 @@
 const mysql = require('mysql2');
+require('dotenv').config();
+
+const host = process.env.LOCALADDRESS
+const user = process.env.USER
+const password = process.env.PASS
+const database = process.env.DATABASE
+
+
+
 const db = mysql.createConnection({
-    host: 'database-gam.c3gcao0wi23m.us-east-1.rds.amazonaws.com',
-    user: 'gabroviski', 
-    password: 'Gam1997Vsc',
-    database: 'shopdosbaloes',
+    host: host,
+    user: user, 
+    password: password,
+    database: database,
     port: 3306 
 });
 
