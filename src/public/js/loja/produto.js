@@ -2,142 +2,142 @@ const quantidadeProduto = document.querySelector('#quantidadeProduto');
 const variantesSelect = document.querySelector('#variantesSelect');
 const preco = document.querySelector('#preco');
 
-class Produto {
-    constructor(){
-       this.produto = {};
-       this.precoUnit = 0;
-    };
-
-    get getProduto(){
-        return this.produto;
-    }
-    set setProduto(array){
-        this.produto = array;
-    }
-
-    calcularCusto(){
-        let totalProduto = this.produto.preco * this.produto.qtdProduto
-        preco.innerHTML = `R$ ${totalProduto.toFixed(2).replace('.', ',')}`;
-    };
-
-    maisQTD(){
-        if(this.alertaSelecioneVariante() == false) return;
-        
-        if(this.produto.estoque > this.produto.qtdProduto){
-            this.produto.qtdProduto = this.produto.qtdProduto +1;
-        };
-        this.calcularCusto()
-        quantidadeProduto.value = this.produto.qtdProduto
-    };
-
-    menosQTD(){
-        if(this.alertaSelecioneVariante() == false) return;
-        if(this.produto.qtdProduto > 1){
-            this.produto.qtdProduto = this.produto.qtdProduto -1;
-        };
-        this.calcularCusto()
-        quantidadeProduto.value = this.produto.qtdProduto
-    };
-
-    setCookie(name, value, days) {
-        if (typeof name !== 'string' || typeof days !== 'number' || days <= 0) {
-            console.error('Parâmetros inválidos para setCookie.');
-            return;
-        }
-        if(typeof value !== 'string'){
-            value = JSON.stringify(value);
-        };
-
-        const expires = new Date();
-        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-        document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/`;
-        return {
-            msg: 'Item salvo em Cookies',
-            name: name, 
-            value: value
-        }
-    };
-
-    finalizarCompra(){
-        if(this.alertaSelecioneVariante() == false) return;
-
-        if(!localStorage.carrinho || localStorage.carrinho != '[]'){
-            localStorage.carrinho = JSON.stringify([this.produto]);
-        }else{
-            const produtosNoCarrinho = JSON.parse(localStorage.carrinho);
-            produtosNoCarrinho.push(this.produto);
-            localStorage.carrinho = JSON.stringify(produtosNoCarrinho);
-        };
-
-        const carrinho = JSON.parse(localStorage.carrinho);
-        const cookie = [];
-        carrinho.forEach(e => {
-            cookie.push({
-                produto_id: e.produto_id, 
-                variante_id: e.variante_id, 
-                qtdProduto: e.qtdProduto
-            });
-        });
-
-
-        this.setCookie('carrinho', cookie, 30);
-
-        window.location.href = '/checkout';
-    };
-
-    alertaSelecioneVariante(){
-        if(!variantesSelect.value || variantesSelect.value == ''){
-            alert('Escolha uma das opções');
-            variantesSelect.classList.replace('border-blue-500', 'border-red-500')
-            setTimeout(() => {
-                variantesSelect.classList.replace('border-red-500', 'border-blue-500')
-            }, 1000);
-            return false;
-        };
-    };
-
-
-    adicionarAoCarrinho(){
-        if(this.alertaSelecioneVariante() == false) return;
-        
-        //pegar produtodo carrinho
-        console.log(window.carrinho)
-
-        //pegar produto a ser adicionado
-        const produtoSelecionado = {
-            idVariante: variantesSelect.value,
-            qtdProduto: quantidadeProduto.value
-        }
-
-        console.log(produtoSelecionado)
-
-        
-    }
+//PRODUTOS E VARIANTES 
+let produtoPagina = [];
+if(localStorage.paginaProduto){
+    produtoPagina = JSON.parse(localStorage.paginaProduto);
 };
 
 
-const produto = new Produto();
+//SE NÃO TIVER VARIANTES O ITEM SELECIONADO E O 0
+let produtoSelecionado = {};
+if(produtoPagina.length == 1){
+    produtoSelecionado = produtoPagina[0]
+    produtoSelecionado.qtd = 1;
+}
 
 
-
-
-variantesSelect.addEventListener('change', (e)=>{  
+//BUSCAR ITEM SELECIONADO EM SELECT
+variantesSelect.addEventListener('change', () => {
     const variante_id = variantesSelect.value;
+    const item = produtoPagina.filter(e => e.variante_id == variante_id)[0];
+    item.qtd = 1
+    produtoSelecionado = item;
+    preco.innerHTML = converterEmReal(Number(produtoSelecionado.preco));
     quantidadeProduto.value = 1;
 
-    if(localStorage.paginaProduto && localStorage.paginaProduto != "[]"){
-        const produtoLocalStorage = JSON.parse(localStorage.paginaProduto);
-        
-        produtoLocalStorage.forEach(element => {
-            console.log(element)
-            if(element.variante_id == variante_id){
-                element.qtdProduto = 1;
-                produto.setProduto = element;
-                preco.innerHTML = `R$ ${Number(element.preco).toFixed(2).replace('.', ',')}`;
+    console.log(produtoSelecionado)
+})
+
+
+//ULTILITARIOS
+function converterEmReal(precoString){
+    const precoNumero = parseFloat(precoString);
+
+    const formatoMoeda = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+
+    return formatoMoeda.format(precoNumero);
+};
+
+
+//CONTROLES
+function verificarItemSelecionado(){
+    const select = variantesSelect.value;
+    if(!select || select == '') {
+        alert('Por favor, selecione uma opção!'); 
+        variantesSelect.classList.replace('border-c1', 'border-red-500');
+        variantesSelect.classList.replace('border-2', 'border-4');
+
+        setTimeout(()=> {
+            variantesSelect.classList.replace('border-red-500', 'border-c1');
+            variantesSelect.classList.replace('border-4', 'border-2' );
+        }, 1000);
+   
+        return;
+    };
+};
+
+
+function maisQtd(){
+    verificarItemSelecionado();
+    console.log('###')
+
+
+    console.log(produtoSelecionado.estoque, produtoSelecionado.qtd)
+
+    if(produtoSelecionado.estoque > produtoSelecionado.qtd){
+        produtoSelecionado.qtd++;
+        quantidadeProduto.value = produtoSelecionado.qtd;
+        preco.innerHTML = converterEmReal(Number(produtoSelecionado.preco) * Number(produtoSelecionado.qtd));
+
+    }
+}
+function menosQtd(){
+    verificarItemSelecionado();
+    
+    if(produtoSelecionado.qtd > 1){
+        produtoSelecionado.qtd--
+        quantidadeProduto.value = produtoSelecionado.qtd;
+        preco.innerHTML = converterEmReal(Number(produtoSelecionado.preco) * Number(produtoSelecionado.qtd));
+    }
+
+}
+
+function finalizarCompra(){
+    verificarItemSelecionado();
+    if(!localStorage.carrinho){
+        localStorage.carrinho = JSON.stringify([produtoSelecionado]);
+    }else{
+        const carrinho = JSON.parse(localStorage.carrinho);
+        let pushNoCarrinho = true;
+
+        //se item ja estiver no carrinho atualizar
+        carrinho.forEach(e => {
+            if(e.variante_id == produtoSelecionado.variante_id){
+                pushNoCarrinho = false;
+                e.qtd = produtoSelecionado.qtd;
             };
         });
+        //se não estiver no carrinho, adicionar
+        if(pushNoCarrinho){
+            carrinho.push(produtoSelecionado);
+        };
+        localStorage.carrinho = JSON.stringify(carrinho);
     };
 
-    console.log('===> variante escolhida: ', produto.getProduto)
+    notificarItemCarrinho();
+    window.location.href = '/checkout'
+}
 
-})
+function adicionarAoCarrinho(){
+    verificarItemSelecionado();
+
+
+    if(!localStorage.carrinho){
+        localStorage.carrinho = JSON.stringify([produtoSelecionado]);
+    }else{
+        const carrinho = JSON.parse(localStorage.carrinho);
+        let pushNoCarrinho = true;
+
+        //se item ja estiver no carrinho atualizar
+        carrinho.forEach(e => {
+            if(e.variante_id == produtoSelecionado.variante_id){
+                pushNoCarrinho = false;
+                e.qtd = produtoSelecionado.qtd;
+            };
+        });
+        //se não estiver no carrinho, adicionar
+        if(pushNoCarrinho){
+            carrinho.push(produtoSelecionado);
+        };
+        localStorage.carrinho = JSON.stringify(carrinho);
+    };
+
+    notificarItemCarrinho();
+    abrirCarrinho();
+        
+}
+

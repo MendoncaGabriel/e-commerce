@@ -1,20 +1,31 @@
 
 <div>
     <label for="<%= id %>" class="text-sm text-gray-600"><%= titulo  %></label>
-    <select  id="<%= id %>" class="px-4  py-2 w-full border-2 border-blue-500  focus:outline-none rounded-lg">
-        <option value="" selected disabled>Selecione uma opção</option>
-    
-        <% opcoes.forEach(item => { %>
-            <% if (item != '' && item != null ) { %>
+    <select  id="<%= id %>" class="px-4  py-2 w-full border-2 border-c1  focus:outline-none rounded-lg">
+        <% if (opcoes.length > 1) { %>
+            <option value="" selected disabled>Selecione uma opção</option>
+            <% opcoes.forEach(item => { %>
+                <% if (item != '' && item != null ) { %>
+                    <% 
+                        let texto = ''    
+                        texto += typeof item.tamanho != "undefined" && item.tamanho ? `Tamanho: ${item.tamanho} /` : ''
+                        texto +=  typeof item.quantidade != "undefined" && item.quantidade ? ` Pct.: ${item.quantidade}` : ''
+                    %>
+                    <option estoque="<%= item.estoque ?? 0 %>" value="<%= item.variante_id %>" class="w-full bg-white block shadow-sm">
+                        <%= texto %>
+                    </option>
+                <% } %>
+            <% }); %>
+        <% } else { %>
+            <option estoque="<%= opcoes[0].estoque ?? 0 %>" value="<%= opcoes[0].variante_id %>" class="w-full bg-white block shadow-sm">
                 <% 
-                    let texto = ''    
-                    texto += typeof item.tamanho != "undefined" && item.tamanho ? `Tamanho: ${item.tamanho}` : ''
-                    texto +=  typeof item.quantidade != "undefined" && item.quantidade ? ` / Pct.: ${item.quantidade}` : ''
-                %>
-                <option estoque="<%= item.estoque ?? 0 %>" value="<%= item.variante_id %>" class="w-full bg-white block shadow-sm">
-                    <%= texto %>
-                </option>
-            <% } %>
-        <% }); %>
+                let texto = ''    
+                    texto += typeof opcoes[0].tamanho != "undefined" && opcoes[0].tamanho ? `Tamanho: ${opcoes[0].tamanho} /` : ''
+                    texto +=  typeof opcoes[0].quantidade != "undefined" && opcoes[0].quantidade ? `  Pct.: ${opcoes[0].quantidade}` : ''
+                 %>
+                <%= texto %>
+            </option>
+        <% } %>
+    
     </select>
 </div>

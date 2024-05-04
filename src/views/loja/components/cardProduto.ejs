@@ -1,19 +1,18 @@
-<% function tratarNome(nome) {
-    return nome.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, '-');
-}%>
-
+<% 
+function tratarNome(nome) {
+    return nome.toLowerCase().replace(/ /g, '-')
+}
+%>
 
 <% 
-    function converterEmReal(precoString){
-        const precoNumero = parseFloat(precoString);
-
-        const formatoMoeda = new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        });
-
-        return formatoMoeda.format(precoNumero);
-    };
+function converterEmReal(precoString){
+    const precoNumero = parseFloat(precoString);
+    const formatoMoeda = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+    return formatoMoeda.format(precoNumero);
+};
 %>
 
 <% 
@@ -28,7 +27,7 @@
     delete itemParametro.custo;
 %>
 
-<div class="border w-44 lg:w-80 h-80  md:h-[520px] flex-none rounded-xl overflow-hidden text-gray-700 snap-center   hover:shadow-xl flex flex-col justify-between">
+<div class="border w-44 lg:w-80 h-80   md:h-[520px] flex-none rounded-xl overflow-hidden text-gray-700 snap-center   hover:shadow-xl flex flex-col justify-between">
     
     <div class="">
         <!-- IMAGEM -->
@@ -45,7 +44,6 @@
             <h2 class="h-[50px] overflow-hidden lg:text-xl max-h-[283px]">
                 <%= data.nome ?? '' %>
             </h2>
-
         </div>
     </div>
 
