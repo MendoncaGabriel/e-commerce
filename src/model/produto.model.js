@@ -374,8 +374,7 @@ module.exports = {
         return {itens, total}
     },
     getProdutosCategoria: async (categoria) => {
-        //console.log('===> categoria: ', categoria);
-        //buscar protudutos por categoria e juntar com variantes que possuem mesmo produto_id
+
         const sql = `
         SELECT produtos.*, variantes.*
         FROM produtos 
@@ -385,5 +384,20 @@ module.exports = {
         const values = [categoria];
         const result = await  executeSql(sql, values);
         return result;
+    },
+    getProdutosbyOffset: async (limit, offset) => {
+        const LIMIT = parseInt(limit) || 10;
+        const OFFSET = parseInt(offset) || 1;
+    
+        const sql = `
+        SELECT produtos.*, variantes.*
+        FROM produtos
+        JOIN variantes ON produtos.produto_id = variantes.produto_id
+        LIMIT ? OFFSET ? ;`;
+    
+        const values = [LIMIT, OFFSET];
+        const result = await executeSql(sql, values);
+        return result
     }
+    
 }

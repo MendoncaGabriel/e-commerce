@@ -25,7 +25,8 @@ module.exports = {
                 carrosel_1_data: produtosFiltrados, 
                 categorias: categorias,
                 dadosEmpresa: dadosEmpresa,
-                banners: banners
+                banners: banners,
+                tituloCategoria: 'Todos os produtos'
             });
         } catch (error) {
             console.log(error)
@@ -37,7 +38,7 @@ module.exports = {
             const produto = await produtoModel.produtoComVariantes(nome)
             const dadosEmpresa = await empresa.dados()
 
-            res.render('loja/produto', {produto, dadosEmpresa})
+            res.render('loja/produto', {produto, dadosEmpresa, nomeProduto: nome.toUpperCase().replace(/-/g, ' ')})
         } catch (error) {
             console.log(error)
         }
@@ -72,20 +73,29 @@ module.exports = {
     },
     gridProdutos: async (req, res) => {
         try {
-            const categoria = req.params.produtos;
+            const categoria = req.params.categoria;
             const titulo = capitalizar(categoria);
+
             const dadosEmpresa = await empresa.dados();
             const categorias = await categoriaModel.categorias();
 
             //buscar produtos por categorias
-            const produtosCategoria = await produtoModel.getProdutosCategoria(categoria);
+
+            let produtosCategoria = [];
+            if (categoria == 'todos-os-produtos') {
+                produtosCategoria = await produtoModel.getProdutosbyOffset(20, 1);
+            } else {
+                produtosCategoria = await produtoModel.getProdutosCategoria(categoria);
+            }
 
             res.render('loja/gridProdutos', {
                 titulo: titulo,
                 carrosel_1_titulo: 'Novidades', 
                 categorias: categorias,
                 dadosEmpresa: dadosEmpresa,
-                produtosCategoria: produtosCategoria
+                produtosCategoria: produtosCategoria,
+                tituloCategoria: categoria
+
             });
 
         } catch (error) {
