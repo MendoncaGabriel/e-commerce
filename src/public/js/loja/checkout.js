@@ -4,10 +4,10 @@ const rua = document.getElementById('rua');
 const numero = document.getElementById('numero');
 const bairro = document.getElementById('bairro');
 const cidade = document.getElementById('cidade');
-const uf = document.getElementById('uf');
-const pontoReferencia = document.getElementById('pontoReferencia');
-const tel1 = document.getElementById('tel1');
-const tel2 = document.getElementById('tel2');
+const uf = document.getElementById('estado');
+const pontoReferencia = document.getElementById('referencia');
+const telefone = document.getElementById('telefone');
+
 const btnSalvarEndereco = document.getElementById('btnSalvarEndereco');
 
 function exibirBtnSalvar(){
@@ -26,10 +26,10 @@ function salvarFormulario(){
             numero: document.getElementById('numero').value || '',
             bairro: document.getElementById('bairro').value || '',
             cidade: document.getElementById('cidade').value || '',
-            uf: document.getElementById('uf').value || '',
-            pontoReferencia: document.getElementById('pontoReferencia').value || '',
-            tel1: document.getElementById('tel1').value || '',
-            tel2: document.getElementById('tel2').value || ''
+            estado: document.getElementById('estado').value || '',
+            referencia: document.getElementById('referencia').value || '',
+            telefone: document.getElementById('telefone').value || ''
+
         })
     })
     .then(res => res.json())
@@ -57,8 +57,8 @@ bairro.addEventListener('input', ()=> exibirBtnSalvar());
 cidade.addEventListener('input', ()=> exibirBtnSalvar());
 uf.addEventListener('input', ()=> exibirBtnSalvar());
 pontoReferencia.addEventListener('input', ()=> exibirBtnSalvar());
-tel1.addEventListener('input', ()=> exibirBtnSalvar());
-tel2.addEventListener('input', ()=> exibirBtnSalvar());
+telefone.addEventListener('input', ()=> exibirBtnSalvar());
+
 
 
 function validarFormulario(){
@@ -78,8 +78,8 @@ function validarFormulario(){
     else if(uf.value.length == 0 ) { 
         uf.classList.add('border-2', 'border-red-500'), setTimeout(() => {uf.classList.remove('border-2', 'border-red-500')}, time); return false;
     }
-    else if(tel1.value.length == 0 ) { 
-        tel1.classList.add('border-2', 'border-red-500'), setTimeout(() => {tel1.classList.remove('border-2', 'border-red-500')}, time); return false;
+    else if(telefone.value.length == 0 ) { 
+        telefone.classList.add('border-2', 'border-red-500'), setTimeout(() => {telefone.classList.remove('border-2', 'border-red-500')}, time); return false;
     }
     else{
         return true;
