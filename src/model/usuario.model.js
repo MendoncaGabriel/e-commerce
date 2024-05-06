@@ -105,26 +105,23 @@ module.exports = {
         });
     },
     atualizarendereco: async (rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario) => {
-        console.log('===> Model ', { rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario})
-      
-        let enderecoAtual = {}
+        let enderecoAtual = {};
         let atualizar = false;
         try {
-            console.log('Endereço do usuario encontrado!')
+            console.log('Endereço do usuario encontrado!');
             enderecoAtual = await module.exports.pegarEnderecoUsuario(tokenUsuario);
             atualizar = true;
             
         } catch (error) {
-            console.log('Endereço não encontrado, inserindo novo...')
+            console.log('Endereço não encontrado, inserindo novo...');
             enderecoAtual = await module.exports.inserirEnderecoUsuario(rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario);
-            return {msg: 'Endereço não encontrado, novo endereço inserido!'}
-        }
+            return {msg: 'Endereço não encontrado, novo endereço inserido!'};
+        };
 
-    
+
         if(atualizar == true){
             console.log('Atualizando endereço...')
             const sql = `
-            
             UPDATE endereco_cliente 
             JOIN usuarios ON usuarios.idusuarios = endereco_cliente.usuarios_idusuarios 
             SET 
@@ -133,12 +130,11 @@ module.exports = {
                 endereco_cliente.bairro = ?, 
                 endereco_cliente.cidade = ?, 
                 endereco_cliente.estado = ?, 
-                endereco_cliente.referencia = ? 
+                endereco_cliente.referencia = ?,
                 endereco_cliente.telefone = ? 
             WHERE usuarios.idusuarios = ?;
             `;
             const usuarioId = await Utilitarios.verificarToken(tokenUsuario).id
-            console.log('===> update endereço: ', {rua, numero, bairro, cidade, estado, referencia, telefone, usuarioId})
             const values = [rua, numero, bairro, cidade, estado, referencia, telefone, usuarioId];
 
             try {
@@ -146,7 +142,7 @@ module.exports = {
                 if(!result || typeof result == "undefined") throw new Error('Erro ao atualizar endereço do usuario - ' + result);
                 return { msg: 'Endereço do usuário atualizado!'}
             } catch (error) {
-        
+                console.log(error)
                 return { msg: 'Erro ao atualizar endereço do usuario', error }
             }
         }
