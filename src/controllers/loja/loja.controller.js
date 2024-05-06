@@ -56,10 +56,9 @@ module.exports = {
                 });
             });
           
-            let endereco = {}
+            let endereco = {};
             try{
-                endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token)
-                console.log(endereco)
+                endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token);
             } catch (error) {
                 console.log(error)
             }
@@ -72,6 +71,13 @@ module.exports = {
     criarConta: async (req, res) => {
         try{
            res.render('loja/criarConta')
+        }catch(error){
+            console.log(error)
+        }
+    },
+    entar: async (req, res) => {
+        try{
+           res.render('loja/entrar')
         }catch(error){
             console.log(error)
         }

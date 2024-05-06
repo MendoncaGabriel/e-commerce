@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Conta</title>
+    <title>Entrar</title>
     <!-- BOOTSTRAP ICONS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <!-- TAILWINDCSS -->
@@ -18,17 +18,10 @@
         <div class="space-y-2">
             <div>
                 <img src="/assets/logo.png" alt="" class="w-40 m-auto">
-                <h1 class="text-2xl text-gray-600 font-semibold text-center">CRIAR CONTA</h1>
+                <h1 class="text-2xl text-gray-600 font-semibold text-center">ENTRAR</h1>
                 <h2 class="text-xl text-gray-600 font-semibold pb-2 text-center">Preencha seus dados</h2>
             </div>
-            <div class="flex flex-col">
-                <label for="nome" class="text-sm">Nome: <span class="text-red-400">*</span></label>
-                <input id="nome" required type="text" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="name">
-            </div>
-            <div class="flex flex-col">
-                <label for="telefone" class="text-sm">Telefone: <span class="text-red-400">*</span></label>
-                <input id="telefone" required type="text" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="tel">
-            </div>
+
             <div class="flex flex-col">
                 <label for="email" class="text-sm">Email: </label>
                 <input id="email"  type="email" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="email">
@@ -37,15 +30,12 @@
                 <label for="senha" class="text-sm">Senha: <span class="text-red-400">*</span></label>
                 <input id="senha" required type="password" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="new-password">
             </div>
-            <div class="flex flex-col">
-                <label for="confirmarSenha" class="text-sm">Confirmar Senha: <span class="text-red-400">*</span></label>
-                <input id="confirmarSenha" required type="password" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="new-password">
-            </div>
+
             
             <div class="pt-2">
                 <button onclick="enviar()" id="criarContaBtn" class="bg-c1 hover:bg-c2 px-4 py-2 w-full text-white font-semibold">CRIAR CONTA</button>
-                <p class="text-center pt-2">Já tem uma conta? <a href="/entrar" class="text-c1 hover:underline">Entrar</a> </p>
             </div>
+            <p class="text-center pt-2">Não tem uma conta? <a href="/criar-conta" class="text-c1 hover:underline">Criar Conta</a> </p>
         </div>
 
         <div id="container" class="hidden h-full object-cover max-w-auto overflow-x-hidden lg:flex">
