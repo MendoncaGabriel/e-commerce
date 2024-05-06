@@ -6,18 +6,17 @@ const btnFinalizarCompra = document.getElementById('btnFinalizarCompra');
 const contaionerFinalizarCarrinho = document.getElementById('contaionerFinalizarCarrinho');
 
 //ABRIR E FECHAR
-function abrirCarrinho(){
+function abrirCarrinho() {
     carregarCarrinho();
     carrinhoComponent.classList.replace('hidden', 'flex');
-    setTimeout(()=>  carrinhoComponent.classList.replace('left-[-100%]', 'left-[0%]'), 100);
+    setTimeout(() => carrinhoComponent.classList.replace('left-[-100%]', 'left-[0%]'), 100);
 };
-function fecharCarrinho(){
+function fecharCarrinho() {
     carrinhoComponent.classList.replace('left-[0%]', 'left-[-100%]');
-    setTimeout(()=> carrinhoComponent.classList.replace('flex', 'hidden') , 250);
+    setTimeout(() => carrinhoComponent.classList.replace('flex', 'hidden'), 250);
 };
-
-function converterEmRealCarrinho(precoString){
-    const precoNumero = parseFloat(precoString);
+function converterEmRealCarrinho(precoString) {
+    const precoNumero = Number(precoString).toFixed(2);
 
     const formatoMoeda = new Intl.NumberFormat('pt-BR', {
         style: 'currency',
@@ -47,7 +46,7 @@ const itemCarrinho = (imagem, quantidade, preco, variante_id) => `
         <h2 class=""><b>Nome do produto grande aqui...</b></h2>
         <p class="" >Preço: ${converterEmRealCarrinho(preco)}</p>
         <p class="" >Quantidade: <span id="qtd${variante_id}">${quantidade}</span> </p>
-        <p class="">Total: <span class="text-c1 font-bold text-lg " id="total${variante_id}">${converterEmRealCarrinho(Number(preco) * Number(quantidade)) } </span></p>
+        <p class="">Total: <span class="text-c1 font-bold text-lg " id="total${variante_id}">${converterEmRealCarrinho(Number(preco) * Number(quantidade))} </span></p>
     </div>
 
     <div class="col-span-10  border-c1  flex justify-between pt-2">
@@ -70,13 +69,13 @@ const itemCarrinho = (imagem, quantidade, preco, variante_id) => `
 
 
 // MAIS OU MENOS NO CARRINHO
-function menosQtdCarrinho(variante_id){
-    if(localStorage.carrinho){
+function menosQtdCarrinho(variante_id) {
+    if (localStorage.carrinho) {
         const carrinho = JSON.parse(localStorage.carrinho);
         carrinho.forEach(item => {
-            if(item.variante_id == variante_id){
+            if (item.variante_id == variante_id) {
                 const quantidade = document.getElementById(`qtdCarrinho${variante_id}`);
-                if(item.qtd > 1){
+                if (item.qtd > 1) {
                     item.qtd--
                     quantidade.value--
                     localStorage.carrinho = JSON.stringify(carrinho);
@@ -86,15 +85,15 @@ function menosQtdCarrinho(variante_id){
         });
     };
 };
-function maisQtdCarrinho(variante_id){
-    if(localStorage.carrinho){
+function maisQtdCarrinho(variante_id) {
+    if (localStorage.carrinho) {
         const carrinho = JSON.parse(localStorage.carrinho);
 
         carrinho.forEach(item => {
-            if(item.variante_id == variante_id){
+            if (item.variante_id == variante_id) {
                 const quantidade = document.getElementById(`qtdCarrinho${variante_id}`);
 
-                if(item.qtd < item.estoque){
+                if (item.qtd < item.estoque) {
                     item.qtd++;
                     quantidade.value++;
                     localStorage.carrinho = JSON.stringify(carrinho);
@@ -106,7 +105,7 @@ function maisQtdCarrinho(variante_id){
     }
 };
 function removerCarrinho(variante_id) {
-    
+
     if (localStorage.carrinho) {
         const carrinho = JSON.parse(localStorage.carrinho);
         const itemRemovido = carrinho.filter(e => e.variante_id != variante_id);
@@ -119,22 +118,22 @@ function removerCarrinho(variante_id) {
             localStorage.carrinho = JSON.stringify(itemRemovido);
             carregarCarrinho();
             notificarItemCarrinho()
-  
-        }, 250); 
+
+        }, 250);
     }
 }
 
 
 //CARREGAR
-function carregarCarrinho(){
-   
-    if(!localStorage.carrinho){
+function carregarCarrinho() {
+
+    if (!localStorage.carrinho) {
         listaProdutosCarrinho.innerHTML = carrinhovazio();
         return;
     };
 
     const carrinho = JSON.parse(localStorage.carrinho);
-    if(carrinho.length == 0){
+    if (carrinho.length == 0) {
         subtotal.innerText = 'R$ 00,00';
         listaProdutosCarrinho.innerHTML = carrinhovazio();
         contaionerFinalizarCarrinho.classList.add('hidden');
@@ -144,15 +143,64 @@ function carregarCarrinho(){
     listaProdutosCarrinho.innerHTML = '';
     let total = 0;
     carrinho.forEach(item => {
-        total += Number(item.qtd) * Number(item.preco);
+        console.log(`item.qtd: ${item.qtd} || item.preco: ${item.preco}`)
+
+        if (typeof item.qtd != "undefined" && typeof item.preco != "undefined" && item != {}) {
+
+            total += Number(item.qtd) * Number(item.preco);
+        }
         listaProdutosCarrinho.innerHTML += itemCarrinho(item.imagem, item.qtd, item.preco, item.variante_id);
     });
 
+    console.log(total)
 
     contaionerFinalizarCarrinho.classList.remove('hidden');
     subtotal.innerText = converterEmRealCarrinho(total);
     notificarItemCarrinho()
-    
-  
+
+
+
+}
+
+function finalizarCompraCarrinho() {
+    if (!localStorage.carrinho) alert('Você não tem produtos no carrinho!');
+    const carrinho = [];
+
+    // varilar itens no carrinho
+    JSON.parse(localStorage.carrinho).forEach(item => {
+        if (typeof item.qtd != "undefined" && typeof item.preco != "undefined" && item != {}) {
+            carrinho.push(item);
+        };
+    });
+
+    addCarrinhoCookie(carrinho)
+}
+
+function addCarrinhoCookie(data) {
+    // LIMPAR, APENAD DADOS NECESSARIOS
+    const carrinho = []
+
+    data.forEach(e => {
+        carrinho.push({
+            qtd: e.qtd,
+            variante_id: e.variante_id,
+            produto_id: e.produto_id
+        })
+    });
+
+
+    const dadosString = JSON.stringify(carrinho);
+
+    // Calcular a data de expiração em 30 dias a partir de hoje
+    const dataExpiracao = new Date();
+    dataExpiracao.setDate(dataExpiracao.getDate() + 30);
+
+    // Definir o cookie com os dados e a data de expiração
+    document.cookie = `carrinho=${dadosString}; expires=${dataExpiracao.toUTCString()}; path=/`;
+
+
+    if (document.cookie) {
+        window.location.href = '/';
+    }
 
 }

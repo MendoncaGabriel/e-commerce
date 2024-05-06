@@ -1,5 +1,5 @@
 let tentativas = 0;
-let textoQRCode = ''
+let textoQRCode = '';
 const rua = document.getElementById('rua');
 const numero = document.getElementById('numero');
 const bairro = document.getElementById('bairro');
@@ -7,8 +7,16 @@ const cidade = document.getElementById('cidade');
 const uf = document.getElementById('estado');
 const pontoReferencia = document.getElementById('referencia');
 const telefone = document.getElementById('telefone');
-
 const btnSalvarEndereco = document.getElementById('btnSalvarEndereco');
+
+//DETECTAR ALTERAÇÃO
+rua.addEventListener('input', ()=> exibirBtnSalvar());
+numero.addEventListener('input', ()=> exibirBtnSalvar());
+bairro.addEventListener('input', ()=> exibirBtnSalvar());
+cidade.addEventListener('input', ()=> exibirBtnSalvar());
+uf.addEventListener('input', ()=> exibirBtnSalvar());
+pontoReferencia.addEventListener('input', ()=> exibirBtnSalvar());
+telefone.addEventListener('input', ()=> exibirBtnSalvar());
 
 function exibirBtnSalvar(){
     btnSalvarEndereco.classList.replace('hidden', 'block');
@@ -49,18 +57,6 @@ function salvarFormulario(){
         }, 1000);
     })
 };
-
-//DETECTAR ALTERAÇÃO
-rua.addEventListener('input', ()=> exibirBtnSalvar());
-numero.addEventListener('input', ()=> exibirBtnSalvar());
-bairro.addEventListener('input', ()=> exibirBtnSalvar());
-cidade.addEventListener('input', ()=> exibirBtnSalvar());
-uf.addEventListener('input', ()=> exibirBtnSalvar());
-pontoReferencia.addEventListener('input', ()=> exibirBtnSalvar());
-telefone.addEventListener('input', ()=> exibirBtnSalvar());
-
-
-
 function validarFormulario(){
     let time = 2000;
     if(rua.value.length == 0 ) { 
@@ -96,7 +92,6 @@ function mascara(src, mascara) {
         }
     }
 };
-
 function gerarPixQrCode(btn, valor) {
     if (!validarFormulario()) return;
     const pedido = JSON.parse(window.pedido);
@@ -158,20 +153,17 @@ function gerarPixQrCode(btn, valor) {
         console.error('Erro na requisição:', error);
         // Adicione aqui qualquer tratamento de erro adicional, como mostrar uma mensagem de erro ao usuário.
     });
-}
-
+};
 async function motrarModalQrCode(textoQRCode){
     const qrCode = document.getElementById('qrCode')
     qrCode.src = await `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${textoQRCode}`
     document.getElementById('sectionPix').classList.remove('hidden')
 
-}
-
+};
 function fecharSectionPix(){
     document.getElementById('sectionPix').classList.add('hidden')
-}
-
-function indicadorDeProgresso() {
+};
+function indicadorDeProgresso(){
     let tempo = 180; // 3 minutos em segundos
     let maximo = 180
     const ContadorTempo = document.querySelector('#ContadorTempo');
@@ -200,10 +192,7 @@ function indicadorDeProgresso() {
             alert('Pix Inspirado! Atualize a página se precisar gerar outro.');
         }
     }, 1000);
-}
-
-
-
+};
 function copiarPix(btn){
     btn.classList.replace('bg-blue-500', 'bg-green-500')
     document.getElementById('btnCopiarPix').innerHTML = ` <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
@@ -242,4 +231,4 @@ function copiarPix(btn){
     document.body.removeChild(input);
 
 
-}
+};

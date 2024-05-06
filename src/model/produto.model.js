@@ -1,6 +1,7 @@
 const executeSql = require('../utilities/executarSql')
 const fs = require('fs');
 const path = require('path');
+const db = require('../../database/database');
 
 module.exports = {
     novoProduto: async (data) => {
@@ -328,50 +329,45 @@ module.exports = {
         }
     },
     processarCheckOut: async (carrinho) => {
-        
-        const mapaItens = new Map();
-        carrinho.forEach(item => {
-            const chave = `${item.produto_id}-${item.variante_id}`;
-            if (mapaItens.has(chave)) {
-                // Se o item já existir no mapa, adicione a quantidade
-                mapaItens.get(chave).qtdProduto += item.qtdProduto;
-            } else {
-                // Se o item não existir no mapa, adicione-o
-                item.qtdProduto = item.qtdProduto
-                mapaItens.set(chave, { ...item });
-            }
+        if(!carrinho || carrinho.length == 0 ) throw new Error('Cairrinho esta vazio');
+
+        //array de promessas
+        const promessas = [];
+
+        //interando sobre array do cookie e buscando itens na base de dados
+        carrinho.forEach(element => {
+            const item = new Promise(async (resolve, reject) => {
+                try {
+                    const sql = `SELECT produtos.*, variantes.* FROM variantes JOIN produtos ON produtos.produto_id = variantes.produto_id WHERE variantes.variante_id = ?;`;
+                    const values = [element.variante_id];
+                    const result = await  executeSql(sql, values)
+
+                    //informando qtd e total selecionada pelo usuario
+                    result[0].qtd = Number(element.qtd);
+                    result[0].total = Number(element.qtd) * Number(result[0].preco);
+                  
+                    resolve(result[0])
+                } catch (error) {
+                    reject('Erro ao resolver promessa, item não encontrado!')
+                }
+            });
+
+            //adicionado promessa ao array
+            promessas.push(item);
         });
 
-        // Converter o mapa de volta para um array
-        const itensAgrupados = Array.from(mapaItens.values());
-        const itens = []
-    
-        for (const e of itensAgrupados) {
-      
-            try {
-                const item = await executeSql(`SELECT v.*, p.nome AS nome_produto
-                FROM variantes v
-                JOIN produtos p ON v.produto_id = p.produto_id
-                WHERE v.variante_id = ? AND p.produto_id = ?;
-                `, [e.variante_id, e.produto_id])
-                
-                item[0].qtdProduto = e.qtdProduto
-                itens.push(item[0]);
-            } catch (error) {
-                console.error('Erro ao executar a consulta SQL:', error);
-            }
-        }
-        
-        let total = 0
-        itens.forEach(e =>{
-            let valor = e.preco * e.qtdProduto
-            total = total + valor
-        })
-
-        total = String(total).replace('.', ',')
+        //resolvendo todas as promessas
+        const result = await Promise.all(promessas);
+        if(!result) throw new Error('Erro ao obter produtos do carrinho');
 
         //calcular total
-        return {itens, total}
+        let total = 0;
+        result.forEach(e => total += e.total);
+
+
+
+        return {itens: result, total: total};
+
     },
     getProdutosCategoria: async (categoria) => {
 

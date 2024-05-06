@@ -21,5 +21,15 @@ module.exports = {
             console.log(error)
             throw new Error("Erro ao pegar banners da empresa", error)
         }
+    },
+    bannerForm: async () => {
+        try {
+            const sql = "SELECT * FROM banner_formulario;"
+            const result = await executeSql(sql)
+            return result
+        } catch (error) {
+            console.log(error)
+            throw new Error("Erro ao pegar banners form", error)
+        }
     }
 }

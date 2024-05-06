@@ -23,7 +23,7 @@
             </div>
 
             <div class="flex flex-col">
-                <label for="email" class="text-sm">Email: </label>
+                <label for="email" class="text-sm">Email: <span class="text-red-400">*</span></label>
                 <input id="email"  type="email" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="email">
             </div>
             <div class="flex flex-col">
@@ -33,28 +33,22 @@
 
             
             <div class="pt-2">
-                <button onclick="enviar()" id="criarContaBtn" class="bg-c1 hover:bg-c2 px-4 py-2 w-full text-white font-semibold">CRIAR CONTA</button>
+                <button onclick="enviar()" id="criarContaBtn" class="bg-c1 hover:bg-c2 px-4 py-2 w-full text-white font-semibold">ENTRAR</button>
             </div>
             <p class="text-center pt-2">Não tem uma conta? <a href="/criar-conta" class="text-c1 hover:underline">Criar Conta</a> </p>
         </div>
 
-        <div id="container" class="hidden h-full object-cover max-w-auto overflow-x-hidden lg:flex">
-            <img 
-                src="https://img.freepik.com/fotos-premium/mulher-segurando-baloes-em-uma-festa-sobre-parede-azul-isolada_1368-75237.jpg" 
-                alt=""
-                class="hidden lg:block h-full object-cover max-w-auto"
-            >
-            <img 
-                src="https://img.freepik.com/fotos-premium/mulher-feliz-segura-baloes-de-festa-em-estudio-mulher-com-balao-para-festa-isolada-em-amarelo_474717-102674.jpg" 
-                alt=""
-                class="hidden lg:block h-full object-cover max-w-auto"
-            >
-            <img 
-                src="https://img.freepik.com/fotos-gratis/mulher-loira-romantica-com-um-grande-sorriso-posando-de-vestido-preto-na-parede-rosa-brilhante-aniversariante-encantadora-com-balao-de-helio_197531-21418.jpg" 
-                alt=""
-                class="hidden lg:block h-full object-cover max-w-auto"
-            >
-        </div>
+        <% if (typeof banners != "undefined" && banners && banners.length != 0) { %>
+            <div id="container" class="hidden h-full object-cover max-w-auto overflow-x-hidden lg:flex">
+                <% banners.map(element => { %>             
+                    <img 
+                    src="/banner/form/<%= element.img  %>" 
+                    alt=""
+                    class="hidden lg:block h-full object-cover max-w-auto"
+                    >
+                <% }) %>
+            </div>
+        <% } %>
         
 
     </div>
