@@ -34,7 +34,7 @@
 </style>
 <body class="bg-gray-100">
     <script>
-        window.pedido = `<%- JSON.stringify(pedido).replace(/[\n\r]/g, '').replace(/\\/g, '\\\\') %>`;
+        window.pedido = `<%- JSON.stringify(carrinhoProcessado).replace(/[\n\r]/g, '').replace(/\\/g, '\\\\') %>`;
     </script>
     <% 
         function stringParaReal(string) {
@@ -52,21 +52,28 @@
         <div class="text-right text-gray-700 text-xl flex flex-col border-2 border-c1 rounded-lg bg-white shadow-md">
             <ul id="listaProdutosCarrinho" class="overflow-y-auto h-screen  text-xl text-left p-4  ">
                 <h2 class="w-full p-4 pt-0 text-lg text-center font-light">LISTA DE PRODUTOS</h2>
-                <% if (typeof itensProcessados.itens != 'undefined' && itensProcessados.itens) { %>                 
-                    <% itensProcessados.itens.forEach(e => { %>
-                        <li class="border-b-2 border-c1 text-gray-700 flex items-center justify-between border-dashed pb-2  gap-2 ">
-                            <span class="  text-left text-sm">
-                                <%= e.nome_produto %>
-                            </span> 
+                
+                <!-- ITEM DA LISTA DE PRODUTOS -->
+                <% if (typeof carrinhoProcessado.itens != 'undefined' && carrinhoProcessado.itens) { %>                 
+                    <% carrinhoProcessado.itens.forEach(e => { %>
+                 
+                        <li class="border-b-2 border-c1 text-gray-700 flex items-center justify-between border-dashed pb-2  gap-2 my-2 ">
+                            <div class="flex items-center justify-center space-x-2">
+                                <img src="/img/<%= e.imagem  %>" alt="" class="rounded-md aspect-square w-20 drop-shadow-lg border">
+                                <span class="  text-left text-sm">
+                                    <%= e.nome %>
+                                </span> 
+                            </div>
 
-                            <% let totalUnidade =   stringParaReal(e.preco)  %>
+                
                             <span class="text-right text-md w-24  flex-none text-sm ">
-                                R$ <%= stringParaReal(e.preco) %> x  <%= stringParaReal(e.qtdProduto) %> <br>
-                                <span class="px-2  rounded-full bg-c1 text-white  leading-5">= R$ <%= totalUnidade %></span>
+                                R$ <%= stringParaReal(e.preco) %> x  <%= e.qtd %> <br>
+                                <span class="px-2  rounded-full bg-c1 text-white  leading-5">= R$ <%= stringParaReal(e.total) %></span>
                             </span>
                         </li>
                     <% }) %>
                 <% } %>
+
             </ul>
         </div>
 
@@ -133,14 +140,14 @@
         <div class="text-xl text-left p-4 bg-white rounded-lg  border-2 border-c1 shadow-md">
             <h2 class="w-full p-4 pt-0 text-lg text-center font-light">PAGAMENTO</h2>
 
-            <% const valorTotalAPagar = typeof itensProcessados.total != "string" ? stringParaReal(itensProcessados.total) : itensProcessados.total  %>
+         
 
             <div class="flex justify-between items-center font-semibold text-gray-700">
                 <h2 class="p-4 text-xl " >TOTAL: </h2>
-                <h2 class="p-4 text-xl " id="subtotal">R$ <%= valorTotalAPagar %></h2>
+                <h2 class="p-4 text-xl " id="subtotal">R$ <%= stringParaReal(carrinhoProcessado.total) %></h2>
             </div>
 
-            <button onclick="gerarPixQrCode(this, '<%= valorTotalAPagar %>')" class="bg-gradient-to-l from-pink-500 to-c1 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
+            <button onclick="gerarPixQrCode(this, '<%= stringParaReal(carrinhoProcessado.total) %>')" class="bg-gradient-to-l from-pink-500 to-c1 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
                 <img src="/icons/logo-pix-520x520.png" alt="" class="w-10 drop-shadow-lg">
                 <p class="text-xl leading-none drop-shadow-lg">PAGAR COM PIX</p>
             </button>

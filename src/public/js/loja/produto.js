@@ -56,17 +56,15 @@ function verificarItemSelecionado(){
             variantesSelect.classList.replace('border-4', 'border-2' );
         }, 1000);
    
-        return;
+        return false
     };
+
+    return true
 };
 
 
 function maisQtd(){
-    verificarItemSelecionado();
-    console.log('###')
-
-
-    console.log(produtoSelecionado.estoque, produtoSelecionado.qtd)
+    if(verificarItemSelecionado() == false)  return ;
 
     if(produtoSelecionado.estoque > produtoSelecionado.qtd){
         produtoSelecionado.qtd++;
@@ -76,7 +74,7 @@ function maisQtd(){
     }
 }
 function menosQtd(){
-    verificarItemSelecionado();
+    if(verificarItemSelecionado() == false)  return ;
     
     if(produtoSelecionado.qtd > 1){
         produtoSelecionado.qtd--
@@ -87,7 +85,9 @@ function menosQtd(){
 }
 
 function finalizarCompra(){
-    verificarItemSelecionado();
+    if(verificarItemSelecionado() == false)  return ;
+
+
     if(!localStorage.carrinho){
         localStorage.carrinho = JSON.stringify([produtoSelecionado]);
     }else{
@@ -113,7 +113,7 @@ function finalizarCompra(){
 }
 
 function adicionarAoCarrinho(){
-    verificarItemSelecionado();
+    if(verificarItemSelecionado() == false)  return ;
 
 
     if(!localStorage.carrinho){

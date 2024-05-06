@@ -2,6 +2,7 @@ const produtoModel = require('../../model/produto.model');
 const categoriaModel = require('../../model/categoria.model');
 const empresa = require('../../model/config.model');
 const usuarioModel = require('../../model/usuario.model');
+
 const { capitalizar } = require('../../utilities/text');
 
 module.exports = {
@@ -44,25 +45,21 @@ module.exports = {
     },
     checkout: async (req, res) => {
         try {
-            const carrinho = JSON.parse(req.cookies.carrinho)
-            const itensProcessados = await produtoModel.processarCheckOut(carrinho)
-            const pedido = [];
+            const carrinhoCookie = JSON.parse(req.cookies.carrinho);
+            const carrinhoProcessado = await produtoModel.processarCheckOut(carrinhoCookie);
 
-            itensProcessados.itens.forEach(element => {
-                pedido.push({
-                    produto_id: element.produto_id, 
-                    variante_id: element.variante_id, 
-                    qtdProduto: element.qtdProduto
-                });
-            });
+        
+  
           
             let endereco = {};
             try{
                 endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token);
             } catch (error) {
-                console.log(error)
-            }
-            res.render('loja/checkout', {itensProcessados, endereco, pedido})
+                console.log('Endereço do usuario não definido');
+            };
+
+            console.log('===> carrinhoProcessado: ', carrinhoProcessado)
+            res.render('loja/checkout', {carrinhoProcessado, endereco, carrinhoProcessado})
                
         } catch (error) {
             console.log(error)
@@ -70,14 +67,16 @@ module.exports = {
     },
     criarConta: async (req, res) => {
         try{
-           res.render('loja/criarConta')
+            const dadosEmpresa = await empresa.bannerForm()
+            res.render('loja/criarConta', {banners: dadosEmpresa})
         }catch(error){
             console.log(error)
         }
     },
     entar: async (req, res) => {
         try{
-           res.render('loja/entrar')
+            const dadosEmpresa = await empresa.bannerForm()
+            res.render('loja/entrar', {banners: dadosEmpresa})
         }catch(error){
             console.log(error)
         }
