@@ -36,7 +36,7 @@ module.exports = {
         try {
             const tokenUsuario = req.cookies.token;
             const pedido = req.body;
-            console.log('===> pedido: ',pedido)
+            console.log('===> pedido: ', pedido)
             
             
             const result = await usuarioModel.registarPedido(pedido, tokenUsuario)

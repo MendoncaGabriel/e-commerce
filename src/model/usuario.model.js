@@ -155,12 +155,11 @@ module.exports = {
     },
     inserirEnderecoUsuario: async (rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario) => {
         try {
-            console.log(tokenUsuario)
+       
             // Obtém o ID do usuário a partir do token
             const usuarioId = await Utilitarios.verificarToken(tokenUsuario).id
-            console.log(usuarioId)
+   
 
-    
             // Prepara a consulta SQL para inserir o novo endereço
             const sql = `
                 INSERT INTO endereco_cliente (rua, numero, bairro, cidade, estado, referencia, telefone, usuarios_idusuarios)
@@ -209,7 +208,6 @@ module.exports = {
                 // Executa a consulta SQL
                 const result = await executarSql(sql, values);
                 if(!result || result.length == 0) throw new Error('Endereço do usuario não definido ou não encontrado')
-                console.log(result)
                 resolve(result[0]);
             } catch (error) {
                 reject({ msg: 'Erro ao pegar endereço do usuário', error });
@@ -225,7 +223,6 @@ module.exports = {
                 let data = new Date()
                 const values = ['Aguardando Pagamento', element.qtdProduto, id, element.produto_id, element.variante_id, data ];
                 const result = await executarSql(sql, values);
-                console.log(result);
             }));
         } catch (error) {
             console.error("Erro ao registrar pedido:", error);

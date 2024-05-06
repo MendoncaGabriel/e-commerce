@@ -23,6 +23,7 @@ class Utilitarios {
 router.get('/',  lojaController.home)
 router.get('/produto/:nome',  lojaController.produto)
 router.get('/criar-conta',  lojaController.criarConta)
+router.get('/entrar',  lojaController.entar)
 router.get('/categoria/:categoria',  lojaController.gridProdutos)
 
 const verificarLogin = async (req, res, next) => {
