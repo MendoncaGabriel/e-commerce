@@ -24,8 +24,10 @@ module.exports = {
     endereco: async (req, res) => {
         try {
             const tokenUsuario = req.cookies.token;
-            const {rua, numero, bairro, cidade, uf, pontoReferencia, tel1, tel2} = req.body;
-            const enderecoUsuario = await  usuarioModel.atualizarendereco(rua, numero, bairro, cidade, uf, pontoReferencia, tel1, tel2, tokenUsuario);
+            console.log('Controller ===> ', req.body)
+  
+            const {rua, numero, bairro, cidade, estado, referencia, telefone} = req.body;
+            const enderecoUsuario = await  usuarioModel.atualizarendereco(rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario);
 
             res.status(200).json(enderecoUsuario);
         } catch (error) {

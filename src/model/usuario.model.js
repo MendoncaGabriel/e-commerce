@@ -83,12 +83,12 @@ class Usuario {
 
 
 module.exports = {
-    novoUsuario: async (nome, email, senha, telefone) => {
-        const usuario = new Usuario(nome, email, senha, telefone);
+    novoUsuario: async (nome, email, senha) => {
+        const usuario = new Usuario(nome, email, senha);
         usuario.senha = await Utilitarios.criptografarSenha(senha);
     
-        const sql = 'INSERT INTO usuarios (nome, email, senha, telefone) VALUES (?, ?, ?, ?);';
-        const values = [usuario.nome, usuario.email, usuario.senha, usuario.telefone];
+        const sql = 'INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?);';
+        const values = [usuario.nome, usuario.email, usuario.senha];
     
         return new Promise(async (resolve, reject) => {
             try {
@@ -96,7 +96,7 @@ module.exports = {
                 const id = result.insertId;
     
                 // Adiciona o ID ao token do usuário
-                usuario.token = await Utilitarios.gerarToken({ id, nome, email, senha, telefone });
+                usuario.token = await Utilitarios.gerarToken({ id, nome, email, senha });
     
                 resolve({ msg: 'Usuário criado com sucesso!', id, token: usuario.token });
             } catch (error) {
@@ -104,33 +104,103 @@ module.exports = {
             }
         });
     },
-    atualizarendereco: async (rua, numero, bairro, cidade, uf, pontoReferencia, tel1, tel2, tokenUsuario) => {
+    atualizarendereco: async (rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario) => {
+        console.log('===> Model ', { rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario})
+      
+        let enderecoAtual = {}
+        let atualizar = false;
+        try {
+            console.log('Endereço do usuario encontrado!')
+            enderecoAtual = await module.exports.pegarEnderecoUsuario(tokenUsuario);
+            atualizar = true;
+            
+        } catch (error) {
+            console.log('Endereço não encontrado, inserindo novo...')
+            enderecoAtual = await module.exports.inserirEnderecoUsuario(rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario);
+            return {msg: 'Endereço não encontrado, novo endereço inserido!'}
+        }
+
     
-        const sql = `
-        UPDATE usuarios 
-        SET rua = ?, numero = ?, bairro = ?, cidade = ?, uf = ?, pontoReferencia = ?, tel1 = ?, tel2 = ?
-        WHERE idusuarios = ?;
-        `;
+        if(atualizar == true){
+            console.log('Atualizando endereço...')
+            const sql = `
+            
+            UPDATE endereco_cliente 
+            JOIN usuarios ON usuarios.idusuarios = endereco_cliente.usuarios_idusuarios 
+            SET 
+                endereco_cliente.rua = ?, 
+                endereco_cliente.numero = ?, 
+                endereco_cliente.bairro = ?, 
+                endereco_cliente.cidade = ?, 
+                endereco_cliente.estado = ?, 
+                endereco_cliente.referencia = ? 
+                endereco_cliente.telefone = ? 
+            WHERE usuarios.idusuarios = ?;
+            `;
+            const usuarioId = await Utilitarios.verificarToken(tokenUsuario).id
+            console.log('===> update endereço: ', {rua, numero, bairro, cidade, estado, referencia, telefone, usuarioId})
+            const values = [rua, numero, bairro, cidade, estado, referencia, telefone, usuarioId];
 
-        const usuarioId = await Utilitarios.verificarToken(tokenUsuario).id
-        const values = [rua, numero, bairro, cidade, uf, pontoReferencia, tel1, tel2, usuarioId];
-
-        return new Promise (async (resolve, reject) => {
             try {
                 const result = await executarSql(sql, values);
-                console.log(result);
-                resolve({ msg: 'Endereço do usuário atualizado!'});
+                if(!result || typeof result == "undefined") throw new Error('Erro ao atualizar endereço do usuario - ' + result);
+                return { msg: 'Endereço do usuário atualizado!'}
             } catch (error) {
-                reject({ msg: 'Erro ao atualizar endereço do usuario', error });
-            };
-        });
+        
+                return { msg: 'Erro ao atualizar endereço do usuario', error }
+            }
+        }
+
+
+
+
+            
+        
     },
+    inserirEnderecoUsuario: async (rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario) => {
+        try {
+            console.log(tokenUsuario)
+            // Obtém o ID do usuário a partir do token
+            const usuarioId = await Utilitarios.verificarToken(tokenUsuario).id
+            console.log(usuarioId)
+
+    
+            // Prepara a consulta SQL para inserir o novo endereço
+            const sql = `
+                INSERT INTO endereco_cliente (rua, numero, bairro, cidade, estado, referencia, telefone, usuarios_idusuarios)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+            `;
+            const values = [rua, numero, bairro, cidade, estado, referencia, telefone, usuarioId];
+    
+            // Executa a consulta SQL para inserir o novo endereço
+            const result = await executarSql(sql, values);
+            
+            // Verifica se o endereço foi inserido com sucesso
+            if (!result || typeof result.insertId === 'undefined') {
+                throw new Error('Erro ao inserir o endereço do usuário');
+            }
+    
+            return { msg: 'Novo endereço do usuário inserido com sucesso!' };
+        } catch (error) {
+            return { msg: 'Erro ao inserir endereço do usuário', error };
+        }
+    },
+    
+
     pegarEnderecoUsuario: async (tokenUsuario) => {
         const sql = `
-        SELECT rua, numero, bairro, cidade, uf, pontoReferencia, tel1, tel2 
+        SELECT 
+            endereco_cliente.rua, 
+            endereco_cliente.numero, 
+            endereco_cliente.bairro, 
+            endereco_cliente.cidade, 
+            endereco_cliente.estado, 
+            endereco_cliente.referencia, 
+            endereco_cliente.telefone
         FROM usuarios 
-        WHERE idusuarios = ?;
-        `;
+        JOIN endereco_cliente ON usuarios.idusuarios = endereco_cliente.usuarios_idusuarios 
+        WHERE usuarios.idusuarios = ?;`;
+    
     
         // Obtém o ID do usuário a partir do token
         const { id } = await Utilitarios.verificarToken(tokenUsuario);
@@ -142,6 +212,8 @@ module.exports = {
             try {
                 // Executa a consulta SQL
                 const result = await executarSql(sql, values);
+                if(!result || result.length == 0) throw new Error('Endereço do usuario não definido ou não encontrado')
+                console.log(result)
                 resolve(result[0]);
             } catch (error) {
                 reject({ msg: 'Erro ao pegar endereço do usuário', error });

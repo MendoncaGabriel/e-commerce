@@ -17,7 +17,6 @@ module.exports = {
                return e.ativo == 1 && e.imagem !== null && e.estoque > 0 ;
             });
 
-            console.log(produtosFiltrados)
 
             const categorias = await categoriaModel.categorias();
             res.render('loja/home', {
@@ -57,9 +56,15 @@ module.exports = {
                 });
             });
           
-            const endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token)
-               
+            let endereco = {}
+            try{
+                endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token)
+                console.log(endereco)
+            } catch (error) {
+                console.log(error)
+            }
             res.render('loja/checkout', {itensProcessados, endereco, pedido})
+               
         } catch (error) {
             console.log(error)
         }

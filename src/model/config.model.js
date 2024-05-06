@@ -3,8 +3,9 @@ const executeSql = require('../utilities/executarSql')
 module.exports = {
     dados: async () => {
         try {
-            const sql = "SELECT * FROM shopdosbaloes.configuracoes;"
+            const sql = "SELECT * FROM configuracoes;"
             const result = await executeSql(sql)
+            console.log(result)
             return result
         } catch (error) {
             console.log(error)
@@ -13,7 +14,7 @@ module.exports = {
     },
     banners: async () => {
         try {
-            const sql = "SELECT * FROM shopdamaquiagem.banners;"
+            const sql = "SELECT * FROM banners;"
             const result = await executeSql(sql)
             return result
         } catch (error) {

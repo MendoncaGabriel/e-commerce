@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>CHECKOUT</title>
         <!-- BOOTSTRAP ICONS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
         <!-- TAILWINDCSS -->
@@ -70,6 +70,7 @@
             </ul>
         </div>
 
+        <% console.log('===> ejs checkout ',endereco) %>
         <!-- ENDEREÇO DE ENTREGA -->
         <div class="text-xl text-left p-4 bg-white rounded-lg  border-2 border-blue-500 shadow-md">
             <h2 class="w-full p-4 pt-0 text-lg text-center font-light">ENDEREÇO DE ENTREGA</h2>
@@ -79,29 +80,35 @@
                 <div class="flex justify-between items-center space-x-4">
                     <div class="w-full">
                         <label for="">Rua: <span class="text-red-400">*</span></label><br>
-                        <input id="rua" maxlength="45" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.rua ?? ''  %>">
+                        <input id="rua" maxlength="45" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.numero ? endereco.numero :  ''  %>">
                     </div>
                     <div>
                         <label for="">Numero: <span class="text-red-400">*</span></label><br>
-                        <input autocomplete="address-line2" id="numero" type="text" maxlength="5" class="bg-gray-100 focus:outline-none focus:border-blue-500 px-2 py-1 w-20" value="<%= endereco.numero ?? ''  %>">
+                        <input autocomplete="address-line2" id="numero" type="text" maxlength="5" class="bg-gray-100 focus:outline-none focus:border-blue-500 px-2 py-1 w-20" value="<%=  typeof  endereco != "undefined" &&  endereco.rua ? endereco.rua :  ''  %>">
                     </div>
                 </div>
 
                 <div class="w-full">
                     <label for="">Bairro: <span class="text-red-400">*</span></label><br>
-                    <input autocomplete="address-level3" id="bairro" maxlength="30" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.bairro ?? ''  %>">
+                    <input autocomplete="address-level3" id="bairro" maxlength="30" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%=  typeof  endereco != "undefined" &&  endereco.bairro ? endereco.bairro :  ''   %>">
+                </div>
+
+                <div class="w-full">
+                 
+                    <label for="">Telefone: <span class="text-red-400">*</span></label><br>
+                    <input autocomplete="tel" onkeypress="mascara(this, '(##) #####-####')" maxlength="15" id="telefone" type="tel" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.telefone ? endereco.telefone :  ''   %>">
                 </div>
 
                 <div class="flex justify-between items-center space-x-4">
                     <div class="w-full">
                         <label for="">Cidade:</label><br>
-                        <select id="cidade" class="px-2 py-1 w-full  bg-gray-100" value="<%= endereco.cidade ?? ''  %>">
+                        <select id="cidade" class="px-2 py-1 w-full  bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.cidade ? endereco.cidade :  ''   %>">
                             <option value="Manaus" >Manaus</option>
                         </select>
                     </div>
                     <div class="w-20 ">
                         <label for="">UF:</label><br>
-                        <select id="uf" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.ud ?? ''  %>">
+                        <select id="estado" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.estado ? endereco.estado :  ''   %>">
                             <option value="AM" >AM</option>
                         </select>
                     </div>
@@ -110,17 +117,11 @@
 
                 <div class="w-full">
                     <label for="">Ponto de referência:</label><br>
-                    <input autocomplete="landmark" maxlength="45" id="pontoReferencia" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.pontoReferencia ?? ''  %>">
+                    <input autocomplete="landmark" maxlength="45" id="referencia" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%=  typeof  endereco != "undefined" &&  endereco.referencia ? endereco.referencia :  ''   %>">
                 </div>
 
-                <div class="w-full">
-                    <label for="">Telefone 1: <span class="text-red-400">*</span></label><br>
-                    <input autocomplete="tel" onkeypress="mascara(this, '(##) #####-####')" maxlength="15" id="tel1" type="tel" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.tel1 ?? ''  %>">
-                </div>
-                <div class="w-full">
-                    <label autocomplete="tel-national" for="">Telefone 2: </label><br>
-                    <input onkeypress="mascara(this, '(##) #####-####')" maxlength="15" id="tel2" type="tel" class="px-2 py-1 w-full bg-gray-100" value="<%= endereco.tel2 ?? ''  %>">
-                </div>
+  
+  
                 <div class="pt-2 " >
 
                     <button onclick="salvarFormulario()" id="btnSalvarEndereco" class="hidden py-2 px-4 text-white bg-green-500 duration-200 text-lg w-full ">SALVAR </button>
@@ -131,7 +132,7 @@
         <!-- PAGAMENTO -->
         <div class="text-xl text-left p-4 bg-white rounded-lg  border-2 border-blue-500 shadow-md">
             <h2 class="w-full p-4 pt-0 text-lg text-center font-light">PAGAMENTO</h2>
-            <% console.log(itensProcessados.total) %>
+
             <% const valorTotalAPagar = typeof itensProcessados.total != "string" ? stringParaReal(itensProcessados.total) : itensProcessados.total  %>
 
             <div class="flex justify-between items-center font-semibold text-gray-700">
