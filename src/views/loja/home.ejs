@@ -15,8 +15,6 @@
 
 </head>
 <body class="max-w-screen-md md:max-w-none m-auto relative">
-
-
     <%- include('components/aviso', {aviso: "VENDAS SOMENTE PARA REGIÃO NORTE"}) %>
     <%- include('components/navbar') %>
     <%- include('components/modal') %>
@@ -34,12 +32,9 @@
         <%- include('components/carroselProdutos', {titulo: carrosel_1_data[0].categoria, data: carrosel_1_data}) %>
     <% } %>
 
-
-
     <%- include('components/newsletter') %>
 
     <% if (typeof dadosEmpresa.instagram != "undefined" && dadosEmpresa && dadosEmpresa.length > 0) { %>
-     
         <%- include('components/sigaNoInstagram', {data: dadosEmpresa[0]}) %>
     <% } %>
 
@@ -52,7 +47,6 @@
 
 </body>
 </html>
-
 
 <script src="/js/loja/components/modal.js"></script>
 <script src="/js/loja/components/carrinho.js"></script>

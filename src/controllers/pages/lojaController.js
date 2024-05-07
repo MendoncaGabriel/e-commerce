@@ -1,24 +1,23 @@
-const produtoModel = require('../../model/produto.model');
-const categoriaModel = require('../../model/categoria.model');
-const empresa = require('../../model/config.model');
-const usuarioModel = require('../../model/usuario.model');
-
-const { capitalizar } = require('../../utilities/text');
+const produtoModel = require('../../model/produtoModel');
+const empresaModel = require('../../model/empresaModel');
+const categoriaModel = require('../../model/categoriaModel');
 
 module.exports = {
     home: async (req, res) => {
+    
         try {
+            const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             const produtos = await produtoModel.listaProdutos(1);
-         
-            const dadosEmpresa = await empresa.dados();
-            const banners = await empresa.banners();
+            const dadosEmpresa = await empresaModel.dados();
+            const banners = await empresaModel.bannerHome();
+            console.log(banners.length)
       
             // Filtrar produtos a serem enviados
             const  produtosFiltrados = produtos.filter((e)=>{
                return e.ativo == 1 && e.imagem !== null && e.estoque > 0 ;
             });
-
-
+           
+     
             const categorias = await categoriaModel.categorias();
             res.render('loja/home', {
                 carrosel_1_titulo: 'Novidades', 
@@ -26,19 +25,26 @@ module.exports = {
                 categorias: categorias,
                 dadosEmpresa: dadosEmpresa,
                 banners: banners,
-                tituloCategoria: 'Todos os produtos'
+                tituloCategoria: 'Todos os produtos',
+                logado:logado
             });
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     },
     produto: async (req, res) => {
         try {
-            const nome = req.params.nome
-            const produto = await produtoModel.produtoComVariantes(nome)
-            const dadosEmpresa = await empresa.dados()
+            const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
+            const nome = req.params.nome;
+            const produto = await produtoModel.produtoComVariantes(nome);
+            const dadosEmpresa = await empresaModel.dados()
 
-            res.render('loja/produto', {produto, dadosEmpresa, nomeProduto: nome.toUpperCase().replace(/-/g, ' ')})
+            res.render('loja/produto', {
+                produto, 
+                dadosEmpresa, 
+                nomeProduto: nome.toUpperCase().replace(/-/g, ' '),
+                logado:logado
+            })
         } catch (error) {
             console.log(error)
         }
@@ -49,8 +55,6 @@ module.exports = {
             const carrinhoProcessado = await produtoModel.processarCheckOut(carrinhoCookie);
 
         
-  
-          
             let endereco = {};
             try{
                 endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token);
@@ -67,15 +71,15 @@ module.exports = {
     },
     criarConta: async (req, res) => {
         try{
-            const dadosEmpresa = await empresa.bannerForm()
+            const dadosEmpresa = await empresaModel.bannerAuth()
             res.render('loja/criarConta', {banners: dadosEmpresa})
         }catch(error){
             console.log(error)
         }
     },
-    entar: async (req, res) => {
+    entrar: async (req, res) => {
         try{
-            const dadosEmpresa = await empresa.bannerForm()
+            const dadosEmpresa = await empresaModel.bannerAuth()
             res.render('loja/entrar', {banners: dadosEmpresa})
         }catch(error){
             console.log(error)
@@ -86,7 +90,7 @@ module.exports = {
             const categoria = req.params.categoria;
             const titulo = capitalizar(categoria);
 
-            const dadosEmpresa = await empresa.dados();
+            const dadosEmpresa = await empresaModel.dados();
             const categorias = await categoriaModel.categorias();
 
             //buscar produtos por categorias
@@ -112,4 +116,4 @@ module.exports = {
             console.log(error);
         }
     }
-};
+}

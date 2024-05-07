@@ -12,9 +12,10 @@ module.exports = {
             throw new Error("Erro ao pegar configurações da empresa", error)
         }
     },
-    banners: async () => {
+    bannerHome: async () => {
         try {
-            const sql = "SELECT * FROM banners;"
+            const sql = `
+            SELECT * FROM banners_home;`;
             const result = await executeSql(sql)
             return result
         } catch (error) {
@@ -22,14 +23,16 @@ module.exports = {
             throw new Error("Erro ao pegar banners da empresa", error)
         }
     },
-    bannerForm: async () => {
+    bannerAuth: async () => {
         try {
-            const sql = "SELECT * FROM banner_formulario;"
+            const sql = `
+            SELECT * FROM banners_auth;`;
+
             const result = await executeSql(sql)
             return result
         } catch (error) {
             console.log(error)
-            throw new Error("Erro ao pegar banners form", error)
+            throw new Error("Erro ao pegar banners", error)
         }
     }
 }
