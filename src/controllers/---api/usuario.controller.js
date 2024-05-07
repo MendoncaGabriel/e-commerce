@@ -4,6 +4,8 @@ module.exports = {
     novoUsuario: async (req, res) => {
         try {
             const {nome, email, senha, telefone} = req.body;
+            if(!nome, !email, !senha, !telefone) throw new Error("Dados estão faltando para o cadastro: nome, email, senha, telefone");
+
             const usuario = await usuarioModel.novoUsuario(nome, email, senha, telefone);
             if(usuario){
                 // Configurar o cookie para armazenar o token
@@ -13,14 +15,14 @@ module.exports = {
                 });
 
 
-                res.status(200).json(usuario.msg);
+                res.status(200).json({msg: usuario.msg});
             };
             
         } catch (error) {
-            console.log(error)
-            res.status(500).json(error);
+            res.status(500).json({msg: error.message});
         };
     },
+
     endereco: async (req, res) => {
         try {
             const tokenUsuario = req.cookies.token;

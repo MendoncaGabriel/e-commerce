@@ -31,6 +31,7 @@ router.post('/pagamento/qrcodepix', pagamentoController.gerarQrCodePix);
 
 //USUARIOS
 router.post('/usuario/novo', usuarioController.novoUsuario );
+router.post('/login', usuarioController.login)
 router.patch('/usuario/endereco', usuarioController.endereco );
 
 //PEDIDOS

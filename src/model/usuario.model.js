@@ -80,10 +80,9 @@ class Usuario {
 }
 
 
-
-
 module.exports = {
     novoUsuario: async (nome, email, senha) => {
+
         const usuario = new Usuario(nome, email, senha);
         usuario.senha = await Utilitarios.criptografarSenha(senha);
     
@@ -100,9 +99,19 @@ module.exports = {
     
                 resolve({ msg: 'Usuário criado com sucesso!', id, token: usuario.token });
             } catch (error) {
-                reject({ msg: 'Erro ao salvar usuário!', error });
+                reject(error);
             }
         });
+    },
+    login: async (email, senha) => {
+        try {
+            const sql = "select * from usuarios where email = ?;";
+            const values = [email];
+            const result = await executarSql(sql, values)
+            console.log(result)
+        } catch (error) {
+            console.log(error)      
+        }
     },
     atualizarendereco: async (rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario) => {
         let enderecoAtual = {};
@@ -146,12 +155,6 @@ module.exports = {
                 return { msg: 'Erro ao atualizar endereço do usuario', error }
             }
         }
-
-
-
-
-            
-        
     },
     inserirEnderecoUsuario: async (rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario) => {
         try {
@@ -180,8 +183,6 @@ module.exports = {
             return { msg: 'Erro ao inserir endereço do usuário', error };
         }
     },
-    
-
     pegarEnderecoUsuario: async (tokenUsuario) => {
         const sql = `
         SELECT 
@@ -228,7 +229,4 @@ module.exports = {
             console.error("Erro ao registrar pedido:", error);
         }
     }
-    
-    
-
 }

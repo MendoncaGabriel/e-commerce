@@ -1,0 +1,19 @@
+# JWT
+    # Verificar Token
+        jwt.verify(token, process.env.SECRET_JWT)
+
+    # Criar Token
+        const payload = {login, password, date: new Date()};
+        const expiresIn = '30d'
+        const token = jwt.sign(payload, process.env.SECRET_JWT, { expiresIn });
+
+
+# Bycript
+    # Criptografar
+        const password = 123;
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(password, salt);
+        
+    # Comparar Criptografia
+        const teste = await bcrypt.compare(password, hasg);
+        
