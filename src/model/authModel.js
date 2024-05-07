@@ -50,6 +50,7 @@ module.exports = {
     login: async (email, senha) => {
         const usuario = await buscarUsuario(email);
         if(!usuario || usuario == []) throw new Error('Usuario não encontrado, verifique email');
+        console.log(usuario)
 
         //verificar se senha esta correta
         const checkSenha = await bycript.compare(senha, usuario[0].senha)
@@ -67,10 +68,10 @@ module.exports = {
 
         // Verificar se há algum resultado
         let aviso = ''
-        usuarioExiste[0]?.nome == nome ? aviso += "nome ja cadastrado" : '';
-        usuarioExiste[0]?.email == email ? aviso += " email ja cadastrado,": '';
-        usuarioExiste[0]?.telefone == telefone ? aviso += " telefone ja cadastrado," : '';
-        if(usuarioExiste.length > 0) throw new Error(`Usuário já existe: ${aviso}`);
+        usuarioExiste[0]?.nome == nome ? aviso += " ( nome ja foi cadastrado )" : '';
+        usuarioExiste[0]?.email == email ? aviso += " ( email ja foi cadastrado )": '';
+        usuarioExiste[0]?.telefone == telefone ? aviso += " ( telefone ja foi cadastrado )" : '';
+        if(usuarioExiste.length > 0) throw new Error(`Usuario já existe: ${aviso}`);
 
         //criptografar senha
         const salt = await bycript.genSalt(10);
@@ -79,6 +80,12 @@ module.exports = {
         //salvar usuario
         const usuario = await salvarUsuario(nome, email, senhaHash, telefone);
         if(usuario.affectedRows == 0) throw new Error('Erro inesperado, usuario não salvo!');
-        return usuario;        
+
+        //gerar token
+ 
+        const payload = {nome, email, senhaHash, telefone};
+        const validade = '30d';
+        const token = jwt.sign(payload, secret, {expiresIn: validade})
+        return {usuario, token};        
     }
 }

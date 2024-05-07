@@ -4,7 +4,9 @@ const categoriaModel = require('../../model/categoriaModel');
 
 module.exports = {
     home: async (req, res) => {
+    
         try {
+            const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             const produtos = await produtoModel.listaProdutos(1);
             const dadosEmpresa = await empresaModel.dados();
             const banners = await empresaModel.bannerHome();
@@ -14,7 +16,8 @@ module.exports = {
             const  produtosFiltrados = produtos.filter((e)=>{
                return e.ativo == 1 && e.imagem !== null && e.estoque > 0 ;
             });
-
+           
+     
             const categorias = await categoriaModel.categorias();
             res.render('loja/home', {
                 carrosel_1_titulo: 'Novidades', 
@@ -22,7 +25,8 @@ module.exports = {
                 categorias: categorias,
                 dadosEmpresa: dadosEmpresa,
                 banners: banners,
-                tituloCategoria: 'Todos os produtos'
+                tituloCategoria: 'Todos os produtos',
+                logado:logado
             });
         } catch (error) {
             console.log(error);
@@ -30,11 +34,17 @@ module.exports = {
     },
     produto: async (req, res) => {
         try {
+            const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             const nome = req.params.nome;
             const produto = await produtoModel.produtoComVariantes(nome);
             const dadosEmpresa = await empresaModel.dados()
 
-            res.render('loja/produto', {produto, dadosEmpresa, nomeProduto: nome.toUpperCase().replace(/-/g, ' ')})
+            res.render('loja/produto', {
+                produto, 
+                dadosEmpresa, 
+                nomeProduto: nome.toUpperCase().replace(/-/g, ' '),
+                logado:logado
+            })
         } catch (error) {
             console.log(error)
         }
@@ -45,8 +55,6 @@ module.exports = {
             const carrinhoProcessado = await produtoModel.processarCheckOut(carrinhoCookie);
 
         
-  
-          
             let endereco = {};
             try{
                 endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token);
