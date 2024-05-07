@@ -1,24 +1,21 @@
 <section class="relative m-auto   overflow-hidden">
     
   <div id="containerSlideProduto" class="relative w-full  flex overflow-x-auto md:overflow-x-hidden space-x-5 snap-mandatory snap-x  ">
-      <!-- <% banners.forEach(element => { %>
+       <% banners.forEach(element => { %>
 
-        <img 
-          src="/banner/<%= element.img %>" 
-          alt="imagem de banners"
-          class="imagemSlideProduto w-full   overflow-hidden object-cover flex-none snap-center aspect-square md:aspect-[21/9]"
-        >
-      <% }) %> -->
+        
+        <picture class="imagemSlideProduto w-full overflow-hidden object-cover flex-none snap-center aspect-square md:aspect-[21/9]">
+          <source media="(max-width: 768px)" srcset="/banner/mobile/<%= element.mobile %>">
+          <img 
+            src="/banner/<%= element.pc %>" 
+            alt="imagem de banners"
+            
+          >
+        </picture>
+      <% }) %> 
 
 
-      <picture>
-        <source media="(max-width: 768px)" srcset="/banner/mobile/1.jpg">
-        <img 
-          src="/banner/1.png" 
-          alt="imagem de banners"
-          class="imagemSlideProduto w-full overflow-hidden object-cover flex-none snap-center aspect-square md:aspect-[21/9]"
-        >
-      </picture>
+
       
     </div>
    

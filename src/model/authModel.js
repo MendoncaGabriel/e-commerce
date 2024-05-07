@@ -1,5 +1,5 @@
 require('dotenv').config();
-const db = require('../../../database/database');
+const db = require('../../database/database');
 const bycript = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = process.env.ASSINATURA_TOKEN;

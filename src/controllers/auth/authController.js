@@ -1,4 +1,4 @@
-const authModel = require('../../model/auth/authModel');
+const authModel = require('../../model/authModel');
 
 module.exports = {
     login: async (req, res) => {
