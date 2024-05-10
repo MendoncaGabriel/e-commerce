@@ -5,6 +5,9 @@
     localStorage.paginaProduto = JSON.stringify( produtosJson );
 </script>
 
+
+
+
 <section class="p-5 text-gray-700">
     <!-- NOME DO PRODUTO -->
     <h2 class=" text-2xl leading-7 font-bold "><%=typeof produto[0] != "undefined" && produto[0] ? produto[0].nome : ""  %></h2>
@@ -47,7 +50,7 @@
 
             <button onclick="menosQtd()"  class="text-3xl w-10 h-9 flex items-center justify-center"><i class="bi bi-dash-circle leading-3"></i></button>
         </div>
-        <button onclick="finalizarCompra()" class="w-full bg-c1 px-4 font-bold text-white block h-full rounded-br-lg rounded-tr-lg">COMPRAR</button>
+        <button onclick="finalizarCompraProduto()" class="w-full bg-c1 px-4 font-bold text-white block h-full rounded-br-lg rounded-tr-lg">COMPRAR</button>
     </div>
 
     <div>

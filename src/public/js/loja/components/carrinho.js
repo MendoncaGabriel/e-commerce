@@ -160,49 +160,29 @@ function carregarCarrinho() {
 
 
 
-}
+};
 
 function finalizarCompraCarrinho() {
-    if (!localStorage.carrinho) alert('Você não tem produtos no carrinho!');
-    const carrinho = [];
-
-    // varilar itens no carrinho
-    JSON.parse(localStorage.carrinho).forEach(item => {
-        if (typeof item.qtd != "undefined" && typeof item.preco != "undefined" && item != {}) {
-            carrinho.push(item);
-        };
-    });
-
-    addCarrinhoCookie(carrinho)
-
-    
-    if (document.cookie) {
-        window.location.href = '/checkout';
+    function setCookie(name, value, days) {
+        if (typeof name !== 'string' || typeof value !== 'string' || typeof days !== 'number' || days <= 0) {
+            console.error('Parâmetros inválidos para setCookie.');
+            return;
+        }
+        const expires = new Date();
+        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/`;
+        return {
+            msg: 'Item salvo em Cookies',
+            name: name, 
+            value: value
+        }
     }
-}
+    const itens = []
+    const carrinho = JSON.parse(localStorage.carrinho);
+    carrinho.forEach(e => {
+        itens.push({produto_id: e.produto_id, qtd: e.qtd, variante_id: e.variante_id})
+    })
+    setCookie("carrinho", JSON.stringify(itens), 30)
 
-function addCarrinhoCookie(data) {
-    // LIMPAR, APENAD DADOS NECESSARIOS
-    const carrinho = []
-
-    data.forEach(e => {
-        carrinho.push({
-            qtd: e.qtd,
-            variante_id: e.variante_id,
-            produto_id: e.produto_id
-        })
-    });
-
-
-    const dadosString = JSON.stringify(carrinho);
-
-    // Calcular a data de expiração em 30 dias a partir de hoje
-    const dataExpiracao = new Date();
-    dataExpiracao.setDate(dataExpiracao.getDate() + 30);
-
-    // Definir o cookie com os dados e a data de expiração
-    document.cookie = `carrinho=${dadosString}; expires=${dataExpiracao.toUTCString()}; path=/`;
-
-
-
-}
+    window.location.href = "/checkout"
+};

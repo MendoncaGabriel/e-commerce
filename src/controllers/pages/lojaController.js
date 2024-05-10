@@ -12,7 +12,10 @@ module.exports = {
             const produtos = await produtoModel.listaProdutos(1);
             const categorias = await categoriaModel.categorias();
             const dadosEmpresa = await empresaModel.dados();
+            const enderecosEmpresa = await empresaModel.enderecos();
             const banners = await empresaModel.bannerHome();
+            const redesSociais = await empresaModel.redesSociais();
+      
  
 
             // Filtro
@@ -27,7 +30,9 @@ module.exports = {
                 dadosEmpresa: dadosEmpresa,
                 categorias: categorias,
                 banners: banners,
-                logado:logado
+                logado:logado,
+                enderecosEmpresa: enderecosEmpresa,
+                redesSociais: redesSociais
             };
             res.render('loja/home', data);
         } catch (error) {
@@ -39,13 +44,18 @@ module.exports = {
             const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             const nome = req.params.nome;
             const produto = await produtoModel.produtoComVariantes(nome);
-            const dadosEmpresa = await empresaModel.dados()
+            const redesSociais = await empresaModel.redesSociais();
+            const dadosEmpresa = await empresaModel.dados();
+            const enderecosEmpresa = await empresaModel.enderecos();
+
 
             res.render('loja/produto', {
                 produto, 
                 dadosEmpresa, 
                 nomeProduto: nome.toUpperCase().replace(/-/g, ' '),
-                logado:logado
+                logado:logado,
+                redesSociais: redesSociais,
+                enderecosEmpresa: enderecosEmpresa
             })
         } catch (error) {
             console.log(error)

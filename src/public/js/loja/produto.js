@@ -84,7 +84,7 @@ function menosQtd(){
 
 }
 
-function finalizarCompra(){
+function finalizarCompraProduto(){
     if(verificarItemSelecionado() == false)  return ;
 
 
@@ -108,7 +108,29 @@ function finalizarCompra(){
         localStorage.carrinho = JSON.stringify(carrinho);
     };
 
-    notificarItemCarrinho();
+    function setCookie(name, value, days) {
+        if (typeof name !== 'string' || typeof value !== 'string' || typeof days !== 'number' || days <= 0) {
+            console.error('Parâmetros inválidos para setCookie.');
+            return;
+        }
+        const expires = new Date();
+        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/`;
+        return {
+            msg: 'Item salvo em Cookies',
+            name: name, 
+            value: value
+        }
+    }
+
+    //passar para o cookies
+    const itens = []
+    const carrinho = JSON.parse(localStorage.carrinho);
+    carrinho.forEach(e => {
+        itens.push({produto_id: e.produto_id, qtd: e.qtd, variante_id: e.variante_id})
+    })
+    setCookie("carrinho", JSON.stringify(itens), 30)
+
     window.location.href = '/checkout'
 }
 

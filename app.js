@@ -3,24 +3,13 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
-const session = require('express-session');
 
-// const apiRouter = require('./src/routes/api/api.router');
-// const pagesRouterLoja = require('./src/routes/loja/loja.page.router')
-// const pageRouterAdmin = require('./src/routes/admin/admin.pages.router')
 const authRouter = require('./src/routes/authRouter');
 const lojaRouter = require('./src/routes/pages/lojaRouter');
 const pedidoRouter = require('./src/routes/pedidoRouter');
 const usuarioRouter = require('./src/routes/usuarioRouter')
 const pagamentoRouter = require('./src/routes/pagamentoRouter')
 var app = express();
-
-// Express Session 
-// app.use(session({
-//     secret: process.env.ASSINATURA_TOKEN, 
-//     resave: false,
-//     saveUninitialized: true
-// }));
 
 // arquivos estativos
 app.use('/banner', express.static(path.join(__dirname, 'src/public/banner')));

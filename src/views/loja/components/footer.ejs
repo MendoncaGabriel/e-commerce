@@ -1,9 +1,68 @@
 <footer class="w-full p-5 md:p-8 lg:p-16  bg-c4  " style="background-image: url('/assets/fundo.png'); background-size: 100%;">
-    <div class="m-auto max-w-screen-lg">
+    <div class="m-auto max-w-screen-xl">
+        <!-- REDES SOCIAIS -->
+        <h2 class="text-center text-xl font-semibold mb-5 text-c1 bg-c0 px-10 m-auto py-2 rounded-full w-72">REDES SOCIAIS</h2>
+        <div class="  p-4 rounded-xl flex  items-end justify-center space-x-4">
+            <!-- FACEBOOK -->
+            <% if (typeof redesSociais.facebook != "undefined" && redesSociais.facebook) { %>         
+                <a href="<%= redesSociais.facebook  %>" target="_blank" >
+                    <img src="/assets/facebook.png" alt="" class="w-16 h-16 aspect-square bg-white p-1  object-cover rounded-full hover:scale-110 duration-200">
+                </a>
+            <% } %>
+    
+            <!-- INSTAGRAM -->
+            <% if (typeof redesSociais.instagram != "undefined" && redesSociais.instagram) { %>
+                <a href="<%= redesSociais.instagram %>"  target="_blank">
+                    <img src="/assets/instagram.png" alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
+                </a>
+            <% } %>
+    
+            <!-- WHATSAPP -->
+            <% if (typeof redesSociais.whatsapp != "undefined" && redesSociais.whatsapp) { %>         
+                <a href="https://api.whatsapp.com/send?phone=<%= redesSociais.whatsapp %>" target="_blank">
+                    <img src="/assets/whatsapp2.png"  alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
+                </a>
+            <% } %>
+    
+            <!-- TIKTOK -->
+            <% if (typeof redesSociais.tiktok != "undefined" && redesSociais.tiktok) { %>         
+                <a href="<%= redesSociais.tiktok %>" target="_blank">
+                    <img src="/assets/tiktok.png"  alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
+                </a>
+            <% } %>
+    
+            <!-- PINTEREST -->
+            <% if (typeof redesSociais.pinterest != "undefined" && redesSociais.pinterest) { %>         
+                <a href="<%= redesSociais.pinterest %>" target="_blank">
+                    <img src="/assets/pinterest.png"  alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
+                </a>
+            <% } %>
+        </div>
+        <br><hr class="border border-blue-300"><br>
+
+        <!-- ENDEREÇOS -->
+        <h2 class="text-center text-xl font-semibold mb-5 text-c1 bg-c0 px-10 m-auto py-2 rounded-full w-52">UNIDADES</h2>
+        <div class="bg-gray-50 p-4 rounded-xl">
+
+            <ul class="space-y-5 grid md:grid-cols-2 md:gap-5 items-baseline">
+                <!-- MAPS -->
+                <% if (typeof enderecosEmpresa[0].maps_iframe != "undefined" && enderecosEmpresa[0].maps_iframe) { %>
+                    <% enderecosEmpresa.forEach(element => { %>
+                        <%- include('maps', {data: element}) %>
+                    <% }) %>
+                <% } %>
+            </ul>
+            
+
+
+        </div>
+        <br><hr class="border border-blue-300"><br>
+    
+
         <!-- PAGINAS -->
         <h2 class="text-center text-xl font-semibold mb-5 text-c1 bg-c0 px-10 m-auto py-2 rounded-full w-40">Páginas</h2>
         <div class="bg-gray-50 p-4 rounded-xl">
-            <ul class="space-y-1 text-gray-700 text-md lg:text-lg ">
+            <ul class="space-y-1 text-gray-700 text-md lg:text-lg md:grid md:grid-cols-2 lg:grid-cols-3">
                 <li>
                     <a href="#" class="flex items-center space-x-2">
                         <svg class="text-c1 "  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
@@ -55,95 +114,10 @@
         
             </ul>
         </div>
-    
         <br><hr class="border border-blue-300"><br>
     
-
-        <h2 class="text-center text-xl font-semibold mb-5 text-c1 bg-c0 px-10 m-auto py-2 rounded-full w-52">Fale Conosco</h2>
-        <div class="bg-gray-50 p-4 rounded-xl">
-            <ul class="space-y-2 ">
-                <!-- EMAIL -->
-                <% if (typeof data[0].email != "undefined" && data[0].email) { %>
-                    <li>
-                       <span class="mr-2">
-                        <i class="bi bi-envelope"></i>
-                        </span> 
-                        <a class="text-blue-700 " href="mailto:<%= data[0].email %>"><%= data[0].email %></a>
-                    </li>
-                <% } %>
-        
-                <!-- CIDADE E UF  -->
-                <% if (typeof data[0].cidade != "undefined" && data[0].cidade && typeof data[0].uf != "undefined" && data[0].uf) { %>
-                    <li>
-                        <span class="mr-2"><i class="bi bi-geo-alt"></i></span><a href="#"><%= data[0].cidade  %> - <%= data[0].uf%></a>
-                    </li>
-                <% } %>
-        
-                <!-- MAPS -->
-                <% if (typeof data[0].maps_iframe != "undefined" && data[0].maps_iframe) { %>
-                    <%- include('maps', {maps_iframe: data[0].maps_iframe}) %>
-                <% } %>
-            </ul>
-
-            <div  class="pt-4 rounded-lg">
-                <div class="flex space-x-4">
-                    <!-- FACEBOOK -->
-                    <% if (typeof data[0].facebook != "undefined" && data[0].facebook) { %>         
-                        <a href="<%= data[0].facebook  %>" target="_blank" >
-                            <img src="/assets/facebook.png" alt="" class="w-14 h-14 aspect-square  object-cover rounded-full hover:scale-110 duration-200">
-                        </a>
-                    <% } %>
-            
-                    <!-- INSTAGRAM -->
-                    <% if (typeof data[0].instagram != "undefined" && data[0].instagram) { %>
-                        <a href="<%= data[0].instagram %>"  target="_blank">
-                            <img src="/assets/instagram.png" alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
-                        </a>
-                    <% } %>
-            
-                    <!-- WHATSAPP -->
-                    <% if (typeof data[0].whatsapp != "undefined" && data[0].whatsapp) { %>         
-                        <a href="https://api.whatsapp.com/send?phone=<%= data[0].whatsapp %>" target="_blank">
-                            <img src="/assets/whatsapp2.png"  alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
-                        </a>
-                    <% } %>
-            
-                    <!-- TIKTOK -->
-                    <% if (typeof data[0].tiktok != "undefined" && data[0].tiktok) { %>         
-                        <a href="<%= ata[0].tiktok %>" target="_blank">
-                            <img src="/assets/tiktok.png"  alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
-                        </a>
-                    <% } %>
-            
-                    <!-- PINTEREST -->
-                    <% if (typeof data[0].pinterest != "undefined" && data[0].pinterest) { %>         
-                        <a href="<%= data[0].pinterest %>" target="_blank">
-                            <img src="/assets/pinterest.png"  alt="" class="w-14 h-14 aspect-square  object-cover rounded-full  hover:scale-110 duration-200">
-                        </a>
-                    <% } %>
-                </div>
-            </div>
-            
-        </div>
-
     
-        <!-- desativado tempora -->
-        <div class="hidden">
-            <br><hr class="border border-blue-300"><br>
-            <h2 class="text-center text-xl font-semibold mb-5 text-gray-50 bg-c1 px-10 m-auto py-2 rounded-full w-72">Meios de pagamento</h2>
-            <div class="bg-gray-50 p-4 rounded-lg  flex-wrap space-x-2 space-y-2 items-center justify-around flex"> 
-                <img src="/icons/amex@2x.png"       class="w-16 h-8 object-contain" alt="icone">
-                <img src="/icons/aura@2x.png"       class="w-16 h-8 object-contain" alt="icone">
-                <img src="/icons/discover@2x.png"   class="w-16 h-8 object-contain" alt="icone">
-                <img src="/icons/elo@2x.png"        class="w-16 h-8 object-contain" alt="icone">
-                <img src="/icons/hipercard@2x.png"  class="w-16 h-8 object-contain" alt="icone">
-                <img src="/icons/mastercard@2x.png" class="w-16 h-8 object-contain" alt="icone">
-                <img src="/icons/pix@2x.png"        class="w-16 h-8 object-contain" alt="icone">
-                <img src="/icons/visa@2x.png"       class="w-16 h-8 object-contain" alt="icone">
-            </div>
-        </div>
-    
-        <br><hr class="border border-blue-300"><br>
+
     
         <img src="/assets/logo.png" alt="logo" class="w-[80%] m-auto max-w-80">
     
@@ -159,3 +133,6 @@
 
 
 </footer>
+
+
+

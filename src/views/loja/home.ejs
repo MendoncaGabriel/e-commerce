@@ -39,7 +39,11 @@
         <%- include('components/sigaNoInstagram', {data: dadosEmpresa[0]}) %>
     <% } %>
 
-    <%- include('components/footer', {data: dadosEmpresa}) %>
+    <%- include('components/footer', {
+        data: dadosEmpresa, 
+        enderecosEmpresa: enderecosEmpresa,
+        redesSociais: redesSociais
+    }) %>
 
     <!-- BTN WHATSAPP -->
     <% if (typeof dadosEmpresa[0].whatsapp != "undefined" && dadosEmpresa[0].whatsapp ) { %>
