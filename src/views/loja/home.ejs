@@ -29,7 +29,8 @@
 
     <!-- CARROSEL DE PRODUTOS -->
     <% if (carrosel_1_data[0]) { %>
-        <%- include('components/carroselProdutos', {titulo: carrosel_1_data[0].categoria, data: carrosel_1_data}) %>
+        <% console.log(carrosel_1_data[0]) %>
+        <%- include('components/carroselProdutos', {titulo: carrosel_1_titulo, data: carrosel_1_data}) %>
     <% } %>
 
     <%- include('components/newsletter') %>

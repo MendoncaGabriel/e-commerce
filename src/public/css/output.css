@@ -731,6 +731,10 @@ video {
   top: 150%;
 }
 
+.right-1 {
+  right: 0.25rem;
+}
+
 .isolate {
   isolation: isolate;
 }
@@ -757,6 +761,10 @@ video {
 
 .z-50 {
   z-index: 50;
+}
+
+.z-20 {
+  z-index: 20;
 }
 
 .col-span-10 {
@@ -2945,6 +2953,11 @@ video {
 .text-c1 {
   --tw-text-opacity: 1;
   color: rgb(236 38 143 / var(--tw-text-opacity));
+}
+
+.text-c5 {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .text-gray-200 {

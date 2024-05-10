@@ -10,7 +10,7 @@ module.exports = {
             res.status(200).json(enderecoUsuario);
         } catch (error) {
             console.log(error);
-            res.status(500).json(error);
+            res.status(500).json({msg: error.message});
         };
     },
 

@@ -26,7 +26,7 @@ function esconderBtnSalvar(){
 };
 function salvarFormulario(){
     if(!validarFormulario()) return;
-    fetch('/api/usuario/endereco', {
+    fetch('/usuario/endereco', {
         method: 'PATCH',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -94,70 +94,32 @@ function mascara(src, mascara) {
 };
 function gerarPixQrCode(btn, valor) {
     if (!validarFormulario()) return;
-    const pedido = JSON.parse(window.pedido);
-    if (!pedido) {
-        alert('Erro: Pedidos não foram registrados...');
-        window.location.reload();
-        return;
-    }
-
-    // Remover função do botão
     btn.onclick = null;
-    console.log(Number(valor));
 
-    // GERAR PIX
-    fetch('/api/pagamento/qrcodepix', {
+    
+    fetch('/pagamento/qrcodepix', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ valor: Number(valor) })
-    })
-    .then(res => {
-        if (!res.ok && tentativas < 3) {
-            setTimeout(() => {
-                tentativas++;
-                gerarPixQrCode(btn, valor);
-            }, 500);
-            throw new Error('Erro na resposta da requisição.');
-        } else if (!res.ok) {
-            alert('Erro ao gerar pix, vamos tentar novamente!')
-            window.location.reload()
-        }
-        
-        return res.json();
-    })
-    .then(res => {
-        console.log(res);
-        if (res.additional_data && res.additional_data.qr_code) {
-            indicadorDeProgresso();
-            textoQRCode = res.additional_data.qr_code;
-            motrarModalQrCode(res.additional_data.qr_code);
-
-            // REGISTRAR PEDIDO após gerar o QR Code
-            return fetch('/api/usuario/pedido', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(pedido)
-            });
-        } else {
-            alert('Erro ao gerar pix, vamos tentar novamente!')
-            window.location.reload()
-            throw new Error('QR Code não encontrado na resposta.');
-        }
     })
     .then(res => res.json())
     .then(res => {
-        console.log(res);
-        // Aqui você pode adicionar qualquer tratamento adicional após registrar o pedido, se necessário.
+        const pixQrCode = res.pix.additional_data.qr_code;
+
+        motrarModalQrCode(pixQrCode);
     })
-    .catch(error => {
-        console.error('Erro na requisição:', error);
-        // Adicione aqui qualquer tratamento de erro adicional, como mostrar uma mensagem de erro ao usuário.
-    });
+    .catch((error)=>{
+        console.log(error)
+    })
+    
 };
 async function motrarModalQrCode(textoQRCode){
     const qrCode = document.getElementById('qrCode')
     qrCode.src = await `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${textoQRCode}`
-    document.getElementById('sectionPix').classList.remove('hidden')
+
+    setTimeout(()=> {
+        document.getElementById('sectionPix').classList.remove('hidden');
+        indicadorDeProgresso();
+    },500)
 
 };
 function fecharSectionPix(){

@@ -1,6 +1,8 @@
 const produtoModel = require('../../model/produtoModel');
 const empresaModel = require('../../model/empresaModel');
 const categoriaModel = require('../../model/categoriaModel');
+const usuarioModel = require('../../model/usuarioModel');
+
 
 module.exports = {
     home: async (req, res) => {
@@ -8,26 +10,26 @@ module.exports = {
         try {
             const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             const produtos = await produtoModel.listaProdutos(1);
+            const categorias = await categoriaModel.categorias();
             const dadosEmpresa = await empresaModel.dados();
             const banners = await empresaModel.bannerHome();
-            console.log(banners.length)
-      
-            // Filtrar produtos a serem enviados
+ 
+
+            // Filtro
             const  produtosFiltrados = produtos.filter((e)=>{
                return e.ativo == 1 && e.imagem !== null && e.estoque > 0 ;
-            });
+            });  
            
-     
-            const categorias = await categoriaModel.categorias();
-            res.render('loja/home', {
-                carrosel_1_titulo: 'Novidades', 
-                carrosel_1_data: produtosFiltrados, 
-                categorias: categorias,
-                dadosEmpresa: dadosEmpresa,
-                banners: banners,
+            const data = {
                 tituloCategoria: 'Todos os produtos',
+                carrosel_1_data: produtosFiltrados, 
+                carrosel_1_titulo: 'Novidades', 
+                dadosEmpresa: dadosEmpresa,
+                categorias: categorias,
+                banners: banners,
                 logado:logado
-            });
+            };
+            res.render('loja/home', data);
         } catch (error) {
             console.log(error);
         }
@@ -53,8 +55,6 @@ module.exports = {
         try {
             const carrinhoCookie = JSON.parse(req.cookies.carrinho);
             const carrinhoProcessado = await produtoModel.processarCheckOut(carrinhoCookie);
-
-        
             let endereco = {};
             try{
                 endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token);
@@ -62,7 +62,6 @@ module.exports = {
                 console.log('Endereço do usuario não definido');
             };
 
-            console.log('===> carrinhoProcessado: ', carrinhoProcessado)
             res.render('loja/checkout', {carrinhoProcessado, endereco, carrinhoProcessado})
                
         } catch (error) {
@@ -87,20 +86,17 @@ module.exports = {
     },
     gridProdutos: async (req, res) => {
         try {
-            const categoria = req.params.categoria;
-            const titulo = capitalizar(categoria);
-
+            const titulo = req.params.categoria;
             const dadosEmpresa = await empresaModel.dados();
             const categorias = await categoriaModel.categorias();
 
-            //buscar produtos por categorias
-
             let produtosCategoria = [];
-            if (categoria == 'todos-os-produtos') {
+            if (titulo == 'todos-os-produtos') {
                 produtosCategoria = await produtoModel.getProdutosbyOffset(20, 1);
             } else {
-                produtosCategoria = await produtoModel.getProdutosCategoria(categoria);
-            }
+                produtosCategoria = await produtoModel.getProdutosCategoria(titulo);
+            };
+            console.log(produtosCategoria)
 
             res.render('loja/gridProdutos', {
                 titulo: titulo,
@@ -108,8 +104,7 @@ module.exports = {
                 categorias: categorias,
                 dadosEmpresa: dadosEmpresa,
                 produtosCategoria: produtosCategoria,
-                tituloCategoria: categoria
-
+                tituloCategoria: titulo
             });
 
         } catch (error) {

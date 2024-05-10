@@ -4,7 +4,6 @@ module.exports = {
     login: async (req, res) => {
         try {
             const {email, senha} = req.body;
-            console.log(email, senha);
             const token = await authModel.login(email, senha);
 
             // Configurar o cookie

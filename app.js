@@ -11,6 +11,8 @@ const session = require('express-session');
 const authRouter = require('./src/routes/authRouter');
 const lojaRouter = require('./src/routes/pages/lojaRouter');
 const pedidoRouter = require('./src/routes/pedidoRouter');
+const usuarioRouter = require('./src/routes/usuarioRouter')
+const pagamentoRouter = require('./src/routes/pagamentoRouter')
 var app = express();
 
 // Express Session 
@@ -42,7 +44,8 @@ app.use(cookieParser());
 
 //app.use(sqlstring) //proteção contra sql injection
 // app.use('/admin', pageRouterAdmin);
-// app.use('/api', apiRouter);
+app.use('/pagamento', pagamentoRouter);
+app.use('/usuario', usuarioRouter);
 app.use('/pedido', pedidoRouter);
 app.use('/auth', authRouter);
 app.use('/', lojaRouter);

@@ -114,20 +114,20 @@ module.exports = {
         }
     },
     atualizarendereco: async (rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario) => {
+      
         let enderecoAtual = {};
         let atualizar = false;
         try {
-            console.log('Endereço do usuario encontrado!');
             enderecoAtual = await module.exports.pegarEnderecoUsuario(tokenUsuario);
             atualizar = true;
             
         } catch (error) {
-            console.log('Endereço não encontrado, inserindo novo...');
+            console.log('===> Inserindo novo endereço')
             enderecoAtual = await module.exports.inserirEnderecoUsuario(rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario);
+           
             return {msg: 'Endereço não encontrado, novo endereço inserido!'};
-        };
-
-
+        }
+        
         if(atualizar == true){
             console.log('Atualizando endereço...')
             const sql = `
@@ -141,8 +141,8 @@ module.exports = {
                 endereco_cliente.estado = ?, 
                 endereco_cliente.referencia = ?,
                 endereco_cliente.telefone = ? 
-            WHERE usuarios.idusuarios = ?;
-            `;
+            WHERE usuarios.idusuarios = ?;`;
+
             const usuarioId = await Utilitarios.verificarToken(tokenUsuario).id
             const values = [rua, numero, bairro, cidade, estado, referencia, telefone, usuarioId];
 
@@ -160,8 +160,8 @@ module.exports = {
         try {
        
             // Obtém o ID do usuário a partir do token
-            const usuarioId = await Utilitarios.verificarToken(tokenUsuario).id
-   
+            const usuarioId = await Utilitarios.verificarToken(tokenUsuario).idusuarios
+
 
             // Prepara a consulta SQL para inserir o novo endereço
             const sql = `
@@ -197,12 +197,11 @@ module.exports = {
         JOIN endereco_cliente ON usuarios.idusuarios = endereco_cliente.usuarios_idusuarios 
         WHERE usuarios.idusuarios = ?;`;
     
-    
         // Obtém o ID do usuário a partir do token
-        const { id } = await Utilitarios.verificarToken(tokenUsuario);
-    
+        const { idusuarios } = await Utilitarios.verificarToken(tokenUsuario);
+
         // Prepara os valores para a consulta SQL
-        const values = [id];
+        const values = [idusuarios];
     
         return new Promise(async (resolve, reject) => {
             try {

@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const usuarioController = require('../../controllers/api/usuario.controller');
+const usuarioController = require('../controllers/usuarios/usuarioController');
 
 
-router.patch('/usuario/endereco', usuarioController.endereco );
-router.post('/usuario/novo', usuarioController.novoUsuario );
-router.post('/usuario/pedido', usuarioController.pedido);
+router.patch('/endereco', usuarioController.endereco );
+router.post('/pedido', usuarioController.pedido);
 
 module.exports = router;

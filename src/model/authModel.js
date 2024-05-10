@@ -50,7 +50,6 @@ module.exports = {
     login: async (email, senha) => {
         const usuario = await buscarUsuario(email);
         if(!usuario || usuario == []) throw new Error('Usuario não encontrado, verifique email');
-        console.log(usuario)
 
         //verificar se senha esta correta
         const checkSenha = await bycript.compare(senha, usuario[0].senha)

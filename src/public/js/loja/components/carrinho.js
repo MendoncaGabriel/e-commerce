@@ -174,6 +174,11 @@ function finalizarCompraCarrinho() {
     });
 
     addCarrinhoCookie(carrinho)
+
+    
+    if (document.cookie) {
+        window.location.href = '/checkout';
+    }
 }
 
 function addCarrinhoCookie(data) {
@@ -199,8 +204,5 @@ function addCarrinhoCookie(data) {
     document.cookie = `carrinho=${dadosString}; expires=${dataExpiracao.toUTCString()}; path=/`;
 
 
-    if (document.cookie) {
-        window.location.href = '/';
-    }
 
 }

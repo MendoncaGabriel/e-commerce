@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const pageController = require('../../controllers/pages/lojaController');
-const jwt = require('jsonwebtoken');
 
 
 router.get('/',  pageController.home)

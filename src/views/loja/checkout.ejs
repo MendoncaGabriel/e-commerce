@@ -32,7 +32,7 @@
         transition: all 1s linear;
     }
 </style>
-<body class="bg-gray-100">
+<body class="bg-gray-100" style="background-image: url('/assets/fundo.png'); background-size: 100%;">
     <script>
         window.pedido = `<%- JSON.stringify(carrinhoProcessado).replace(/[\n\r]/g, '').replace(/\\/g, '\\\\') %>`;
     </script>
@@ -49,7 +49,7 @@
     <!-- FORMULARIOS -->
     <section id="carrinho" class=" m-auto w-[90%] z-50 duration-300 flex flex-col justify-between max-w-screen-md space-y-4 pt-5 ">
         <!-- LISTA DE PRODUTOS NO CARRINHO -->
-        <div class="text-right text-gray-700 text-xl flex flex-col border-2 border-c1 rounded-lg bg-white shadow-md">
+        <div class="text-right text-gray-700 text-xl flex flex-col rounded-lg bg-white shadow-md">
             <ul id="listaProdutosCarrinho" class="overflow-y-auto h-screen  text-xl text-left p-4  ">
                 <h2 class="w-full p-4 pt-0 text-lg text-center font-light">LISTA DE PRODUTOS</h2>
                 
@@ -79,7 +79,7 @@
 
 
         <!-- ENDEREÇO DE ENTREGA -->
-        <div class="text-xl text-left p-4 bg-white rounded-lg  border-2 border-c1 shadow-md">
+        <div class="text-xl text-left p-4 bg-white rounded-lg   shadow-md">
             <h2 class="w-full p-4 pt-0 text-lg text-center font-light">ENDEREÇO DE ENTREGA</h2>
             
             <div class="text-gray-700 text-sm   m-auto space-y-2 ">
@@ -137,11 +137,10 @@
         </div>
             
         <!-- PAGAMENTO -->
-        <div class="text-xl text-left p-4 bg-white rounded-lg  border-2 border-c1 shadow-md">
+        <div class="text-xl text-left p-4 bg-white rounded-lg   shadow-md">
             <h2 class="w-full p-4 pt-0 text-lg text-center font-light">PAGAMENTO</h2>
 
-         
-
+        
             <div class="flex justify-between items-center font-semibold text-gray-700">
                 <h2 class="p-4 text-xl " >TOTAL: </h2>
                 <h2 class="p-4 text-xl " id="subtotal">R$ <%= stringParaReal(carrinhoProcessado.total) %></h2>
@@ -158,11 +157,13 @@
     <!-- POPUP PAGAMENTO COM PIX -->
     <section id="sectionPix" class="hidden  max-w-screen-sm fixed top-1/2 left-1/2 p-10 bg-gradient-to-r from-cyan-100 to-blue-200 transform -translate-x-1/2 -translate-y-1/2 space-y-5  w-full ">
        <div class="flex items-center space-x-4 pt-5">
-           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart-check-fill text-c1" viewBox="0 0 16 16">
+        
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart-check-fill text-c1" viewBox="0 0 16 16">
                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708"/>
             </svg>
             <h2 class="text-gray-700">Pague com QR Code ou PIX copiar e colar!</h2>
-       </div>
+        </div>
+        <h2>Após a confirmação do pagamento, entraremos em contato para agendar a entrega. Por favor, <b>verifique se o seu número de contato está correto.</b> <%= typeof  endereco != "undefined" &&  endereco.telefone ? endereco.telefone :  'Não cadastrado'   %> </h2>
 
         <div class="progress-bar relative duration-200">
             <p id="ContadorTempo" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">3:00</p>
