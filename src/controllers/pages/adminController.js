@@ -1,5 +1,5 @@
-const produtoModel = require('../../model/produto.model')
-const caregoriaModel = require('../../model/categoria.model')
+const produtoModel = require('../../model/produtoModel');
+const caregoriaModel = require('../../model/categoriaModel');
 
 module.exports = {
     home: (req, res) => {

@@ -177,6 +177,8 @@ const Variante = {
             // Adiciona o event listener chamando a função handleChange
             e.addEventListener('change', handleChange);
         });
+
+        
     },
 
     rolarTela: (id) => {
@@ -184,3 +186,5 @@ const Variante = {
         variantesDiv.scrollIntoView({ behavior: 'smooth',  block: 'end' });
     }
 };
+
+Variante.imagemInput();

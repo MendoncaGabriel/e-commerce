@@ -6,8 +6,10 @@ const cors = require('cors')
 
 const authRouter = require('./src/routes/authRouter');
 const lojaRouter = require('./src/routes/pages/lojaRouter');
-const usuarioRouter = require('./src/routes/usuarioRouter')
-const pagamentoRouter = require('./src/routes/pagamentoRouter')
+const usuarioRouter = require('./src/routes/usuarioRouter');
+const pagamentoRouter = require('./src/routes/pagamentoRouter');
+const adminRouter = require('./src/routes/pages/adminRouter');
+const varianteRouter = require('./src/routes/varianteRouter');
 var app = express();
 
 // arquivos estativos
@@ -28,8 +30,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use('/variante', varianteRouter);
 app.use('/pagamento', pagamentoRouter);
 app.use('/usuario', usuarioRouter);
+app.use('/admin', adminRouter);
 app.use('/auth', authRouter);
 app.use('/', lojaRouter);
 

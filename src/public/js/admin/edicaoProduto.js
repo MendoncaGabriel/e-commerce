@@ -93,17 +93,17 @@ const Edicao = {
 const Variante = {
     remover: async (btn, id) => {
  
-        console.log(id)
         const resposta = prompt('Deseja remover esta variante?: sim/não')
         if(resposta == 'sim'){
 
-            const res = await fetch('/api/variante/' + id , {
+            const res = await fetch('/variante/' + id , {
                 method: 'DELETE'
             })
 
-            console.log(res)
+            console.log(await res.json())
             if(res.status == 200){
                 btn.parentNode.remove()
+                
             }else{
                 alert('Erro ao remover variante..')
                 const response = res.json()
