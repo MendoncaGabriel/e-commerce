@@ -17,7 +17,7 @@ function verificarExistenciaUsuario(nome, email, telefone){
             }
         });
     })
-}
+};
 function salvarUsuario(nome, email, senhaHash, telefone){
     return new Promise((resolve, reject) => {
         const sql = "INSERT INTO usuarios (nome, email, senha, telefone) VALUES (?, ?, ?, ?)"
@@ -31,7 +31,7 @@ function salvarUsuario(nome, email, senhaHash, telefone){
             }
         })
     })
-}
+};
 function buscarUsuario(email){
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM usuarios WHERE email = ?"
@@ -44,7 +44,7 @@ function buscarUsuario(email){
             }
         })
     })
-}
+};
 
 module.exports = {
     login: async (email, senha) => {
@@ -58,7 +58,7 @@ module.exports = {
         //gerar token
         const payload = usuario[0];
         const validade = '30d';
-        const token = jwt.sign(payload, secret, {expiresIn: validade})
+        const token = jwt.sign(payload, secret, {expiresIn: validade});
         return token
     },
     signup: async (nome, email, senha, telefone) => {

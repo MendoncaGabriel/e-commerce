@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../app'); 
 let usuarioTeste = {};
+let token = ''
 
 function usuarioAleatorio(){
 
@@ -34,7 +35,6 @@ function usuarioAleatorio(){
   return  gerarObjetoAleatorio()
 }
 
-// CRIAR CONTA
 describe('Testando rota de signup', () => {
   test('Deve retornar: usuario registrado com sucesso', async () => {
     const userData = usuarioAleatorio()
@@ -47,16 +47,67 @@ describe('Testando rota de signup', () => {
     expect(response.body).toHaveProperty('msg', 'usuario registrado com sucesso');
   });
 });
-
-
-//FAZER LOGIN
 describe('Testando rota de login', () => {
   test("Deve retornar: Usuario autenticado com sucesso", async () => {
     const res = await request(app)
     .post('/auth/login')
     .send(usuarioTeste);
-
+    token = res.body.token
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('msg', 'Usuario autenticado com sucesso!')
   })
-})
+});
+describe("Testando rota de logout", ()=> {
+  test("Deve retornar: Logout realizado com sucesso.", async () => {
+    const res = await request(app)
+    .get('/auth/logout')
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("msg", "Logout realizado com sucesso.")
+  })
+});
+describe("Testando home", () => {
+  test("Dere renderizar a pagina home", async () => {
+    const res = await request(app)
+    .get('/')
+    expect(res.status).toBe(200);
+  })
+});
+describe("Testando pagina do produto", () => {
+  test("Deve renderizar a pagina do produto", async () => {
+      const res = await request(app)
+      .get('/produto/pó-translucido-tango-phonto-power-microfinish');
+      expect(res.status).toBe(200);
+  })
+});
+describe("Testando pagina de criar conta", () => {
+  test("Deve renderizar a pagina do produto", async () => {
+      const res = await request(app)
+      .get('/criar-conta')
+      expect(res.status).toBe(200);
+  })
+});
+describe("Testando pagina entrar", () => {
+  test("Deve renderizar a pagina de entrar", async () => {
+    const res = await request(app)
+    .get('/entrar')
+    expect(res.status).toBe(200)
+  })
+});
+describe("Testando página de checkout", () => {
+  test("Deve renderizar a página de checkout", async () => {
+    const carrinho = [{ produto_id: 22, variante_id: 28, qtd: 1 }];
+    const cookie = `carrinho=${encodeURIComponent(JSON.stringify(carrinho))}; token=${token}`;
+
+    const res = await request(app)
+      .get("/checkout")
+      .set('Cookie', [cookie]);
+    expect(res.status).toBe(200);
+  });
+});
+describe("Testando página de categoria", () => {
+  test("Deve renderizar a página de categoria", async () => {
+    const res = await request(app)
+    .get('/categoria/:categoria')
+    expect(res.status).toBe(200)
+  })
+});

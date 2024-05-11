@@ -64,7 +64,10 @@ module.exports = {
     checkout: async (req, res) => {
         try {
             const carrinhoCookie = JSON.parse(req.cookies.carrinho);
+            if(!carrinhoCookie) throw new Error("sem carrinho em cookies");
+
             const carrinhoProcessado = await produtoModel.processarCheckOut(carrinhoCookie);
+            if(!carrinhoProcessado) throw new Error("carrinho processado e undefined ou []");
             let endereco = {};
             try{
                 endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token);

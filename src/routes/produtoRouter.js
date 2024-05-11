@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const produtoController = require('../../controllers/api/produto.controller');
 const  upload = require('../middlewares/multer');
 const compactarImagem = require('../middlewares/sharp');
+const produtoController = require('../controllers/produto/produtoController');
 
 
 router.post('/produto', upload.array('imagens'), compactarImagem,  produtoController.novoProduto);

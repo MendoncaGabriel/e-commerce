@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const db = require('../../database/database');
 const pagamentoController = require('../controllers/pagamento/pagamentoController');
-const db = require('../../database/database')
 
 function resgatarItens(req){
     const cookies = req.cookies.carrinho;

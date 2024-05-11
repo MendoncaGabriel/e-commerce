@@ -1,14 +1,11 @@
-const express = require('express')
-const router = express.Router()
-const adminController = require('../../controllers/admin/admin.controller')
+const express = require('express');
+const router = express.Router();
+const adminController = require('../../controllers/admin/admin.controller');
 
-router.get('/', adminController.home)
-router.get('/cadastro/produto', adminController.cadastroProduto)
-router.get('/lista/produto', adminController.listaProduto)
-router.get('/edicao/produto/:id', adminController.edicaoProduto)
-router.get('/categorias', adminController.categorias)
+router.get('/', adminController.home);
+router.get('/cadastro/produto', adminController.cadastroProduto);
+router.get('/lista/produto', adminController.listaProduto);
+router.get('/edicao/produto/:id', adminController.edicaoProduto);
+router.get('/categorias', adminController.categorias);
 
-
-
-
-module.exports = router
+module.exports = router;

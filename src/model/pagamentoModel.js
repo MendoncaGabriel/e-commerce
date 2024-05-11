@@ -7,13 +7,10 @@ const Seller_ID = process.env.Seller_ID;
 const authString = clientID + ':' + clientSecret;
 const base64AuthString = btoa(authString);
 
-
-
 //HOMOLOGAÇÃO
 // const authString = "YTE1NjljYjEtOWUwNS00MjA0LWFhM2UtNjMyNjg4N2I4ZTY4OmFhYWUxZjgzLWE5NjUtNGUyMC1hZjY0LWYzOGQyMzMzY2U4MQ==";
 // const Seller_ID = "e965427e-93db-4f88-aacd-052f644f2e9f";
 // const accessToken =  "35c5e0f0-5bae-4136-88d1-3a112160bd27";
-
 
 async function gerarPix(valor, token){
     const valorEmCentavos = String(Number(valor) * 100);
@@ -83,14 +80,11 @@ async function access_token(){
 
 // const accessToken = await access_token();
 module.exports = {
-
     gerarQrCodePix: async (precoTotal) => {
         const access = await access_token();
         const token = access?.access_token;
         console.log("===> ", token)
         const pix = await gerarPix(precoTotal, token)
-        
-
         return pix
     }
 }

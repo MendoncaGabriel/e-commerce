@@ -330,10 +330,9 @@ module.exports = {
     },
     processarCheckOut: async (carrinho) => {
         if(!carrinho || carrinho.length == 0 ) throw new Error('Cairrinho esta vazio');
-
         //array de promessas
         const promessas = [];
-
+        
         //interando sobre array do cookie e buscando itens na base de dados
         carrinho.forEach(element => {
             const item = new Promise(async (resolve, reject) => {
@@ -341,14 +340,17 @@ module.exports = {
                     const sql = `SELECT produtos.*, variantes.* FROM variantes JOIN produtos ON produtos.produto_id = variantes.produto_id WHERE variantes.variante_id = ?;`;
                     const values = [element.variante_id];
                     const result = await  executeSql(sql, values)
+                    if(!result || result == []) throw new Error('1 Item não encontado no baco de dados');
+
 
                     //informando qtd e total selecionada pelo usuario
-                    result[0].qtd = Number(element.qtd);
-                    result[0].total = Number(element.qtd) * Number(result[0].preco);
+                    result[0].qtd = Number(element?.qtd);
+                    result[0].total = Number(element?.qtd) * Number(result[0].preco);
                   
                     resolve(result[0])
                 } catch (error) {
-                    reject('Erro ao resolver promessa, item não encontrado!')
+                    console.log(error)
+                    reject(error.message)
                 }
             });
 
