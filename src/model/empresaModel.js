@@ -1,4 +1,5 @@
-const executeSql = require('../utilities/executarSql')
+const executeSql = require('../utilities/executarSql');
+const db = require('../../database/database');
 
 module.exports = {
     dados: async () => {
@@ -56,5 +57,17 @@ module.exports = {
             console.log(error)
             throw new Error("Erro ao pegar banners", error)
         }
+    },
+    metodosEntrega: async () => {
+        return new Promise((resolve, reject) =>{
+            const sql = "SELECT * FROM metodos_entrega"
+            db.query(sql, [], (error, data) => {
+                if(error){
+                    reject(error)
+                }else{
+                    resolve(data)
+                }
+            })
+        })
     }
 }

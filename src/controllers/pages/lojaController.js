@@ -67,15 +67,17 @@ module.exports = {
             if(!carrinhoCookie) throw new Error("sem carrinho em cookies");
 
             const carrinhoProcessado = await produtoModel.processarCheckOut(carrinhoCookie);
+            const endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token);
+            const metodosEntrega = await empresaModel.metodosEntrega();
+         
             if(!carrinhoProcessado) throw new Error("carrinho processado e undefined ou []");
-            let endereco = {};
-            try{
-                endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token);
-            } catch (error) {
-                console.log('Endereço do usuario não definido');
-            };
+            if(!endereco) throw new Error('Endereço do usuario não definido');
+            if(!metodosEntrega) throw new Error('Metodos de entrega não definidos');
 
-            res.render('loja/checkout', {carrinhoProcessado, endereco, carrinhoProcessado})
+
+            const data = {carrinhoProcessado, endereco, carrinhoProcessado, metodosEntrega};
+
+            res.render('loja/checkout', data )
                
         } catch (error) {
             console.log(error)

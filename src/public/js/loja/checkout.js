@@ -194,3 +194,19 @@ function copiarPix(btn){
 
 
 };
+
+
+// MECANICA DE TAXA DE ENTTREGA
+const adicionalEntrega = document.getElementById('adicionalEntrega');
+const entrega = document.querySelectorAll('[name=entrega]');
+entrega.forEach(e => {
+    e.addEventListener('change', (event)=> {
+        if(event.target.value != "" && Number(event.target.value ) > 1){
+            adicionalEntrega.innerText = `+ R$ ${String(event.target.value).replace('.', ',')}`
+            event.target.classList.replace('hidden', 'block')
+        }else{
+            adicionalEntrega.innerText = ''
+            event.target.classList.replace('block', 'hidden')
+        }
+    });
+});
