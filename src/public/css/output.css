@@ -1200,6 +1200,18 @@ video {
   max-width: 1280px;
 }
 
+.max-w-\[\] {
+  max-width: ;
+}
+
+.max-w-\[80\%\] {
+  max-width: 80%;
+}
+
+.max-w-\[90\%\] {
+  max-width: 90%;
+}
+
 .flex-none {
   flex: none;
 }
@@ -2332,6 +2344,11 @@ video {
   border-color: rgb(236 38 143 / var(--tw-border-opacity));
 }
 
+.border-gray-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+}
+
 .border-gray-300 {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
@@ -2344,11 +2361,6 @@ video {
 
 .border-transparent {
   border-color: transparent;
-}
-
-.border-gray-200 {
-  --tw-border-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity));
 }
 
 .bg-\[rgb\(255\2c 0\2c 0\)\] {
@@ -2574,6 +2586,26 @@ video {
   fill: #2563eb;
 }
 
+.fill-c1 {
+  fill: #EC268F;
+}
+
+.fill-c2 {
+  fill: #D886C3;
+}
+
+.fill-c3 {
+  fill: #201E1E;
+}
+
+.fill-c5 {
+  fill: #FFFFFF;
+}
+
+.fill-c4 {
+  fill: rgb(0 0 0);
+}
+
 .object-contain {
   -o-object-fit: contain;
      object-fit: contain;
@@ -2714,6 +2746,10 @@ video {
   padding-right: 1.25rem;
 }
 
+.ps-4 {
+  padding-inline-start: 1rem;
+}
+
 .pt-0 {
   padding-top: 0px;
 }
@@ -2724,14 +2760,6 @@ video {
 
 .pt-5 {
   padding-top: 1.25rem;
-}
-
-.ps-4 {
-  padding-inline-start: 1rem;
-}
-
-.ps-2 {
-  padding-inline-start: 0.5rem;
 }
 
 .text-left {
@@ -3023,9 +3051,14 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.text-green-400 {
+.text-gray-100 {
   --tw-text-opacity: 1;
-  color: rgb(74 222 128 / var(--tw-text-opacity));
+  color: rgb(243 244 246 / var(--tw-text-opacity));
+}
+
+.text-c3 {
+  --tw-text-opacity: 1;
+  color: rgb(32 30 30 / var(--tw-text-opacity));
 }
 
 .underline {
@@ -3941,11 +3974,6 @@ video {
   .dark\:border-gray-600 {
     --tw-border-opacity: 1;
     border-color: rgb(75 85 99 / var(--tw-border-opacity));
-  }
-
-  .dark\:border-gray-700 {
-    --tw-border-opacity: 1;
-    border-color: rgb(55 65 81 / var(--tw-border-opacity));
   }
 
   .dark\:bg-gray-700 {

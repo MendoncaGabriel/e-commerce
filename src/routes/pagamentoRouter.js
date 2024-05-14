@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../../database/database');
 const pagamentoController = require('../controllers/pagamento/pagamentoController');
 
+
 function resgatarItens(req){
     const cookies = req.cookies.carrinho;
     const carrinhoJson = JSON.parse(cookies);
@@ -60,6 +61,8 @@ const processarItens = async (req, res, next) => {
 }
 
 //PAGAMENTO
-router.post('/qrcodepix', processarItens, pagamentoController.gerarQrCodePix);
+router.post('/mercadoPago', processarItens, pagamentoController.mercadoPagoPix);
+
+
 
 module.exports = router;

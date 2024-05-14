@@ -1,12 +1,18 @@
 const pagamentoModel = require('../../model/pagamentoModel');
 
 module.exports = {
-    gerarQrCodePix: async (req, res) => {
-        const {carrinho, itensVerificados, precoTotal } = req.locals;
-        if(!precoTotal || typeof precoTotal == "undefined") res.status(500).json({msg: 'Erro: não identificado precoTotal em gerarQrCodePix'});
-        const pix = await pagamentoModel.gerarQrCodePix(precoTotal);
+    mercadoPagoPix: async  (req, res) => {
+        try {
+            const {description, email, identificationType, number } = req.body;
+            const transaction_amount = req.locals.precoTotal;
+            const paymentMethodId = 'pix'
 
-        res.status(200).json({pix})
-     
+            const result = await pagamentoModel.mercadoPagoPix(transaction_amount, description, paymentMethodId, email, identificationType, number);
+            res.status(200).json({msg: 'pix', result})
+            
+        } catch (error) {
+            res.status(500).json(error)
+            console.log(error)
+        }
     }
 }

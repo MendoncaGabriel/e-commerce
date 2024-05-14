@@ -169,16 +169,18 @@
                 </h2>
             </div>
 
-            <button onclick="gerarPixQrCode(this, '<%= stringParaReal(carrinhoProcessado.total) %>')" class="bg-gradient-to-l from-pink-500 to-c1 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
+            <button id="btnPagar" onclick="pagar(this, '<%= stringParaReal(carrinhoProcessado.total) %>')" class="bg-gradient-to-l bg-c1 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
                 <img src="/icons/logo-pix-520x520.png" alt="" class="w-10 drop-shadow-lg">
                 <p class="text-xl leading-none drop-shadow-lg">PAGAR COM PIX</p>
             </button>
             <a class="text-center text-sm m-auto block hover:text-c1 font-light p-4" href="/">Voltar a Home</a>
         </div>
+
+
     </section>
 
     <!-- POPUP PAGAMENTO COM PIX -->
-    <section id="sectionPix" class="hidden  max-w-screen-sm fixed top-1/2 left-1/2 p-10 bg-gradient-to-r from-cyan-100 to-blue-200 transform -translate-x-1/2 -translate-y-1/2 space-y-5  w-full ">
+    <section id="sectionPix" class="hidden  max-w-screen-sm fixed top-1/2 left-1/2 p-10 bg-gradient-to-r from-cyan-100 to-blue-200 transform -translate-x-1/2 -translate-y-1/2 space-y-2  w-full ">
         <div class="flex items-center space-x-4 pt-5">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart-check-fill text-c1" viewBox="0 0 16 16">
                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708"/>
@@ -197,16 +199,23 @@
             </svg>
         </button>
 
-       <img src="" alt=""  id="qrCode" class="m-auto p-4 bg-white rounded-lg">
+        <!-- IMAGEM QRCODE -->
+       <img src="" alt=""  id="qrCode" class="m-auto p-1 bg-white rounded-lg ticket__qrcode-canva--desktop max-w-[90%]">
+    
 
-        <button id="btnCopiarPix" onclick="copiarPix(this)" class="bg-c1 duration-300 font-semibold text-white rounded-md  w-52 flex items-center justify-center space-x-2 px-4 py-2 m-auto">
+        <button chaveCopiarColar="" id="btnCopiarPix" onclick="copiarPix(this)" class="bg-c1 duration-300 font-semibold text-white rounded-md  w-52 flex items-center justify-center space-x-2 px-4 py-2 m-auto">
            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
            </svg>
             <p >COPIAR PIX</p>
         </button>
+
+
+        <a href="" target="_blank" id="linkPagamento" class="bg-c4 duration-300 font-semibold text-white rounded-md  w-52 flex items-center justify-center space-x-2 px-4 py-2 m-auto">LINK DE PAGAMENTO</a>
     </section>
+
+
 
 </body>
 </html>
