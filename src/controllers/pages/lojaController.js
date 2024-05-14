@@ -63,16 +63,17 @@ module.exports = {
     },
     checkout: async (req, res) => {
         try {
+            const token = req.cookies.token;
             const carrinhoCookie = JSON.parse(req.cookies.carrinho);
             if(!carrinhoCookie) throw new Error("sem carrinho em cookies");
 
             const carrinhoProcessado = await produtoModel.processarCheckOut(carrinhoCookie);
-            const endereco = await usuarioModel.pegarEnderecoUsuario(req.cookies.token);
+            const endereco = await usuarioModel.pegarEnderecoUsuario(token);
             const metodosEntrega = await empresaModel.metodosEntrega();
          
-            if(!carrinhoProcessado) throw new Error("carrinho processado e undefined ou []");
-            if(!endereco) throw new Error('Endereço do usuario não definido');
-            if(!metodosEntrega) throw new Error('Metodos de entrega não definidos');
+            // if(!carrinhoProcessado) throw new Error("carrinho processado e undefined ou []");
+            // if(!endereco) throw new Error('Endereço do usuario não definido');
+            // if(!metodosEntrega) throw new Error('Metodos de entrega não definidos');
 
 
             const data = {carrinhoProcessado, endereco, carrinhoProcessado, metodosEntrega};

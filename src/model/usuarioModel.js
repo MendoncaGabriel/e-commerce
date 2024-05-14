@@ -207,7 +207,7 @@ module.exports = {
             try {
                 // Executa a consulta SQL
                 const result = await executarSql(sql, values);
-                if(!result || result.length == 0) throw new Error('Endereço do usuario não definido ou não encontrado')
+                if(!result || result.length == 0) reject('Endereço do usuario não definido ou não encontrado')
                 resolve(result[0]);
             } catch (error) {
                 reject({ msg: 'Erro ao pegar endereço do usuário', error });
