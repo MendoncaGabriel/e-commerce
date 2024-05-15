@@ -3,13 +3,14 @@ const cache = new NodeCache({ stdTTL: 60 * 15  }); // TTL de 15 minutos
 
 const produtoModel = require('../../model/produtoModel');
 const empresaModel = require('../../model/empresaModel');
-const categoriaModel = require('../../model/categoriaModel');
 const usuarioModel = require('../../model/usuarioModel');
+const checkoutModel = require('../../model/checkoutModel');
+const categoriaModel = require('../../model/categoriaModel');
 
 async function getDataHome(req){
     return new Promise( async(resolve, reject) => {
         try {
-            const produtos = await produtoModel.listaProdutos(1);
+            const produtos = await produtoModel.getbyOffset(0, 10);
             const categorias = await categoriaModel.categorias();
             const dadosEmpresa = await empresaModel.dados();
             const enderecosEmpresa = await empresaModel.enderecos();
@@ -43,7 +44,7 @@ async function getDataProduto(req){
         try {
             const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             const nome = req.params.nome;
-            const produto = await produtoModel.produtoComVariantes(nome);
+            const produto = await produtoModel.getProdutoWithVariantes(nome);
             const redesSociais = await empresaModel.redesSociais();
             const dadosEmpresa = await empresaModel.dados();
             const enderecosEmpresa = await empresaModel.enderecos();
@@ -71,7 +72,7 @@ async function getDataCheckout(req){
             const carrinhoCookie = JSON.parse(req.cookies.carrinho);
             if(!carrinhoCookie) throw new Error("sem carrinho em cookies");
 
-            const carrinhoProcessado = await produtoModel.processarCheckOut(carrinhoCookie);
+            const carrinhoProcessado = await checkoutModel.processCheckout(carrinhoCookie);
             const endereco = await usuarioModel.pegarEnderecoUsuario(token);
             const metodosEntrega = await empresaModel.metodosEntrega();
          
@@ -154,10 +155,11 @@ module.exports = {
     },
     produto: async (req, res) => {
         try {
-            let data = cache.get("produtoData");
+            const produto = req.params.nome;
+            let data = cache.get("produtoData" + produto);
             if (!data) {
                 data = await getDataProduto(req)
-                cache.set("produtoData", data);
+                cache.set("produtoData" + produto, data);
             }
             res.render('loja/produto', data)
         } catch (error) {
@@ -167,11 +169,7 @@ module.exports = {
     },
     checkout: async (req, res) => {
         try {
-            let data = cache.get("checkoutData");
-            if (!data) {
-                data = await getDataCheckout(req)
-                cache.set("checkoutData", data);
-            }
+            const  data = await getDataCheckout(req)
             res.render('loja/checkout', data )
                
         } catch (error) {
@@ -207,10 +205,11 @@ module.exports = {
     },
     gridProdutos: async (req, res) => {
         try {
-            let data = cache.get("gridProdutosData");
+            const categoria = req.params.categoria
+            let data = cache.get("gridProdutosData" + categoria);
             if (!data) {
                 data = await getDataGridProdutos(req)
-                cache.set("gridProdutosData", data);
+                cache.set("gridProdutosData" + categoria, data);
             }
             res.render('loja/gridProdutos', data);
         } catch (error) {

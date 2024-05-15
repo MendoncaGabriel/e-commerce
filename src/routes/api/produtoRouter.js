@@ -4,10 +4,12 @@ const  upload = require('../../middlewares/multer');
 const compactarImagem = require('../../middlewares/sharp');
 const produtoController = require('../../controllers/produto/produtoController');
 
-router.post('/produto', upload.array('imagens'), compactarImagem,  produtoController.novoProduto);
-router.get('/produto/:id', produtoController.pegarProdutoId);
-router.get('/produto/lista/:pg', produtoController.listaProdutos);
-router.patch('/produto/:id', upload.array('imagens'), compactarImagem, produtoController.atualizarProduto);
-router.delete('/produto/:id', produtoController.removerProduto);
+router.post('/create', upload.array('imagens'), compactarImagem,  produtoController.create);
+router.get('/getById/:id', produtoController.getById);
+router.get('/getProdutoWithVariantes/:name', produtoController.getById);
+router.get('/getByCategoria', produtoController.getByCategoria);
+router.get('/getByOffset', produtoController.getByOffset);
+router.patch('update/:id', upload.array('imagens'), compactarImagem, produtoController.update);
+router.delete('delete/:id', produtoController.delete);
 
 module.exports = router;

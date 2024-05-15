@@ -1,11 +1,11 @@
 const produtoModel = require('../../model/produtoModel');
 
 module.exports = {
-    novoProduto: async (req, res) => {
+    create: async (req, res) => {
         try {
             // Salvando produto
             const produto = JSON.parse(req.body.produto)
-            const result = await produtoModel.novoProduto(produto)
+            const result = await produtoModel.crate(produto)
 
             // Salvando Variante
             const variantes = JSON.parse(req.body.variantes)
@@ -33,54 +33,53 @@ module.exports = {
             res.status(500).json({msg: 'Erro interno no servidor'})
         }
     },
-    pegarVarianteId: async (req, res) => {
+    getById: async (req, res) => {
         try {
             const id = req.params.id
-            const result = await produtoModel.pegarVarianteId(id)
-            res.status(200).json({msg: "Variante resgatado com sucesso!", result})
-        } catch (error) {
-            res.status(500).json({msg: 'Erro interno no servidor'})
-        }
-    },
-    pegarProdutoId: async (req, res) => {
-        try {
-            const id = req.params.id
-            const result = await produtoModel.pegarProdutoId(id)
+            const result = await produtoModel.getById(id)
             res.status(200).json({msg: "Produto resgatado com sucesso!", result})
         } catch (error) {
             res.status(500).json({msg: 'Erro interno no servidor'})
         }
     },
-    novaVariante: async (req, res) => {
-        try {   
-            const data = req.body
-            const result = await produtoModel.novaVariante(data)
-            res.status(200).json({msg: 'Nova variante de produto criada com sucesso!', result})
+    getProdutoWithVariantes: async (req, res) => {
+        try {
+            const id = req.params.name;
+            const result = await produtoModel.getProdutoWithVariantes(id);
+            res.status(200).json({msg: "Produto resgatado com sucesso!", result});
+        } catch (error) {
+            res.status(500).json({msg: 'Erro interno no servidor'});
+        }
+    },
+    getByCategoria: async (req, res) => {
+        try {
+            const categoria = req.params.categoria;
+            const result = await produtoModel.getByCategoria(categoria);
+            res.status(200).json({msg: "Produtos pegos por categoria", result})
         } catch (error) {
             console.log(error)
             res.status(500).json({msg: 'Erro interno no servidor'})
         }
     },
-    listaProdutos: async (req, res) => {
+    getByOffset: async (req, res) => {
         try {
-            const pg = req.params.pg
-            const limit = Number(req.query.limit || 20)
-            const result = await produtoModel.listaProdutos(pg, limit)
+            const offset = Number(req.query.offset || 0);
+            const limit = Number(req.query.limit || 20);
+            const result = await produtoModel.getbyOffset(offset, limit)
             res.status(200).json({msg: "Lista de produtos resgatada com sucesso!", result})
         } catch (error) {
             console.log(error)
             res.status(500).json({msg: 'Erro interno no servidor'})
         }
-
     },
-    atualizarProduto: async (req, res) => {
+    update: async (req, res) => {
         try {
             const id = req.params.id; //id de produto
             const produto = JSON.parse(req.body.produto);
             const variantes = JSON.parse(req.body.variantes);
 
             // Atualizar o produto
-            await produtoModel.atualizarProduto(id, produto);
+            await produtoModel.update(id, produto);
 
             // Atualizar as variantes
             await Promise.all(variantes.map(async (variante, index) => {
@@ -89,9 +88,9 @@ module.exports = {
                     novaVariante.produto_id = id
                     typeof novaVariante.imagem !== "undefined" && novaVariante.imagem ?  novaVariante.imagem = variante.imagem.replace('.jpeg', '.png').replace('.jpg', '.png').replace('.webp', '.png') : ''
                     delete novaVariante.variante_id
-                    const result = await produtoModel.novaVariante(novaVariante)
+                    const result = await produtoModel.crate(novaVariante)
                 }
-                await produtoModel.atualizarVariante(variante.variante_id, variante);
+                await produtoModel.update(variante.variante_id, variante);
             }));
 
             res.status(200).json({ msg: "Produto atualizado com sucesso!" });
@@ -100,25 +99,14 @@ module.exports = {
             res.status(500).json({ msg: 'Erro interno no servidor' });
         }
     },
-    removerProduto: async (req, res) => {
+    delete: async (req, res) => {
         try {
             const id = req.params.id
-            const result = await produtoModel.removerProduto(Number(id))
+            const result = await produtoModel.delete(Number(id))
             res.status(200).json({msg: "Produto deletado com sucesso!", result})
         } catch (error) {
             console.log(error)
             res.status(500).json('Erro interno no servidor')
         }
-    },
-    removerVariante: async (req, res) => {
-        try {
-            const id = req.params.id
-            const result = await produtoModel.removerVariante(id)
-            res.status(200).json({msg: "Variante deletada com sucesso!", result})
-        } catch (error) {
-            console.log(error)
-            res.status(500).json('Erro interno no servidor')
-        }
-    },
-
+    }
 }
