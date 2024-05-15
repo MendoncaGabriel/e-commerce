@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Erro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ocorreu um erro</h1>
+    <p>Lamentamos, mas ocorreu um erro ao processar a sua solicitação.</p>
+    <p>Por favor, <a href="/">clique aqui</a> para voltar à página inicial.</p>
+    <p id="redirect"></p>
+</body>
+</html>
+
+
+<script>
+    let cont = 3;
+    
+    setInterval(() => {
+        document.getElementById("redirect").innerText = `Direcionando em ${cont}`
+        if(cont == 2) window.location.href = '/';
+        cont--
+       
+    }, 1000);
+</script>

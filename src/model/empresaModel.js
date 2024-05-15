@@ -17,8 +17,6 @@ module.exports = {
         try {
             const sql = "SELECT * FROM endereco_empresa;"
             const result = await executeSql(sql)
-            console.log(result)
-
             return result
         } catch (error) {
             console.log(error)

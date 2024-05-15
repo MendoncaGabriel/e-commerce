@@ -397,5 +397,4 @@ module.exports = {
         const result = await executeSql(sql, values);
         return result
     }
-    
 }

@@ -1,107 +1,45 @@
+const NodeCache = require("node-cache");
+const cache = new NodeCache({ stdTTL: 60 * 15  }); // TTL de 15 minutos
+
 const produtoModel = require('../../model/produtoModel');
 const empresaModel = require('../../model/empresaModel');
 const categoriaModel = require('../../model/categoriaModel');
 const usuarioModel = require('../../model/usuarioModel');
 
-
-
-
-function base64 (){
-    const Client_ID = "7ddd8d35-0e0a-4f58-b928-719eca35659b"
-    const Client_Secret = "YkBvQUsngF336WiaCoPci4X70UIm7XNB"
-    const token = Client_ID + ':' + Client_Secret
-    console.log('===> base64: ', token)
-    return btoa(token)
-}
-function authorization(){
-    const formData = new URLSearchParams();
-    formData.append('scoop', 'oob');
-    formData.append('grant_type', 'client_credentials');
-
-    return new Promise((resolve, reject)=> {
-        fetch('https://api.getnet.com.br/auth/oauth/v2/token', {
-            method: 'POST',
-            headers: {
-                "Content-type": "application/x-www-form-urlencoded",
-                "Authorization": `Basic ${base64()}`
-            },
-            body: formData
-        })
-        .then(response =>  response.json())
-        .then(response => {
-            resolve(response)
-        })
-        .catch(error => {
-            reject(error)
-        });
-    })
-}
-async function gerarPix(){
-    const auth = await authorization();
-    const seller_id = "e965427e-93db-4f88-aacd-052f644f2e9f";
-    console.log('===> access_token: ', auth.access_token)
-
-    fetch('https://api.getnet.com.br/v1/payments/qrcode/pix', {
-        method: 'POST',
-        headers: {
-            "seller_id": seller_id,
-            "Content-Type": "application/json; charset=utf-8",
-            "Authorization": `Bearer ${auth.access_token}`,
-            "x-qrcode-expiration-time": "180"
-        },
-        body: JSON.stringify({
-            amount: 100,
-            currency: "BRL",
-            customer_id: "string",
-            order_id: "DEV-160874898asd0"
-        })
-    })
-    .then(response =>  response.json())
-    .then(response => {
-        console.log(response);
-    })
-    .catch(error => {
-        console.log(error.message);
-    });
-}
-
-
-module.exports = {
-    home: async (req, res) => {
-        gerarPix()
+async function getDataHome(req){
+    return new Promise( async(resolve, reject) => {
         try {
-            const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             const produtos = await produtoModel.listaProdutos(1);
             const categorias = await categoriaModel.categorias();
             const dadosEmpresa = await empresaModel.dados();
             const enderecosEmpresa = await empresaModel.enderecos();
             const banners = await empresaModel.bannerHome();
             const redesSociais = await empresaModel.redesSociais();
-      
- 
+            const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
 
-            // Filtro
             const  produtosFiltrados = produtos.filter((e)=>{
-               return e.ativo == 1 && e.imagem !== null && e.estoque > 0 ;
+                return e.ativo == 1 && e.imagem !== null && e.estoque > 0 ;
             });  
-           
+            
             const data = {
-                tituloCategoria: 'Todos os produtos',
-                carrosel_1_data: produtosFiltrados, 
-                carrosel_1_titulo: 'Novidades', 
-                dadosEmpresa: dadosEmpresa,
-                categorias: categorias,
-                banners: banners,
                 logado:logado,
+                banners: banners,
+                categorias: categorias,
+                redesSociais: redesSociais,
+                dadosEmpresa: dadosEmpresa,
+                carrosel_1_titulo: 'Novidades', 
+                carrosel_1_data: produtosFiltrados, 
                 enderecosEmpresa: enderecosEmpresa,
-                redesSociais: redesSociais
+                tituloCategoria: 'Todos os produtos',
             };
-            res.render('loja/home', data);
+            resolve(data);
         } catch (error) {
-            console.log(error);
+            reject(error);
         }
-    },
-    produto: async (req, res) => {
+    })
+}
+async function getDataProduto(req){
+    return new Promise(async (resolve, reject) => {
         try {
             const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             const nome = req.params.nome;
@@ -110,22 +48,26 @@ module.exports = {
             const dadosEmpresa = await empresaModel.dados();
             const enderecosEmpresa = await empresaModel.enderecos();
 
-
-            res.render('loja/produto', {
+            const data = {
                 produto, 
                 dadosEmpresa, 
-                nomeProduto: nome.toUpperCase().replace(/-/g, ' '),
                 logado:logado,
                 redesSociais: redesSociais,
-                enderecosEmpresa: enderecosEmpresa
-            })
+                enderecosEmpresa: enderecosEmpresa,
+                nomeProduto: nome.toUpperCase().replace(/-/g, ' ')
+            }
+            resolve(data)
         } catch (error) {
-            console.log(error)
+            reject(error)
         }
-    },
-    checkout: async (req, res) => {
+    })
+}
+async function getDataCheckout(req){
+    return new Promise(async (resolve, reject) => {
         try {
             const token = req.cookies.token;
+            if(!token) throw new Error('Token em cookie não encontrado');
+
             const carrinhoCookie = JSON.parse(req.cookies.carrinho);
             if(!carrinhoCookie) throw new Error("sem carrinho em cookies");
 
@@ -133,36 +75,41 @@ module.exports = {
             const endereco = await usuarioModel.pegarEnderecoUsuario(token);
             const metodosEntrega = await empresaModel.metodosEntrega();
          
-            // if(!carrinhoProcessado) throw new Error("carrinho processado e undefined ou []");
-            // if(!endereco) throw new Error('Endereço do usuario não definido');
-            // if(!metodosEntrega) throw new Error('Metodos de entrega não definidos');
-
+            if(!carrinhoProcessado) throw new Error("carrinho processado e undefined ou []");
+            if(!endereco) throw new Error('Endereço do usuario não definido');
+            if(!metodosEntrega) throw new Error('Metodos de entrega não definidos');
 
             const data = {carrinhoProcessado, endereco, carrinhoProcessado, metodosEntrega};
-
-            res.render('loja/checkout', data )
-               
+            resolve(data)
         } catch (error) {
-            console.log(error)
+            reject(error)
         }
-    },
-    criarConta: async (req, res) => {
-        try{
+    })
+}
+async function getDataCriarConta(){
+    return new Promise( async (resolve, reject) => {
+        try {
+            const bannerAuth = await empresaModel.bannerAuth()
+            const data = {banners: bannerAuth}
+            resolve(data)
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+async function getDataEntrar(){
+    return new Promise( async (resolve, reject) => {
+        try {
             const dadosEmpresa = await empresaModel.bannerAuth()
-            res.render('loja/criarConta', {banners: dadosEmpresa})
-        }catch(error){
-            console.log(error)
+            const data = {banners: dadosEmpresa}
+            resolve(data)
+        } catch (error) {
+            reject(error)
         }
-    },
-    entrar: async (req, res) => {
-        try{
-            const dadosEmpresa = await empresaModel.bannerAuth()
-            res.render('loja/entrar', {banners: dadosEmpresa})
-        }catch(error){
-            console.log(error)
-        }
-    },
-    gridProdutos: async (req, res) => {
+    })
+}
+async function getDataGridProdutos(req){
+    return new Promise( async (resolve, reject) => {
         try {
             const titulo = req.params.categoria;
             const dadosEmpresa = await empresaModel.dados();
@@ -174,19 +121,108 @@ module.exports = {
             } else {
                 produtosCategoria = await produtoModel.getProdutosCategoria(titulo);
             };
-            console.log(produtosCategoria)
-
-            res.render('loja/gridProdutos', {
+            const data = {
                 titulo: titulo,
                 carrosel_1_titulo: 'Novidades', 
                 categorias: categorias,
                 dadosEmpresa: dadosEmpresa,
                 produtosCategoria: produtosCategoria,
                 tituloCategoria: titulo
-            });
-
+            }
+            resolve(data)
         } catch (error) {
-            console.log(error);
+            reject(error)
+        }
+    })
+}
+
+
+module.exports = {
+    home: async (req, res) => {
+        try {
+            let data = cache.get("homeData");
+            if (!data) {
+                data = await getDataHome(req);
+                cache.set("homeData", data);
+            }
+
+            res.render('loja/home', data);
+        } catch (error) {
+            console.log(error)
+            res.redirect('/erro')
+        }
+    },
+    produto: async (req, res) => {
+        try {
+            let data = cache.get("produtoData");
+            if (!data) {
+                data = await getDataProduto(req)
+                cache.set("produtoData", data);
+            }
+            res.render('loja/produto', data)
+        } catch (error) {
+            console.log(error)
+            res.redirect('/erro')
+        }
+    },
+    checkout: async (req, res) => {
+        try {
+            let data = cache.get("checkoutData");
+            if (!data) {
+                data = await getDataCheckout(req)
+                cache.set("checkoutData", data);
+            }
+            res.render('loja/checkout', data )
+               
+        } catch (error) {
+            console.log(error)
+            res.redirect('/erro')
+        }
+    },
+    criarConta: async (req, res) => {
+        try{
+            let data = cache.get("criarContaData");
+            if (!data) {
+                data = await getDataCriarConta();
+                cache.set("criarContaData", data);
+            }
+            res.render('loja/criarConta', data);
+        }catch(error){
+            console.log(error)
+            res.redirect('/erro')
+        }
+    },
+    entrar: async (req, res) => {
+        try{
+            let data = cache.get("entrarData");
+            if (!data) {
+                data = await getDataEntrar();
+                cache.set("entrarData", data);
+            }
+            res.render('loja/entrar', data)
+        }catch(error){
+            console.log(error)
+            res.redirect('/erro')
+        }
+    },
+    gridProdutos: async (req, res) => {
+        try {
+            let data = cache.get("gridProdutosData");
+            if (!data) {
+                data = await getDataGridProdutos(req)
+                cache.set("gridProdutosData", data);
+            }
+            res.render('loja/gridProdutos', data);
+        } catch (error) {
+            console.log(error)
+            res.redirect('/erro')
+        }
+    },
+    error: (req, res) =>{
+        try {
+            res.render('500')
+        } catch (error) {
+            console.log(error)
         }
     }
 }

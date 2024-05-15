@@ -4,12 +4,12 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
 
-const authRouter = require('./src/routes/authRouter');
 const lojaRouter = require('./src/routes/pages/lojaRouter');
-const usuarioRouter = require('./src/routes/usuarioRouter');
-const pagamentoRouter = require('./src/routes/pagamentoRouter');
 const adminRouter = require('./src/routes/pages/adminRouter');
-const varianteRouter = require('./src/routes/varianteRouter');
+const authRouter = require('./src/routes/api/authRouter');
+const usuarioRouter = require('./src/routes/api/usuarioRouter');
+const pagamentoRouter = require('./src/routes/api/pagamentoRouter');
+const varianteRouter = require('./src/routes/api/varianteRouter');
 var app = express();
 
 // arquivos estativos
@@ -37,7 +37,6 @@ app.use('/admin', adminRouter);
 app.use('/auth', authRouter);
 app.use('/', lojaRouter);
 
-// Middleware para lidar com rotas não encontradas (erro 404)
 app.use((req, res, next) => {
     res.status(404).render('404'); 
 });
