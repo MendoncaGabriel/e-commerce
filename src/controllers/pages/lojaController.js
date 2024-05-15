@@ -4,9 +4,71 @@ const categoriaModel = require('../../model/categoriaModel');
 const usuarioModel = require('../../model/usuarioModel');
 
 
+
+
+function base64 (){
+    const Client_ID = "7ddd8d35-0e0a-4f58-b928-719eca35659b"
+    const Client_Secret = "YkBvQUsngF336WiaCoPci4X70UIm7XNB"
+    const token = Client_ID + ':' + Client_Secret
+    console.log('===> base64: ', token)
+    return btoa(token)
+}
+function authorization(){
+    const formData = new URLSearchParams();
+    formData.append('scoop', 'oob');
+    formData.append('grant_type', 'client_credentials');
+
+    return new Promise((resolve, reject)=> {
+        fetch('https://api.getnet.com.br/auth/oauth/v2/token', {
+            method: 'POST',
+            headers: {
+                "Content-type": "application/x-www-form-urlencoded",
+                "Authorization": `Basic ${base64()}`
+            },
+            body: formData
+        })
+        .then(response =>  response.json())
+        .then(response => {
+            resolve(response)
+        })
+        .catch(error => {
+            reject(error)
+        });
+    })
+}
+async function gerarPix(){
+    const auth = await authorization();
+    const seller_id = "e965427e-93db-4f88-aacd-052f644f2e9f";
+    console.log('===> access_token: ', auth.access_token)
+
+    fetch('https://api.getnet.com.br/v1/payments/qrcode/pix', {
+        method: 'POST',
+        headers: {
+            "seller_id": seller_id,
+            "Content-Type": "application/json; charset=utf-8",
+            "Authorization": `Bearer ${auth.access_token}`,
+            "x-qrcode-expiration-time": "180"
+        },
+        body: JSON.stringify({
+            amount: 100,
+            currency: "BRL",
+            customer_id: "string",
+            order_id: "DEV-160874898asd0"
+        })
+    })
+    .then(response =>  response.json())
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error.message);
+    });
+}
+
+
 module.exports = {
     home: async (req, res) => {
-    
+        gerarPix()
         try {
             const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             const produtos = await produtoModel.listaProdutos(1);
