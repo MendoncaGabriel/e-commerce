@@ -28,6 +28,7 @@ const checkSignup = (req, res, next) => {
 
 //ROTAS
 router.post('/signup', checkSignup, authController.signup);
-router.get('/logout', checkLogin, authController.logout);
+router.get('/login', checkLogin, authController.login);
+router.get('/logout', authController.logout);
 
 module.exports = router;

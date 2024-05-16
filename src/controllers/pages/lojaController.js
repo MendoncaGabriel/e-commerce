@@ -18,14 +18,13 @@ async function getDataHome(req){
             const enderecosEmpresa = await empresaModel.enderecos();
             const banners = await empresaModel.bannerHome();
             const redesSociais = await empresaModel.redesSociais();
-            const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
+            
 
             const  produtosFiltrados = produtos.filter((e)=>{
                 return e.ativo == 1 && e.imagem !== null && e.estoque > 0 ;
             });  
             
             const data = {
-                logado:logado,
                 banners: banners,
                 categorias: categorias,
                 redesSociais: redesSociais,
@@ -153,7 +152,7 @@ module.exports = {
                 data = await getDataHome(req);
                 cache.set("homeData", data);
             }
-
+            data.logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             res.render('loja/home', data);
         } catch (error) {
             console.log(error)

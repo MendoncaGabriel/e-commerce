@@ -19,6 +19,7 @@ uf.addEventListener('input', ()=> exibirBtnSalvar());
 pontoReferencia.addEventListener('input', ()=> exibirBtnSalvar());
 telefone.addEventListener('input', ()=> exibirBtnSalvar());
 
+
 function exibirBtnSalvar(){
     btnSalvarEndereco.classList.replace('hidden', 'block');
 };
@@ -277,6 +278,5 @@ async function handleInputCep(cep){
         // document.querySelector('#cidade').value = endereco.localidade || '';
         document.querySelector('#rua').value = endereco.logradouro || '';
         // document.querySelector('#estado').value = endereco.uf || '';
-
     }
 }
