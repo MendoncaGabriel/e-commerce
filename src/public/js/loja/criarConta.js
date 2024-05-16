@@ -8,7 +8,7 @@ function enviar(){
         alert('Senhas Não conferem!')
         return
     }
-
+    console.log('fazendo fetch')
     fetch('/auth/signup', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -21,13 +21,12 @@ function enviar(){
     })
     .then(res => res.json())
     .then(res => {
-        if(JSON.stringify(res.msg).includes('Usuario já existe')) throw new Error(res.msg)
-        alert(JSON.stringify(res.msg))
+        alert(JSON.stringify(res))
         window.location.href = '/'
         console.log(res)
     })
     .catch((error) =>{
-        alert('Falha no registro: ' + JSON.stringify(error.message))
+        console.log(error)
         window.location.reload()
     })
 }

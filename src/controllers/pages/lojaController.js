@@ -1,5 +1,7 @@
 const NodeCache = require("node-cache");
 const cache = new NodeCache({ stdTTL: 60 * 15  }); // TTL de 15 minutos
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const produtoModel = require('../../model/produtoModel');
 const empresaModel = require('../../model/empresaModel');
@@ -69,11 +71,16 @@ async function getDataCheckout(req){
             const token = req.cookies.token;
             if(!token) throw new Error('Token em cookie não encontrado');
 
+            const usuario = jwt.verify(token, process.env.ASSINATURA_TOKEN)
+            const idusuarios = usuario.idusuario;
+           
+
             const carrinhoCookie = JSON.parse(req.cookies.carrinho);
             if(!carrinhoCookie) throw new Error("sem carrinho em cookies");
 
             const carrinhoProcessado = await checkoutModel.processCheckout(carrinhoCookie);
-            const endereco = await usuarioModel.pegarEnderecoUsuario(token);
+            const endereco = await usuarioModel.getEndereco(idusuarios);
+   
             const metodosEntrega = await empresaModel.metodosEntrega();
          
             if(!carrinhoProcessado) throw new Error("carrinho processado e undefined ou []");
@@ -179,11 +186,7 @@ module.exports = {
     },
     criarConta: async (req, res) => {
         try{
-            let data = cache.get("criarContaData");
-            if (!data) {
-                data = await getDataCriarConta();
-                cache.set("criarContaData", data);
-            }
+            let data = await  getDataCriarConta();
             res.render('loja/criarConta', data);
         }catch(error){
             console.log(error)

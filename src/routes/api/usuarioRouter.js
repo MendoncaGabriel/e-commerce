@@ -3,7 +3,8 @@ const router = express.Router();
 const usuarioController = require('../../controllers/usuarios/usuarioController');
 
 
-router.patch('/endereco', usuarioController.endereco );
+router.get('/endereco', usuarioController.getEndereco );
+router.patch('/endereco', usuarioController.updateEndereco );
 router.post('/pedido', usuarioController.pedido);
 
 module.exports = router;

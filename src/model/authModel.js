@@ -4,34 +4,8 @@ const bycript = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = process.env.ASSINATURA_TOKEN;
 
-function verificarExistenciaUsuario(nome, email, telefone){
-    return new Promise ((resolve, reject) => {
-        const sql = "SELECT * FROM usuarios WHERE nome = ? OR email = ? OR telefone = ?"
-        const values = [nome, email, telefone]
-        
-        db.query(sql, values, (error, data) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(data);
-            }
-        });
-    })
-};
-function salvarUsuario(nome, email, senhaHash, telefone){
-    return new Promise((resolve, reject) => {
-        const sql = "INSERT INTO usuarios (nome, email, senha, telefone) VALUES (?, ?, ?, ?)"
-        const values = [nome, email, senhaHash, telefone]
 
-        db.query(sql, values, (error, data) => {
-            if(error){
-                reject(error)
-            }else{
-                resolve(data)
-            }
-        })
-    })
-};
+
 function buscarUsuario(email){
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM usuarios WHERE email = ?"
@@ -62,29 +36,27 @@ module.exports = {
         return token
     },
     signup: async (nome, email, senha, telefone) => {
-        //verificar se usuario ja existe
-        const usuarioExiste = await verificarExistenciaUsuario(nome, email, telefone);
-
-        // Verificar se há algum resultado
-        let aviso = ''
-        usuarioExiste[0]?.nome == nome ? aviso += " ( nome ja foi cadastrado )" : '';
-        usuarioExiste[0]?.email == email ? aviso += " ( email ja foi cadastrado )": '';
-        usuarioExiste[0]?.telefone == telefone ? aviso += " ( telefone ja foi cadastrado )" : '';
-        if(usuarioExiste.length > 0) throw new Error(`Usuario já existe: ${aviso}`);
-
+       console.log('signup')
         //criptografar senha
         const salt = await bycript.genSalt(10);
         const senhaHash = await bycript.hash(senha, salt);
 
-        //salvar usuario
-        const usuario = await salvarUsuario(nome, email, senhaHash, telefone);
-        if(usuario.affectedRows == 0) throw new Error('Erro inesperado, usuario não salvo!');
-
-        //gerar token
- 
-        const payload = {nome, email, senhaHash, telefone};
-        const validade = '30d';
-        const token = jwt.sign(payload, secret, {expiresIn: validade})
-        return {usuario, token};        
+        return new Promise((resolve, reject) => {
+            const sql = "INSERT INTO usuarios (nome, email, senha, telefone) VALUES (?, ?, ?, ?)"
+            const values = [nome, email, senhaHash, telefone]
+    
+            db.query(sql, values, (error, result) => {
+                if(error){
+                    reject(error)
+                }else{
+                    //gerar token
+                    const payload = {nome, email, senhaHash, telefone, idusuario: result.insertId};
+                    const validade = '30d';
+                    const token = jwt.sign(payload, secret, {expiresIn: validade})
+                    console.log(token)
+                    resolve(token);        
+                }
+            })
+        })
     }
 }

@@ -3,7 +3,7 @@ const router = express.Router();
 const authController = require('../../controllers/auth/authController');
 
 //MIDLLEWARES
-const checkLogin = (req, res) => {
+const checkLogin = (req, res, next) => {
     try {
         const {email, senha} = req.body;
         if(!email) throw new Error('Email não foi passado em body');
@@ -13,13 +13,14 @@ const checkLogin = (req, res) => {
         res.status(400).json({msg: error.message})
     }
 }
-const checkSignup = (req, res) => {
+const checkSignup = (req, res, next) => {
     try {
         const {nome, email, senha, telefone} = req.body;
         if(!nome) throw new Error("Nome não foi passado no body");
         if(!email) throw new Error("Email não foi passado no body");
         if(!senha) throw new Error("Senha não foi passado no body");
         if(!telefone) throw new Error("Telefone não foi passado no body");
+        next()
     } catch (error) {
         res.status(400).json({msg: error.message})
     }

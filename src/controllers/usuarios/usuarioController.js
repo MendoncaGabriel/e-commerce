@@ -1,13 +1,33 @@
 const usuarioModel = require('../../model/usuarioModel');
-
+const jwt = require('jsonwebtoken')
+require('dotenv').config();
 module.exports = {
-    // atualizar ou inserir endereço
-    endereco: async (req, res) => {
+    getEndereco: async (req, res) => {
+        console.log('pedido para atualizar')
         try {
             const tokenUsuario = req.cookies.token;
-            const {rua, numero, bairro, cidade, estado, referencia, telefone} = req.body;
-            const enderecoUsuario = await  usuarioModel.atualizarendereco(rua, numero, bairro, cidade, estado, referencia, telefone, tokenUsuario);
+            const {idusuario} = jwt.verify(tokenUsuario, process.env.ASSINATURA_TOKEN)
+
+
+
+            const enderecoUsuario = await  usuarioModel.getEndereco(idusuario);
+
+           
             res.status(200).json(enderecoUsuario);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({msg: error.message});
+        };
+    },
+    updateEndereco: async (req, res) => {
+        try {
+            const tokenUsuario = req.cookies.token;
+            const {idusuario} = jwt.verify(tokenUsuario, process.env.ASSINATURA_TOKEN)
+
+            const {rua, bairro, cep, cidade, estado, pais, numero_casa, referencia, telefone} = req.body
+            await  usuarioModel.updateEndereco(rua, bairro, cep, cidade, estado, pais, numero_casa, referencia, telefone, idusuario);
+
+            res.status(200).json({msg: 'Endereço atualizado com sucesso!'});
         } catch (error) {
             console.log(error);
             res.status(500).json({msg: error.message});

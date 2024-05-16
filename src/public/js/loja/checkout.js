@@ -38,7 +38,6 @@ function salvarFormulario(){
             estado: document.getElementById('estado').value || '',
             referencia: document.getElementById('referencia').value || '',
             telefone: document.getElementById('telefone').value || ''
-
         })
     })
     .then(res => res.json())
