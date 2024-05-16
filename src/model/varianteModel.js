@@ -9,13 +9,13 @@ module.exports = {
                 VALUES 
                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             `;
-            const values = [data.produto_id, data.preco, data.tamanho, data.quantidade, data.referencia, data.vendas, data.ean, data.estoque, data.custo, data.imagem]
+            const values = [data.produto_id, data.preco, data.tamanho, data.quantidade, data.referencia, data.vendas, data.ean, data.estoque, data.custo, data.imagem];
 
             db.query(sql, values, (error, result) => {
                 if(error){
-                    reject(error)
+                    reject(error);
                 }else{
-                    resolve(result)
+                    resolve(result);
                 }
             })
         })
@@ -26,9 +26,9 @@ module.exports = {
             const values = [id];
             db.query(sql, values, (error, result) => {
                 if(error){
-                    reject(error)
+                    reject(error);
                 }else{
-                    resolve(result)
+                    resolve(result);
                 }
             })
         })
@@ -39,9 +39,9 @@ module.exports = {
             const values = [id];
             db.query(sql, values, (error, result) => {
                 if(error){
-                    reject(error)
+                    reject(error);
                 }else{
-                    resolve(result)
+                    resolve(result);
                 }
             })
         })
@@ -73,9 +73,9 @@ module.exports = {
 
             db.query(sql, values, (error, result) => {
                 if(error){
-                    reject(error)
+                    reject(error);
                 }else{
-                    resolve(result)
+                    resolve(result);
                 }
             })
         })
@@ -86,9 +86,9 @@ module.exports = {
             const values = [id];
             db.query(sql, values, (error, result) => {
                 if(error) {
-                    reject(error)
+                    reject(error);
                 }else{
-                    resolve(result)
+                    resolve(result);
                 }
             })
         })
