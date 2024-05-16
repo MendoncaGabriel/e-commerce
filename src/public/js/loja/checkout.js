@@ -243,3 +243,39 @@ entrega.forEach(e => {
         }
     });
 });
+
+
+//BUSCAR ENDEREÇO COM CEP
+function buscarEndereco(cep) {
+    return new Promise((resolve, reject) => {
+        if(!cep) throw new Error('cep não informado')
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(res => res.json())
+        .then(res => {
+            resolve(res)
+        })
+        .catch(error => {
+            reject(error)
+        });
+    })
+}
+
+//lidar input
+const inputCep = document.getElementById('cep');
+inputCep.addEventListener('keyup', (event) =>{
+    handleInputCep(event.target.value)
+})
+
+//preencher inputs com resultado
+async function handleInputCep(cep){
+    if(cep.length == 9){
+        const endereco = await buscarEndereco(cep);
+        console.log(endereco)
+        document.querySelector('#bairro').value = endereco.bairro || '';
+        document.querySelector('#referencia').value = endereco.complemento || '';
+        // document.querySelector('#cidade').value = endereco.localidade || '';
+        document.querySelector('#rua').value = endereco.logradouro || '';
+        // document.querySelector('#estado').value = endereco.uf || '';
+
+    }
+}
