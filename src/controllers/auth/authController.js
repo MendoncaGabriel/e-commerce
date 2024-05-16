@@ -42,7 +42,7 @@ module.exports = {
                 maxAge: 24 * 60 * 60 * 1000 * 30, //30d
             });
 
-            res.status(200).json({msg: "usuario registrado com sucesso"})
+            res.status(200).json({msg: "Usuário registrado com sucesso"})
         } catch (error) {
             console.log(error)
             res.status(500).json({msg: error.message});

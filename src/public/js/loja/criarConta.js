@@ -21,13 +21,11 @@ function enviar(){
     })
     .then(res => res.json())
     .then(res => {
-        alert(JSON.stringify(res))
         window.location.href = '/'
-        console.log(res)
     })
     .catch((error) =>{
-        console.log(error)
-        window.location.reload()
+        alert(JSON.stringify(error.msg))
+        window.location.reload();
     })
 }
 

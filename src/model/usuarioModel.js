@@ -1,8 +1,5 @@
 require('dotenv').config();
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs');
 const db = require('../../database/database');
-
 
 module.exports = {
     updateEndereco: async (rua, bairro, cep, cidade, estado, pais, numero_casa, referencia, telefone, idusuarios) => {
