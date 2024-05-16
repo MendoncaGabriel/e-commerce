@@ -79,7 +79,7 @@ async function getDataCheckout(req){
             if(!carrinhoCookie) throw new Error("sem carrinho em cookies");
 
             const carrinhoProcessado = await checkoutModel.processCheckout(carrinhoCookie);
-            const endereco = await usuarioModel.getEndereco(idusuarios);
+            const endereco = await usuarioModel.getEndereco(idusuarios) || [];
    
             const metodosEntrega = await empresaModel.metodosEntrega();
          
