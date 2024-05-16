@@ -87,6 +87,7 @@
                 <div class="flex justify-between items-center space-x-4">
                     <div class="w-full">
                         <label for="">Cep: </label><br>
+                        <% console.log(endereco) %>
                         <input id="cep" onkeypress="mascara(this, '#####-####')" maxlength="9" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.cep ? endereco.cep :  ''  %>">
                     </div>
                     <div>

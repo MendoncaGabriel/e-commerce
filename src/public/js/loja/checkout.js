@@ -31,6 +31,7 @@ function salvarFormulario(){
         method: 'PATCH',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
+            cep: document.getElementById('cep').value || '',
             rua: document.getElementById('rua').value || '',
             numero: document.getElementById('numero').value || '',
             bairro: document.getElementById('bairro').value || '',
