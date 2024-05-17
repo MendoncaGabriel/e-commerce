@@ -5,10 +5,10 @@
     }
 %>
 
-<% carroselProdutos.forEach(carrosel => { %>
-    <% const id = gerarIdAleatorio() %>
-    <% const left =  gerarIdAleatorio() %>
-    <% const right =  gerarIdAleatorio() %>
+<% carroselProdutos.forEach((carrosel, index) => { %>
+    <% const id = `carrosel-${index}-${gerarIdAleatorio()}`; %>
+    <% const leftId = `left-${id}`; %>
+    <% const rightId = `right-${id}`; %>
 
     <section class="py-5 relative lg:px-14 flex items-start justify-center flex-col max-w-screen-2xl m-auto carroselProdutos" data-carrosel-id="<%= id %>">
 
@@ -23,17 +23,17 @@
         <!-- CARROSEL -->
         <div id="<%= id %>" class="flex p-5 w-full space-x-5  overflow-x-auto snap-x snap-mandatory duration-300">
             <% carrosel.data.forEach(produto => { %>
-                <%- include('cardProduto',  {data: produto}) %>
+                <%- include('cardProduto', { data: produto }) %>
             <% }) %>
         </div>
     
         <!-- BOTÕES -->
-        <button id="<%= left %>" class="absolute top-0 left-0 z-10 px-2 h-full flex items-center justify-center text-4xl opacity-75 text-gray-500 hover:text-black">
+        <button id="<%= leftId %>" class="absolute top-0 left-0 z-10 px-2 h-full flex items-center justify-center text-4xl opacity-75 text-gray-500 hover:text-black">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
             </svg>
         </button>
-        <button id="<%= right %>" class="absolute top-0 right-0 z-10 px-2 h-full flex items-center justify-center text-4xl opacity-75 text-gray-500 hover:text-black">
+        <button id="<%= rightId %>" class="absolute top-0 right-0 z-10 px-2 h-full flex items-center justify-center text-4xl opacity-75 text-gray-500 hover:text-black">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
             </svg>
@@ -42,26 +42,28 @@
 <% }) %>
 
 <script>
-    document.querySelectorAll('.carroselProdutos').forEach(section => {
-        const id = section.getAttribute('data-carrosel-id');
-        const leftButton = section.querySelector(`#${id} + button[id^='id'][id$='left']`);
-        const rightButton = section.querySelector(`#${id} + button[id^='id'][id$='right']`);
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.carroselProdutos').forEach(section => {
+            const id = section.getAttribute('data-carrosel-id');
+            const leftButton = document.getElementById(`left-${id}`);
+            const rightButton = document.getElementById(`right-${id}`);
 
-        leftButton.addEventListener('click', () => {
-            const ulElement = document.getElementById(id);
-            const scrollAmount = ulElement.scrollLeft - 244;
-            ulElement.scrollTo({
-                left: scrollAmount,
-                behavior: 'smooth'
+            leftButton.addEventListener('click', () => {
+                const carouselElement = document.getElementById(id);
+                const scrollAmount = carouselElement.scrollLeft - 244;
+                carouselElement.scrollTo({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
             });
-        });
 
-        rightButton.addEventListener('click', () => {
-            const ulElement = document.getElementById(id);
-            const scrollAmount = ulElement.scrollLeft + 244;
-            ulElement.scrollTo({
-                left: scrollAmount,
-                behavior: 'smooth'
+            rightButton.addEventListener('click', () => {
+                const carouselElement = document.getElementById(id);
+                const scrollAmount = carouselElement.scrollLeft + 244;
+                carouselElement.scrollTo({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
             });
         });
     });
