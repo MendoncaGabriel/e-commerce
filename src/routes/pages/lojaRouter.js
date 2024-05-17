@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const pageController = require('../../controllers/pages/lojaController');
 const jwt = require('jsonwebtoken');
+const cacheMiddleware = require('../../middlewares/cacheMiddleware ');
+
 
 const checkAuth = (req, res, next) => {
     try {
@@ -18,12 +20,12 @@ const checkAuth = (req, res, next) => {
     }
 }
 
-router.get('/', pageController.home)
+router.get('/', cacheMiddleware, pageController.home)
 router.get('/error', pageController.error)
-router.get('/entrar', pageController.entrar)
+router.get('/entrar', cacheMiddleware, pageController.entrar)
 router.get('/checkout', checkAuth, pageController.checkout)
-router.get('/criar-conta', pageController.criarConta)
-router.get('/produto/:nome', pageController.produto)
-router.get('/categoria/:categoria', pageController.categorias)
+router.get('/criar-conta', cacheMiddleware, pageController.criarConta)
+router.get('/produto/:nome', cacheMiddleware, pageController.produto)
+router.get('/categoria/:categoria', cacheMiddleware, pageController.categorias)
 
 module.exports = router

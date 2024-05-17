@@ -4,8 +4,7 @@
     }
 %>
 
-<ul id="categorias" class="flex items-center justify-start md:p-2 space-x-4  col-span-2 md:space-x-4 overflow-x-auto  pb-2 snap-x snap-mandatory md:max-w-screen-2xl  m-auto ">
-
+<ul id="categorias" class="flex items-center justify-start md:p-2 space-x-4  col-span-2 md:space-x-4 overflow-x-auto  pb-2 snap-x snap-mandatory md:max-w-screen-2xl  m-auto px-4">
     <% if (typeof data != 'undefined' && data) { %>
         
         <% data.map((e, index) => { %>
@@ -17,7 +16,6 @@
         <% }) %>
         
     <% } %>
-
 </ul>
 
 <script>

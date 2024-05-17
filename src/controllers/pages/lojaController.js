@@ -1,5 +1,4 @@
 const NodeCache = require("node-cache");
-const cache = new NodeCache({ stdTTL: 60 * 15  }); // TTL de 15 minutos
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -153,29 +152,21 @@ async function getDataCategorias(req){
 }
 
 
+
 module.exports = {
     home: async (req, res) => {
         try {
-            let data = cache.get("homeData");
-            if (!data) {
-                data = await getDataHome(req);
-                cache.set("homeData", data);
-            }
+            let data = await getDataHome(req);
             data.logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
-            res.render('loja/home', data);
+            res.render('loja/home', data)
         } catch (error) {
-            console.log(error)
-            res.redirect('/erro')
+            console.log(error);
+            res.redirect('/erro');
         }
     },
     produto: async (req, res) => {
         try {
-            const produto = req.params.nome;
-            let data = cache.get("produtoData" + produto);
-            if (!data) {
-                data = await getDataProduto(req)
-                cache.set("produtoData" + produto, data);
-            }
+            let data = await getDataProduto(req)
             res.render('loja/produto', data)
         } catch (error) {
             console.log(error)
@@ -186,7 +177,6 @@ module.exports = {
         try {
             const  data = await getDataCheckout(req)
             res.render('loja/checkout', data )
-               
         } catch (error) {
             console.log(error)
             res.redirect('/erro')
@@ -203,11 +193,7 @@ module.exports = {
     },
     entrar: async (req, res) => {
         try{
-            let data = cache.get("entrarData");
-            if (!data) {
-                data = await getDataEntrar();
-                cache.set("entrarData", data);
-            }
+            let data = await getDataEntrar();
             res.render('loja/entrar', data)
         }catch(error){
             console.log(error)
@@ -216,12 +202,7 @@ module.exports = {
     },
     categorias: async (req, res) => {
         try {
-            const categoria = req.params.categoria
-            let data = cache.get("categorias" + categoria);
-            if (!data) {
-                data = await getDataCategorias(req)
-                cache.set("categorias" + categoria, data);
-            }
+            let data = await getDataCategorias(req)
             res.render('loja/categorias', data);
         } catch (error) {
             console.log(error)
