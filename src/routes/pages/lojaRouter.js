@@ -20,7 +20,7 @@ const checkAuth = (req, res, next) => {
     }
 }
 
-router.get('/', pageController.home)
+router.get('/', cacheMiddleware, pageController.home)
 router.get('/error', pageController.error)
 router.get('/entrar', cacheMiddleware, pageController.entrar)
 router.get('/checkout', checkAuth, pageController.checkout)
