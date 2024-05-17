@@ -26,7 +26,7 @@
     delete itemParametro.custo;
 %>
 
-<div class="border w-full lg:w-80 max-w-72 h-auto flex-none rounded-xl overflow-hidden text-gray-700 snap-center hover:shadow-md hover:scale-105 duration-300 flex flex-col justify-between relative bg-white">
+<div class="border w-full lg:w-80 max-w-72 h-auto flex-none rounded-xl overflow-hidden text-gray-700 snap-center hover:shadow-md h duration-300 flex flex-col justify-between relative bg-white">
     <!-- TAG -->
     <% if (data.tag) { %>
         <span class="bg-c1 absolute top-1 right-1 text-c5 font-semibold px-2 rounded-full"><%= data.tag %></span>
@@ -38,7 +38,7 @@
             <img 
                 src="<%= data.imagem ? '/img/' + data.imagem : '/assets/produto-default.png' %>" 
                 alt="imagem do produto"
-                class="w-full h-64 object-cover border-b"
+                class="w-full  object-cover border-b aspect-square"
             >
         </a>
         <div class="px-4 py-2  flex-none">
@@ -50,7 +50,7 @@
     </div>
 
     <!-- PREÇO E BOTÕES -->
-    <div class="px-4 py-2 pt-0">
+    <div class="p-2 md:p-4  pt-0">
         <!-- PREÇO -->
         <h2 class="text-center text-2xl lg:text-3xl font-bold text-gray-700 mb-2">
             <% if (data.preco_antigo) { %>
@@ -76,9 +76,8 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                     <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0"/>
                 </svg>
-                <span>ADICIONAR AO CARRINHO</span>
+                <span>CARRINHO</span>
             </button>
         </div>
     </div>
 </div>
-
