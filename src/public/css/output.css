@@ -1200,6 +1200,14 @@ video {
   max-width: 1280px;
 }
 
+.max-w-6 {
+  max-width: 1.5rem;
+}
+
+.max-w-60 {
+  max-width: 15rem;
+}
+
 .flex-none {
   flex: none;
 }
