@@ -9,6 +9,7 @@ module.exports = {
         c2: '#D886C3',
         c3: '#201E1E',
         c4: 'rgb(0 0 0)',
+        c5: "#FFFFFF",
         avisoG2: '#EC268F',
         newsletter: "#EC4899",
         sigaNoInstagram:"#FFFFFF",

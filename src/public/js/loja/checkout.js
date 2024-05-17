@@ -1,5 +1,3 @@
-let tentativas = 0;
-let textoQRCode = '';
 const rua = document.getElementById('rua');
 const numero = document.getElementById('numero');
 const bairro = document.getElementById('bairro');
@@ -8,6 +6,9 @@ const uf = document.getElementById('estado');
 const pontoReferencia = document.getElementById('referencia');
 const telefone = document.getElementById('telefone');
 const btnSalvarEndereco = document.getElementById('btnSalvarEndereco');
+const btnPagar = document.getElementById('btnPagar');
+const btnCopiarPix = document.getElementById('btnCopiarPix');
+const linkPagamento = document.getElementById('linkPagamento');
 
 //DETECTAR ALTERAÇÃO
 rua.addEventListener('input', ()=> exibirBtnSalvar());
@@ -18,6 +19,7 @@ uf.addEventListener('input', ()=> exibirBtnSalvar());
 pontoReferencia.addEventListener('input', ()=> exibirBtnSalvar());
 telefone.addEventListener('input', ()=> exibirBtnSalvar());
 
+
 function exibirBtnSalvar(){
     btnSalvarEndereco.classList.replace('hidden', 'block');
 };
@@ -26,10 +28,11 @@ function esconderBtnSalvar(){
 };
 function salvarFormulario(){
     if(!validarFormulario()) return;
-    fetch('/api/usuario/endereco', {
+    fetch('/usuario/endereco', {
         method: 'PATCH',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
+            cep: document.getElementById('cep').value || '',
             rua: document.getElementById('rua').value || '',
             numero: document.getElementById('numero').value || '',
             bairro: document.getElementById('bairro').value || '',
@@ -37,7 +40,6 @@ function salvarFormulario(){
             estado: document.getElementById('estado').value || '',
             referencia: document.getElementById('referencia').value || '',
             telefone: document.getElementById('telefone').value || ''
-
         })
     })
     .then(res => res.json())
@@ -92,72 +94,69 @@ function mascara(src, mascara) {
         }
     }
 };
-function gerarPixQrCode(btn, valor) {
+function pagar(btn, valor) {
+   
     if (!validarFormulario()) return;
-    const pedido = JSON.parse(window.pedido);
-    if (!pedido) {
-        alert('Erro: Pedidos não foram registrados...');
-        window.location.reload();
-        return;
-    }
-
-    // Remover função do botão
     btn.onclick = null;
-    console.log(Number(valor));
 
-    // GERAR PIX
-    fetch('/api/pagamento/qrcodepix', {
+    //adicionado load
+    btnPagar.innerHTML = `
+    <div role="status">
+        <svg aria-hidden="true" class="w-8 h-8 text-c5 animate-spin  fill-c1 border-none" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+        </svg>
+        <span class="sr-only">Loading...</span>
+    </div>`;
+
+    fetch('/pagamento/mercadoPago', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ valor: Number(valor) })
-    })
-    .then(res => {
-        if (!res.ok && tentativas < 3) {
-            setTimeout(() => {
-                tentativas++;
-                gerarPixQrCode(btn, valor);
-            }, 500);
-            throw new Error('Erro na resposta da requisição.');
-        } else if (!res.ok) {
-            alert('Erro ao gerar pix, vamos tentar novamente!')
-            window.location.reload()
-        }
-        
-        return res.json();
-    })
-    .then(res => {
-        console.log(res);
-        if (res.additional_data && res.additional_data.qr_code) {
-            indicadorDeProgresso();
-            textoQRCode = res.additional_data.qr_code;
-            motrarModalQrCode(res.additional_data.qr_code);
-
-            // REGISTRAR PEDIDO após gerar o QR Code
-            return fetch('/api/usuario/pedido', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(pedido)
-            });
-        } else {
-            alert('Erro ao gerar pix, vamos tentar novamente!')
-            window.location.reload()
-            throw new Error('QR Code não encontrado na resposta.');
-        }
+        body: JSON.stringify({
+            "description": "Compra de exemplo",
+            "email": "gabriel.andrade05081997@email.com",
+            "identificationType": "CPF",
+            "number": "02024905218"
+          })
     })
     .then(res => res.json())
     .then(res => {
-        console.log(res);
-        // Aqui você pode adicionar qualquer tratamento adicional após registrar o pedido, se necessário.
+        console.log(res)
+        const copiarColar = res.result.point_of_interaction.transaction_data.qr_code; 
+        const linkPagamento = res.result.point_of_interaction.transaction_data.ticket_url; 
+        const base64 = res.result.point_of_interaction.transaction_data.qr_code_base64; 
+        motrarModalQrCode(copiarColar, linkPagamento, base64);
+
+        // removendo load
+        btnPagar.innerHTML = `
+            <img src="/icons/logo-pix-520x520.png" alt="" class="w-10 drop-shadow-lg">
+            <p class="text-xl leading-none drop-shadow-lg">PAGAR COM PIX</p>
+        `;
     })
-    .catch(error => {
-        console.error('Erro na requisição:', error);
-        // Adicione aqui qualquer tratamento de erro adicional, como mostrar uma mensagem de erro ao usuário.
-    });
+    .catch((error)=>{
+        console.log(error)
+        // removendo load
+        btnPagar.innerHTML = `
+            <img src="/icons/logo-pix-520x520.png" alt="" class="w-10 drop-shadow-lg">
+            <p class="text-xl leading-none drop-shadow-lg">PAGAR COM PIX</p>
+        `;
+    })
+
+
+    
 };
-async function motrarModalQrCode(textoQRCode){
+async function motrarModalQrCode(copiarColar, linkPagamento, base64){
     const qrCode = document.getElementById('qrCode')
-    qrCode.src = await `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${textoQRCode}`
-    document.getElementById('sectionPix').classList.remove('hidden')
+    qrCode.src = `data:image/png;base64,${base64}`; // Correção aqui
+    btnCopiarPix.setAttribute('chaveCopiarColar', copiarColar)
+    document.getElementById('linkPagamento').href = linkPagamento;
+
+
+
+    setTimeout(()=> {
+        document.getElementById('sectionPix').classList.remove('hidden');
+        indicadorDeProgresso();
+    },500)
 
 };
 function fecharSectionPix(){
@@ -195,27 +194,25 @@ function indicadorDeProgresso(){
 };
 function copiarPix(btn){
     btn.classList.replace('bg-blue-500', 'bg-green-500')
-    document.getElementById('btnCopiarPix').innerHTML = ` <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+    btnCopiarPix.innerHTML = ` <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-  </svg>
- <p >PIX COPIADO</p>`
+    </svg>
+    <p >PIX COPIADO</p>`
     
     setTimeout(() => {
         btn.classList.replace('bg-green-500', 'bg-blue-500')
-        document.getElementById('btnCopiarPix').innerHTML = ` <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+        btnCopiarPix.innerHTML = ` <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
         <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
         <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
-    </svg>
-     <p >COPIAR PIX</p>`
-
-        
+        </svg>
+        <p >COPIAR PIX</p>`
     }, 2000);
 
     // Cria um elemento input para armazenar o texto
     const input = document.createElement('input');
     input.style.position = 'fixed';
     input.style.opacity = 0;
-    input.value = textoQRCode;
+    input.value = btn.getAttribute('chaveCopiarColar');
 
     // Adiciona o elemento input ao corpo do documento
     document.body.appendChild(input);
@@ -232,3 +229,54 @@ function copiarPix(btn){
 
 
 };
+
+
+// MECANICA DE TAXA DE ENTTREGA
+const adicionalEntrega = document.getElementById('adicionalEntrega');
+const entrega = document.querySelectorAll('[name=entrega]');
+entrega.forEach(e => {
+    e.addEventListener('change', (event)=> {
+        if(event.target.value != "" && Number(event.target.value ) > 1){
+            adicionalEntrega.innerText = `+ R$ ${String(event.target.value).replace('.', ',')}`
+            event.target.classList.replace('hidden', 'block')
+        }else{
+            adicionalEntrega.innerText = ''
+            event.target.classList.replace('block', 'hidden')
+        }
+    });
+});
+
+
+//BUSCAR ENDEREÇO COM CEP
+function buscarEndereco(cep) {
+    return new Promise((resolve, reject) => {
+        if(!cep) throw new Error('cep não informado')
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(res => res.json())
+        .then(res => {
+            resolve(res)
+        })
+        .catch(error => {
+            reject(error)
+        });
+    })
+}
+
+//lidar input
+const inputCep = document.getElementById('cep');
+inputCep.addEventListener('keyup', (event) =>{
+    handleInputCep(event.target.value)
+})
+
+//preencher inputs com resultado
+async function handleInputCep(cep){
+    if(cep.length == 9){
+        const endereco = await buscarEndereco(cep);
+        console.log(endereco)
+        document.querySelector('#bairro').value = endereco.bairro || '';
+        document.querySelector('#referencia').value = endereco.complemento || '';
+        // document.querySelector('#cidade').value = endereco.localidade || '';
+        document.querySelector('#rua').value = endereco.logradouro || '';
+        // document.querySelector('#estado').value = endereco.uf || '';
+    }
+}

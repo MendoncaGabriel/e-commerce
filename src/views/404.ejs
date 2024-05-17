@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404</title>
+</head>
+<body>
+    <h1>404 - Página não encontrada</h1>
+    <p>A página que você está procurando não foi encontrada.</p>
+   <p id="redirect"></p>
+</body>
+</html>
+<script>
+    let cont = 3;
+    
+    setInterval(() => {
+        document.getElementById("redirect").innerText = `Direcionando em ${cont}`
+        if(cont == 2) window.location.href = '/';
+        cont--
+       
+    }, 1000);
+</script>
