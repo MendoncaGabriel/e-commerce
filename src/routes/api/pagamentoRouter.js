@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../../database/database');
-const pagamentoController = require('../../controllers/pagamento/pagamentoController');
+const pagamentoController = require('../../controllers/pagamentoController');
 
 
 function resgatarItens(req){

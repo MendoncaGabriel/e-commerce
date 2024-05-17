@@ -1,4 +1,4 @@
-const pedidomodel = require('../../model/pedidoModel')
+const pedidomodel = require('../model/pedidoModel')
 
 module.exports = {
     fazerPedido: async (req, res) => {

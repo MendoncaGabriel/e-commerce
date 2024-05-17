@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const  upload = require('../../middlewares/multer');
 const compactarImagem = require('../../middlewares/sharp');
-const produtoController = require('../../controllers/produto/produtoController');
+const produtoController = require('../../controllers/produtoController');
 
 router.post('/create', upload.array('imagens'), compactarImagem,  produtoController.create);
 router.get('/getById/:id', produtoController.getById);

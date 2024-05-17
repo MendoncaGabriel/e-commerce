@@ -1,4 +1,4 @@
-const pagamentoModel = require('../../model/pagamentoModel');
+const pagamentoModel = require('../model/pagamentoModel');
 
 module.exports = {
     mercadoPagoPix: async  (req, res) => {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const varianteController = require('../../controllers/variante/varianteController');
+const varianteController = require('../../controllers/varianteController');
 
 router.post('/create', varianteController.create);
 router.get('/geyById/:id', varianteController.getById);

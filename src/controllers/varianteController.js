@@ -1,4 +1,4 @@
-const varianteModel = require('../../model/varianteModel');
+const varianteModel = require('../model/varianteModel');
 
 module.exports = {
     create: async (req, res) => {
