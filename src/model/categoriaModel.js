@@ -1,15 +1,17 @@
-
-const executeSql = require('../utilities/executarSql')
+const db = require('../../database/database')
 
 module.exports = {
     categorias: async () => {
-        try {
-            const sql = "select * from categorias"
-            const result = await executeSql(sql)
-            return result
-        } catch (error) {
-            console.log(error)
-            throw new Error("Erro ao pegar categorias", error)
-        }
+        return new Promise((resolve, reject)=> {
+            // categorias sem repetição e diferente de vazio
+            const sql = "SELECT DISTINCT  categoria FROM produtos WHERE categoria <> ''";
+            db.query(sql, (error, result) => {
+                if(error){
+                    reject(error)
+                }else{
+                    resolve(result)
+                }
+            })
+        })
     }
 }

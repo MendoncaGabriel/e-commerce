@@ -24,6 +24,6 @@ router.get('/entrar', pageController.entrar)
 router.get('/checkout', checkAuth, pageController.checkout)
 router.get('/criar-conta', pageController.criarConta)
 router.get('/produto/:nome', pageController.produto)
-router.get('/categoria/:categoria', pageController.gridProdutos)
+router.get('/categoria/:categoria', pageController.categorias)
 
 module.exports = router

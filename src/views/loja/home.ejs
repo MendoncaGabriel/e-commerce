@@ -44,13 +44,14 @@
         redesSociais: redesSociais
     }) %>
 
-    <!-- BTN WHATSAPP -->
+    <!-- botão flutuante -->
     <% if (typeof dadosEmpresa[0].whatsapp != "undefined" && dadosEmpresa[0].whatsapp ) { %>
         <%- include('components/btnWhatsapp', {whatsapp: dadosEmpresa[0].whatsapp}) %>
     <% } %>
 
 </body>
 </html>
+ 
 
 <script src="/js/loja/components/modal.js"></script>
 <script src="/js/loja/components/carrinho.js"></script>

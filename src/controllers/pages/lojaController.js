@@ -115,7 +115,7 @@ async function getDataEntrar(){
         }
     })
 }
-async function getDataGridProdutos(req){
+async function getDataCategorias(req){
     return new Promise( async (resolve, reject) => {
         try {
             const titulo = req.params.categoria;
@@ -126,8 +126,9 @@ async function getDataGridProdutos(req){
             if (titulo == 'todos-os-produtos') {
                 produtosCategoria = await produtoModel.getProdutosbyOffset(20, 1);
             } else {
-                produtosCategoria = await produtoModel.getProdutosCategoria(titulo);
+                produtosCategoria = await produtoModel.getByCategoria(titulo);
             };
+            
             const data = {
                 titulo: titulo,
                 carrosel_1_titulo: 'Novidades', 
@@ -205,15 +206,15 @@ module.exports = {
             res.redirect('/erro')
         }
     },
-    gridProdutos: async (req, res) => {
+    categorias: async (req, res) => {
         try {
             const categoria = req.params.categoria
-            let data = cache.get("gridProdutosData" + categoria);
+            let data = cache.get("categorias" + categoria);
             if (!data) {
-                data = await getDataGridProdutos(req)
-                cache.set("gridProdutosData" + categoria, data);
+                data = await getDataCategorias(req)
+                cache.set("categorias" + categoria, data);
             }
-            res.render('loja/gridProdutos', data);
+            res.render('loja/categorias', data);
         } catch (error) {
             console.log(error)
             res.redirect('/erro')

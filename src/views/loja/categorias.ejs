@@ -9,7 +9,6 @@
     <!-- TAILWINDCSS -->
     <link rel="stylesheet" href="/css/output.css">
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
-
 </head>
 
 <body class="max-w-screen-md md:max-w-none m-auto relative">
@@ -20,8 +19,10 @@
     <%- include('components/carrinho') %>
     <%- include('components/categorias', {data: categorias}) %>
     
-    <h2 class="p-4 font-bold text-lg"><%= titulo.toUpperCase().replace(/-/g, ' ' ) ?? '' %></h2>
-
+    <div class="max-w-screen-2xl m-auto">
+        <h2 class="p-4 font-bold text-lg text-center "><%= titulo.toUpperCase().replace(/-/g, ' ' ) ?? '' %></h2>
+        <hr>
+    </div>
     <section class="max-w-screen-2xl m-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 justify-center items-center  gap-y-3 py-2 ">
         <% for( let i = 0; i < produtosCategoria.length; i++ ) { %>
             <!-- PRODUTO CARD -->
@@ -30,7 +31,6 @@
             </div>
         <% } %>
     </section>
-
 </body>
 </html>
 

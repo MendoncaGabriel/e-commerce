@@ -1,6 +1,5 @@
 <% 
     function tratarNome(nome) {
-        // return nome.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, '-');
         return nome.toLowerCase().replace(/ /g, '-')
     }
 %>
@@ -12,10 +11,10 @@
         <% data.map((e, index) => { %>
             <%  let atual = false; %>
             
-            <% if(e.nome.toLowerCase().replace(/ /g, '-') == tituloCategoria.toLowerCase().replace(/ /g , '-')) atual = true; %>
+            <% if(e.categoria.toLowerCase().replace(/ /g, '-') == tituloCategoria.toLowerCase().replace(/ /g , '-')) atual = true; %>
 
             <li class="<%= atual ? 'selecionado hover:bg-c0 bg-c1  hover:text-c1 text-c0' : ''%> hover:shadow-md flex-none snap-start duration-100 ease-in md:text-xl font-medium px-4 md:px-8 md:py-2 py-1 rounded-full ">
-                <a href="/categoria/<%= tratarNome(e.nome)  %>" class="lg:text-2xl"><%= e.nome  %></a>
+                <a href="/categoria/<%= tratarNome(e.categoria)  %>" class="lg:text-2xl"><%= e.categoria  %></a>
             </li>
             
         <% }) %>
@@ -26,19 +25,19 @@
 
 <script>
 
-document.addEventListener('DOMContentLoaded', function() {
-    let selectedItem = document.querySelector('.selecionado');
+    document.addEventListener('DOMContentLoaded', function() {
+        let selectedItem = document.querySelector('.selecionado');
 
-    // Verificar se o elemento selecionado existe
-    if (selectedItem) {
-        // Encontrar a posição do item selecionado em relação ao contêiner do carrossel
-        let container = document.getElementById('categorias'); // Alteração aqui
-        let selectedPosition = selectedItem.offsetLeft;
+        // Verificar se o elemento selecionado existe
+        if (selectedItem) {
+            // Encontrar a posição do item selecionado em relação ao contêiner do carrossel
+            let container = document.getElementById('categorias'); // Alteração aqui
+            let selectedPosition = selectedItem.offsetLeft;
 
-        // Rolar o carrossel até a posição do item selecionado
-        container.scrollLeft = selectedPosition;
-    }
-});
+            // Rolar o carrossel até a posição do item selecionado
+            container.scrollLeft = selectedPosition;
+        }
+    });
 
 </script>
 
