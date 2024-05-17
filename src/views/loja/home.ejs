@@ -15,8 +15,44 @@
 
 </head>
 <body class="max-w-screen-md md:max-w-none m-auto relative">
+
     <%- include('components/aviso', {aviso: "VENDAS SOMENTE PARA REGIÃO NORTE"}) %>
     <%- include('components/navbar') %>
+    
+    <script>
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+        // Evita que o prompt padrão seja exibido
+        e.preventDefault();
+        // Guarda o evento para que possa ser utilizado posteriormente
+        deferredPrompt = e;
+
+        // Exibe um botão ou qualquer elemento que inicie a instalação
+        // Por exemplo, um botão que dispara a instalação
+        let installButton = document.createElement('button');
+        installButton.textContent = 'Instalar';
+        installButton.addEventListener('click', (e) => {
+            // Exibe o prompt de instalação
+            deferredPrompt.prompt();
+
+            // Aguarda o usuário responder ao prompt de instalação
+            deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('Usuário aceitou a instalação');
+            } else {
+                console.log('Usuário recusou a instalação');
+            }
+            // Limpa a variável para o próximo evento de instalação
+            deferredPrompt = null;
+            });
+        });
+
+        // Adiciona o botão em algum lugar do seu DOM (por exemplo, no corpo da página)
+        document.body.appendChild(installButton);
+        });
+
+    </script>
     <%- include('components/modal') %>
     <%- include('components/menu') %>
     <%- include('components/carrinho') %>
