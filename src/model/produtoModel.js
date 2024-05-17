@@ -65,7 +65,12 @@ module.exports = {
         SELECT produtos.*, variantes.*
         FROM produtos
         JOIN variantes ON produtos.produto_id = variantes.produto_id
-        LIMIT ? OFFSET ? ;`;
+        WHERE produtos.ativo = 1
+        AND variantes.imagem IS NOT NULL
+        AND variantes.imagem <> ''
+        AND variantes.estoque > 0
+        LIMIT ? OFFSET ?;
+        `;
     
         const values = [limit, offset];
         const result = await executeSql(sql, values);

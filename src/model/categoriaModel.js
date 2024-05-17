@@ -4,7 +4,12 @@ module.exports = {
     categorias: async () => {
         return new Promise((resolve, reject)=> {
             // categorias sem repetição e diferente de vazio
-            const sql = "SELECT DISTINCT  categoria FROM produtos WHERE categoria <> ''";
+            const sql = `SELECT DISTINCT categoria
+            FROM produtos
+            WHERE produtos.ativo = 1
+            AND categoria <> '';
+            `;
+
             db.query(sql, (error, result) => {
                 if(error){
                     reject(error)

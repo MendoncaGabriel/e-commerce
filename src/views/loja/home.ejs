@@ -28,8 +28,8 @@
     <% } %>
 
     <!-- CARROSEL DE PRODUTOS -->
-    <% if (carrosel_1_data[0]) { %>
-        <%- include('components/carroselProdutos', {titulo: carrosel_1_titulo, data: carrosel_1_data}) %>
+    <% if (typeof carroselProdutos != "undefined" && carroselProdutos.length > 0) { %>
+        <%- include('components/carroselProdutos', carroselProdutos) %>
     <% } %>
 
     <%- include('components/newsletter') %>

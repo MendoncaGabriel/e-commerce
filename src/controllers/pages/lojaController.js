@@ -19,20 +19,28 @@ async function getDataHome(req){
             const banners = await empresaModel.bannerHome();
             const redesSociais = await empresaModel.redesSociais();
             
-
-            const  produtosFiltrados = produtos.filter((e)=>{
-                return e.ativo == 1 && e.imagem !== null && e.estoque > 0 ;
-            });  
+            // Separar em grupos por categorias
+            const carroselProdutos = [];
+            produtos.forEach(produto => {
+              let categoriaExistente = carroselProdutos.find(categoria => categoria.titulo === produto.categoria);
+            
+              if (categoriaExistente) {
+                categoriaExistente.data.push(produto);
+              } else {
+                carroselProdutos.push({
+                  titulo: produto.categoria,
+                  data: [produto]
+                });
+              }
+            });
             
             const data = {
                 banners: banners,
                 categorias: categorias,
                 redesSociais: redesSociais,
                 dadosEmpresa: dadosEmpresa,
-                carrosel_1_titulo: 'Novidades', 
-                carrosel_1_data: produtosFiltrados, 
                 enderecosEmpresa: enderecosEmpresa,
-                tituloCategoria: 'Todos os produtos',
+                carroselProdutos: carroselProdutos
             };
             resolve(data);
         } catch (error) {
@@ -118,7 +126,7 @@ async function getDataEntrar(){
 async function getDataCategorias(req){
     return new Promise( async (resolve, reject) => {
         try {
-            const titulo = req.params.categoria;
+            const titulo = req.params.categoria.replace(/-/g, ' ');
             const dadosEmpresa = await empresaModel.dados();
             const categorias = await categoriaModel.categorias();
 
@@ -128,10 +136,10 @@ async function getDataCategorias(req){
             } else {
                 produtosCategoria = await produtoModel.getByCategoria(titulo);
             };
-            
+
             const data = {
                 titulo: titulo,
-                carrosel_1_titulo: 'Novidades', 
+                
                 categorias: categorias,
                 dadosEmpresa: dadosEmpresa,
                 produtosCategoria: produtosCategoria,
