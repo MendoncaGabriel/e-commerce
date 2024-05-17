@@ -19,9 +19,12 @@ function enviar(){
             telefone: document.getElementById('telefone').value
         })
     })
-    .then(res => res.json())
     .then(res => {
-        window.location.href = '/'
+        if(res.status == 200) window.location.href = '/'
+       return res.json()
+    })
+    .then(res => {
+        alert(JSON.stringify(res.msg))
     })
     .catch((error) =>{
         alert(JSON.stringify(error.msg))
