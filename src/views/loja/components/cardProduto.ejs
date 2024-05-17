@@ -1,18 +1,17 @@
 <% 
-function tratarNome(nome) {
-    return nome.toLowerCase().replace(/ /g, '-')
-}
+    function tratarNome(nome) {
+        return nome.toLowerCase().replace(/ /g, '-')
+    }
 %>
-
 <% 
-function converterEmReal(precoString){
-    const precoNumero = parseFloat(precoString);
-    const formatoMoeda = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-    });
-    return formatoMoeda.format(precoNumero);
-};
+    function converterEmReal(precoString){
+        const precoNumero = parseFloat(precoString);
+        const formatoMoeda = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+        return formatoMoeda.format(precoNumero);
+    };
 %>
 
 <% 
@@ -27,59 +26,59 @@ function converterEmReal(precoString){
     delete itemParametro.custo;
 %>
 
-<div class="border w-44 lg:w-80 h-80   md:h-[520px] flex-none rounded-xl overflow-hidden text-gray-700 snap-center   hover:shadow-xl flex flex-col justify-between relative ">
+<div class="border w-full lg:w-80 max-w-72 h-auto flex-none rounded-xl overflow-hidden text-gray-700 snap-center hover:shadow-md hover:scale-105 duration-300 flex flex-col justify-between relative bg-white">
     <!-- TAG -->
-    <% if (typeof data.tag != "undefeined" && data.tag) { %>
-    
+    <% if (data.tag) { %>
         <span class="bg-c1 absolute top-1 right-1 text-c5 font-semibold px-2 rounded-full"><%= data.tag %></span>
     <% } %>
 
-    <div class="">
-        <!-- IMAGEM -->
-        <a href="/produto/<%= tratarNome(data.nome)  %>">
+    <!-- IMAGEM -->
+    <div class="relative">
+        <a href="/produto/<%= tratarNome(data.nome) %>">
             <img 
-                src="<%= typeof data.imagem !== 'undefined' && data.imagem ? '/img/' + data.imagem : '' %>" 
+                src="<%= data.imagem ? '/img/' + data.imagem : '/assets/produto-default.png' %>" 
                 alt="imagem do produto"
-                onerror="this.src='/assets/produto-default.png'"
-                class="w-full aspect-square object-cover border-b"
+                class="w-full h-64 object-cover border-b"
             >
         </a>
-        <div class="p-2 pb-0 lg:p-4 lg:pb-4 ">
+        <div class="px-4 py-2  flex-none">
             <!-- NOME -->
-            <h2 class="h-[50px] overflow-hidden lg:text-xl max-h-[283px]">
+            <h2 class="text-lg lg:text-xl font-semibold overflow-hidden max-h-[58px] leading-5">
                 <%= data.nome ?? '' %>
             </h2>
         </div>
     </div>
 
-
-    <div class="text-sm   font-semibold font-white lg:py-2 pb-2  w-full  z-30 lg:space-y-4 space-y-2">
+    <!-- PREÇO E BOTÕES -->
+    <div class="px-4 py-2 pt-0">
         <!-- PREÇO -->
-        <h2 class="lg:text-3xl text-2xl font-semibold text-gray-700 lg:font-bold text-center flex-none">
-            <!-- preço antigo -->
-            <% if (typeof data.preco_antigo != "undefeined" && data.preco_antigo) { %>
-             <span class="font-normal lg:text-xl text-base line-through"><%= converterEmReal(data.preco_antigo) %></span>
+        <h2 class="text-center text-2xl lg:text-3xl font-bold text-gray-700 mb-2">
+            <% if (data.preco_antigo) { %>
+                <span class="text-lg line-through text-gray-400"><%= converterEmReal(data.preco_antigo) %></span>
             <% } %>
-
-            <!-- preço atual -->
-            <% if (typeof data.preco != "undefeined" && data.preco) { %>
-                <span class="text-2xl lg:text-3xl"><%= converterEmReal(data.preco)  %></span>
+            <% if (data.preco) { %>
+                <span class="text-primary"><%= converterEmReal(data.preco) %></span>
             <% } %>
         </h2>
 
-        <div class="flex  items-center justify-between   lg:px-8 px-1  m-auto ">
-            <!-- MODAL -->
-            <button
-                onclick="carregarItemModal('<%= JSON.stringify(itemParametro) %>'), abrirModal()"
-                class="bg-white hover:bg-c1 border border-c1 hover:border-none p-2 rounded-full h-10 lg:h-12 w-10 lg:w-12 text-c1 hover:text-white leading-3 text-xl duration-200"
-            >
-                <i class="bi bi-cart-plus"></i>
-            </button>
+        <div class="flex flex-col items-center space-y-2">
             <!-- VER PRODUTO -->
-            <a href="/produto/<%= tratarNome(data.nome) %>" class="bg-c1 hover:bg-c0 duration-100 ease-in lg:px-5  px-3 py-2 rounded-full text-sm lg:text-xl text-white hover:text-c1 border-2 border-transparent hover:border-c1  h-10 lg:h-12 flex items-center justify-center">
-                VER PRODUTO
+            <a href="/produto/<%= tratarNome(data.nome) %>" class="bg-c1 hover:brightness-110 hover:drop-shadow-lg duration-100  text-white w-full py-2 rounded-full text-center flex items-center justify-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                </svg>
+                <span>VER PRODUTO</span>
             </a>
+
+            <!-- ADICIONAR AO CARRINHO -->
+            <button onclick="carregarItemModal('<%= JSON.stringify(itemParametro) %>'), abrirModal()" class="border-2 border-c1 text-c1 hover:brightness-110 hover:drop-shadow-lg duration-100 w-full py-2 rounded-full text-center flex items-center justify-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0"/>
+                </svg>
+                <span>ADICIONAR AO CARRINHO</span>
+            </button>
         </div>
     </div>
- 
 </div>
+
