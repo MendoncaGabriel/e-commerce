@@ -36,7 +36,7 @@ module.exports = {
   
 
             const token = await authModel.signup(nome, email, senha, telefone);
-            console.log(token)
+       
             res.cookie('token', token, {
                 httpOnly: true,
                 maxAge: 24 * 60 * 60 * 1000 * 30, //30d

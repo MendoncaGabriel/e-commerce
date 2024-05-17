@@ -53,7 +53,6 @@ module.exports = {
                     const payload = {nome, email, senhaHash, telefone, idusuario: result.insertId};
                     const validade = '30d';
                     const token = jwt.sign(payload, secret, {expiresIn: validade})
-                    console.log(token)
                     resolve(token);        
                 }
             })

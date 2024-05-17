@@ -158,6 +158,7 @@ module.exports = {
         try {
             let data = await getDataHome(req);
             data.logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
+            console.log(data.logado)
             res.render('loja/home', data)
         } catch (error) {
             console.log(error);
