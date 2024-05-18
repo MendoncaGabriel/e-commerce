@@ -109,7 +109,7 @@ function pagar(btn, valor) {
         <span class="sr-only">Loading...</span>
     </div>`;
 
-    fetch('/pagamento/mercadoPago', {
+    fetch('/pagamento/pix', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

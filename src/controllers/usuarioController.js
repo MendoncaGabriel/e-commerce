@@ -1,14 +1,12 @@
 const usuarioModel = require('../model/usuarioModel');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
 module.exports = {
     getEndereco: async (req, res) => {
-        console.log('pedido para atualizar')
         try {
             const tokenUsuario = req.cookies.token;
             const {idusuario} = jwt.verify(tokenUsuario, process.env.ASSINATURA_TOKEN)
-
-
 
             const enderecoUsuario = await  usuarioModel.getEndereco(idusuario);
 
@@ -33,8 +31,6 @@ module.exports = {
             res.status(500).json({msg: error.message});
         };
     },
-
-    // registrar pedido
     pedido: async (req, res) => {
         try {
             const tokenUsuario = req.cookies.token;

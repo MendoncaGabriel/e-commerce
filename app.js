@@ -33,13 +33,16 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
+// API
 app.use('/pesquisa', pesquisaRouter);
 app.use('/variante', varianteRouter);
 app.use('/pagamento', pagamentoRouter);
 app.use('/produto', produtoRouter);
 app.use('/usuario', usuarioRouter);
-app.use('/admin', adminRouter);
 app.use('/auth', authRouter);
+
+// Paginas
+app.use('/admin', adminRouter);
 app.use('/', lojaRouter);
 
 app.use((req, res, next) => {

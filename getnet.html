@@ -25,11 +25,13 @@
         formData.append('grant_type', 'client_credentials');
 
         return new Promise((resolve, reject)=> {
+            const tokenBase64 = base64()
+            console.log(tokenBase64)
             fetch('https://api.getnet.com.br/auth/oauth/v2/token', {
                 method: 'POST',
                 headers: {
                     "Content-type": "application/x-www-form-urlencoded",
-                    "Authorization": `Basic ${base64()}`
+                    "Authorization": `Basic ${tokenBase64}`
                 },
                 body: formData
             })
@@ -45,7 +47,7 @@
 
     async function gerarPix(){
         const auth = await authorization();
-        const seller_id = "e965427e-93db-4f88-aacd-052f644f2e9f";
+        const seller_id = "09f25555-5351-4680-828e-24208973bdb7";
 
         fetch('https://api.getnet.com.br/v1/payments/qrcode/pix', {
             method: 'POST',
