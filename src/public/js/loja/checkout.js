@@ -8,7 +8,6 @@ const telefone = document.getElementById('telefone');
 const btnSalvarEndereco = document.getElementById('btnSalvarEndereco');
 const btnPagar = document.getElementById('btnPagar');
 const btnCopiarPix = document.getElementById('btnCopiarPix');
-const linkPagamento = document.getElementById('linkPagamento');
 
 //DETECTAR ALTERAÇÃO
 rua.addEventListener('input', ()=> exibirBtnSalvar());
@@ -117,15 +116,15 @@ function pagar(btn, valor) {
             "email": "gabriel.andrade05081997@email.com",
             "identificationType": "CPF",
             "number": "02024905218"
-          })
+        })
     })
     .then(res => res.json())
     .then(res => {
         console.log(res)
-        const copiarColar = res.result.point_of_interaction.transaction_data.qr_code; 
-        const linkPagamento = res.result.point_of_interaction.transaction_data.ticket_url; 
-        const base64 = res.result.point_of_interaction.transaction_data.qr_code_base64; 
-        motrarModalQrCode(copiarColar, linkPagamento, base64);
+        const copiarColar = res.result.additional_data.qr_code
+        const CodeQr = res.result.additional_data.qr_code 
+
+        motrarModalQrCode(copiarColar, CodeQr);
 
         // removendo load
         btnPagar.innerHTML = `
@@ -143,24 +142,29 @@ function pagar(btn, valor) {
     })
 
 
+
+
+
     
 };
-async function motrarModalQrCode(copiarColar, linkPagamento, base64){
+
+async function motrarModalQrCode(copiarColar, CodeQr){
     const qrCode = document.getElementById('qrCode')
-    qrCode.src = `data:image/png;base64,${base64}`; // Correção aqui
+    qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(CodeQr)}`; // Correção aqui
     btnCopiarPix.setAttribute('chaveCopiarColar', copiarColar)
-    document.getElementById('linkPagamento').href = linkPagamento;
 
 
 
     setTimeout(()=> {
         document.getElementById('sectionPix').classList.remove('hidden');
+        document.getElementById('carrinho').classList.add('hidden');
         indicadorDeProgresso();
     },500)
 
 };
 function fecharSectionPix(){
     document.getElementById('sectionPix').classList.add('hidden')
+    document.getElementById('carrinho').classList.remove('hidden')
 };
 function indicadorDeProgresso(){
     let tempo = 180; // 3 minutos em segundos

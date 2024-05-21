@@ -3,6 +3,7 @@ const router = express.Router();
 const pagamentoController = require('../../controllers/pagamentoController');
 const processarItens = require('../../middlewares/processarItens');
 
-router.post('/pix', processarItens, pagamentoController.mercadoPagoPix);
+router.post('/pix', processarItens, pagamentoController.getNet);
+
 
 module.exports = router;
