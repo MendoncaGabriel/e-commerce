@@ -26,8 +26,9 @@ async function getDataEdicaoProduto(req){
     return new Promise(async (resolve, reject) => {
         try {
             const id = parseInt(req.params.id);
-            const produto = await produtoModel.pegarProdutoId(id);
-            const variantes = await produtoModel.pegarVarianteDoProduto(id);
+            const produto = await produtoModel.getById(id);
+       
+            const variantes = await produtoModel.getProdutoWithVariantes(produto[0].nome);
             const categorias = await caregoriaModel.categorias();
 
             const data = {
