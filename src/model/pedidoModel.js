@@ -1,16 +1,18 @@
+const db = require('../../database/database');
+
 module.exports = {
-    registarPedido: async (pedido, tokenUsuario) => {
-        const { id } = await Utilitarios.verificarToken(tokenUsuario);
-        const sql = "INSERT INTO pedidos (status, qtdProduto, usuarios_idusuarios, produtos_produto_id, variantes_variante_id, data) VALUES (?, ?, ?, ?, ?, ?);"
-     
-        try {
-            await Promise.all(pedido.map(async element => {
-                let data = new Date()
-                const values = ['Aguardando Pagamento', element.qtdProduto, id, element.produto_id, element.variante_id, data ];
-                const result = await executarSql(sql, values);
-            }));
-        } catch (error) {
-            console.error("Erro ao registrar pedido:", error);
-        }
+    registarPedido: async (status, qtdProduto, data) => {
+        return new Promise((resolve, reject) => {
+            const sql = "INSERT INTO pedidos (status, qtdProduto, data) VALUES (?, ?, ?)";
+            const values = [status, qtdProduto, data];
+
+            db.query(sql, values, (error, result) => {
+                if(error){
+                    reject(error)
+                }else{
+                    resolve(result)
+                }
+            })
+        })
     }
 }

@@ -24,7 +24,6 @@ module.exports = {
         }
     },
     getNet: async (req, res) => {
-
         try {
             const valorTotal = req.locals.precoTotal;
             if(!valorTotal || valorTotal <= 0 ) throw new Error('Erro no pagamento')

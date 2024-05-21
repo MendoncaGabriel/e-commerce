@@ -2,7 +2,6 @@ require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const { Payment, MercadoPagoConfig,  } = require('mercadopago');
 
-// const accessToken = await access_token();
 module.exports = {
     mercadoPagoPix: async (transaction_amount, description, paymentMethodId, email, identificationType, number) => {
         try {
@@ -35,10 +34,14 @@ module.exports = {
     getnetPix: async (valorCentavos) => {
         return new Promise( async (resolve, reject) => {
             function base64 (){
-                const Client_ID = "7ddd8d35-0e0a-4f58-b928-719eca35659b"
-                const Client_Secret = "YkBvQUsngF336WiaCoPci4X70UIm7XNB"
+                const Client_ID = process.env.Client_ID;
+                const Client_Secret = process.env.Client_Secret;
                 const token = Client_ID + ':' + Client_Secret
                 return btoa(token)
+            }
+            function tranformCentavos(real){
+                const centavos = real * 100
+                return centavos
             }
             function authorization(){
                 const formData = new URLSearchParams();
@@ -63,13 +66,10 @@ module.exports = {
                     });
                 })
             }
-            function tranformCentavos(real){
-                const centavos = real * 100
-                return centavos
-            }
- 
+
             const auth = await authorization();
-            const seller_id = "e965427e-93db-4f88-aacd-052f644f2e9f";
+            const seller_id = process.env.Client_ID;
+            const uuid = uuidv4();
 
             fetch('https://api.getnet.com.br/v1/payments/qrcode/pix', {
                 method: 'POST',
@@ -77,19 +77,18 @@ module.exports = {
                     "seller_id": seller_id,
                     "Content-Type": "application/json; charset=utf-8",
                     "Authorization": `Bearer ${auth.access_token}`,
-                    "x-qrcode-expiration-time": "180"
+                    "x-qrcode-expiration-time": "180" // 3min
                 },
                 body: JSON.stringify({
                     amount: tranformCentavos(valorCentavos),
                     currency: "BRL",
                     customer_id: "string",
-                    order_id: "DEV-160874898asd0"
+                    order_id: `M-${uuid}`   
                 })
             })
-            .then(response =>  response.json())
-            .then(response => {
-                console.log(response)
-                resolve(response)
+            .then(res =>  res.json())
+            .then(res => {
+                resolve(res)
             })
             .catch(error => {
                 reject(error)
@@ -97,7 +96,3 @@ module.exports = {
         })
     }
 }
-
-
-
-
