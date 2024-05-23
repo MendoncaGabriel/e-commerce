@@ -27,19 +27,22 @@ function esconderBtnSalvar(){
 };
 function salvarFormulario(){
     if(!validarFormulario()) return;
+
+    const data = {
+        cep: document.getElementById('cep').value,
+        rua: document.getElementById('rua').value,
+        numero: document.getElementById('numero').value,
+        bairro: document.getElementById('bairro').value,
+        cidade: document.getElementById('cidade').value,
+        estado: document.getElementById('estado').value,
+        referencia: document.getElementById('referencia').value,
+        telefone: document.getElementById('telefone').value
+    }
+
     fetch('/usuario/endereco', {
         method: 'PATCH',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            cep: document.getElementById('cep').value || '',
-            rua: document.getElementById('rua').value || '',
-            numero: document.getElementById('numero').value || '',
-            bairro: document.getElementById('bairro').value || '',
-            cidade: document.getElementById('cidade').value || '',
-            estado: document.getElementById('estado').value || '',
-            referencia: document.getElementById('referencia').value || '',
-            telefone: document.getElementById('telefone').value || ''
-        })
+        body: JSON.stringify(data)
     })
     .then(res => res.json())
     .then(res => {
@@ -48,7 +51,6 @@ function salvarFormulario(){
             esconderBtnSalvar();
             btnSalvarEndereco.classList.replace('bg-blue-500', 'bg-green-500');
         }, 1000);
-        console.log(res)
     })
     .catch((erro)=>{
         btnSalvarEndereco.classList.replace('bg-green-500', 'bg-red-500');
@@ -82,18 +84,7 @@ function validarFormulario(){
         return true;
     }
 };
-function mascara(src, mascara) {
-    const campo = src.value.length;
-    const texto = mascara.substring(campo);
-    if (texto.charAt(0) !== '#') {
-        src.value += texto.charAt(0);
-        // Verifica se o próximo caractere na máscara é um espaço
-        if (texto.charAt(1) === ' ') {
-            src.value += ' ';
-        }
-    }
-};
-function pagar(btn, valor) {
+function pagar(btn) {
    
     if (!validarFormulario()) return;
     btn.onclick = null;
@@ -109,18 +100,11 @@ function pagar(btn, valor) {
     </div>`;
 
     fetch('/pagamento/pix', {
-        method: 'POST',
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            "description": "Compra de exemplo",
-            "email": "gabriel.andrade05081997@email.com",
-            "identificationType": "CPF",
-            "number": "02024905218"
-        })
     })
     .then(res => res.json())
     .then(res => {
-        console.log(res)
         const copiarColar = res.result.additional_data.qr_code
         const CodeQr = res.result.additional_data.qr_code 
 
@@ -191,7 +175,6 @@ function indicadorDeProgresso(){
 
         if (tempo <= 0) {
             clearInterval(contador);
-            console.log('Tempo Inspirado!');
             alert('Pix Inspirado! Atualize a página se precisar gerar outro.');
         }
     }, 1000);
@@ -276,11 +259,22 @@ inputCep.addEventListener('keyup', (event) =>{
 async function handleInputCep(cep){
     if(cep.length == 9){
         const endereco = await buscarEndereco(cep);
-        console.log(endereco)
         document.querySelector('#bairro').value = endereco.bairro || '';
         document.querySelector('#referencia').value = endereco.complemento || '';
-        // document.querySelector('#cidade').value = endereco.localidade || '';
         document.querySelector('#rua').value = endereco.logradouro || '';
-        // document.querySelector('#estado').value = endereco.uf || '';
     }
 }
+
+
+
+// Formatação
+var cleaveCEP = new Cleave('[name=cep]', {
+    delimiters: ['-'],
+    blocks: [5, 3],
+    numericOnly: true
+});
+var cleaveTelefone = new Cleave('[name=telefone]', {
+    delimiters: ['(', ') ', '-', ' '],
+    blocks: [0, 2, 5, 4],
+    numericOnly: true
+});

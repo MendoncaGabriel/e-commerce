@@ -52,3 +52,5 @@ function animacao() {
     // Iniciar a animação
     animate();
 }
+
+

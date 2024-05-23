@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
     <title>CHECKOUT</title>
-        <!-- BOOTSTRAP ICONS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-        <!-- TAILWINDCSS -->
-        <link rel="stylesheet" href="/css/output.css">
-        <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+    <!-- BOOTSTRAP ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- TAILWINDCSS -->
+    <link rel="stylesheet" href="/css/output.css">
+    <!-- Cleave.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"></script>
+    
 
 </head>
 <style>
@@ -58,16 +60,18 @@
                 <% if (typeof carrinhoProcessado.itens != 'undefined' && carrinhoProcessado.itens) { %>                 
                     <% carrinhoProcessado.itens.forEach(e => { %>
                  
-                        <li class="border-b-2 border-c1 text-gray-700 flex items-center justify-between border-dashed pb-2  gap-2 my-2 ">
-                            <div class="flex items-center justify-center space-x-2">
-                                <img src="/img/<%= e.imagem  %>" alt="" class="rounded-md aspect-square w-20 drop-shadow-lg border">
-                                <span class="  text-left text-sm">
-                                    <%= e.nome %>
+                        <li class="border-b-2 border-c1 text-gray-700 flex items-center justify-between border-dashed pb-2  gap-2 my-2 text-sm lg:text-lg md:text-md">
+                            <div class="flex items-center justify-center space-x-2 ">
+                                <img src="/img/<%= e.imagem  %>" alt="" class="rounded-md aspect-square object-cover w-20 drop-shadow-lg border">
+                                <span class="text-left ">
+                                    <% const url = e.nome.toLowerCase().replace(/ /g, '-') %>
+                                    <a href="/produto/<%= url %>" target="_blank" class="hover:underline"><%= e.nome %></a>
+                                    
                                 </span> 
                             </div>
 
                 
-                            <span class="text-right text-md w-24  flex-none text-sm ">
+                            <span class="text-right  w-24  flex-none  ">
                                 R$ <%= stringParaReal(e.preco) %> x  <%= e.qtd %> <br>
                                 <span class="px-2  rounded-full bg-c1 text-white  leading-5">= R$ <%= stringParaReal(e.total) %></span>
                             </span>
@@ -83,17 +87,17 @@
         <div class="text-xl text-left p-4 bg-white rounded-lg   shadow-md">
             <h2 class="w-full p-4 pt-0 text-lg text-center font-light">ENDEREÇO DE ENTREGA</h2>
             
-            <div class="text-gray-700 text-sm   m-auto space-y-2 ">
+            <div class="text-gray-700 lg:text-lg md:text-md text-sm  m-auto space-y-2 ">
 
                 <div class="flex justify-between items-center space-x-4">
                     <div class="w-full">
                         <label for="">Cep: </label><br>
                         <% console.log(endereco) %>
-                        <input id="cep" onkeypress="mascara(this, '#####-####')" maxlength="9" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.cep ? endereco.cep :  ''  %>">
+                        <input id="cep"name="cep" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.cep ? endereco.cep :  ''  %>">
                     </div>
                     <div>
                         <label for="">Numero: <span class="text-red-400">*</span></label><br>
-                        <input autocomplete="address-line2" id="numero" type="text" maxlength="5" class="bg-gray-100 focus:outline-none focus:border-c1 px-2 py-1 w-20" value="<%=  typeof  endereco != "undefined" &&  endereco.rua ? endereco.rua :  ''  %>">
+                        <input autocomplete="address-line2" id="numero" type="number"  min="1" max="3" class="bg-gray-100 focus:outline-none focus:border-c1 px-2 py-1 w-20 md:w-24" value="<%=  typeof  endereco != "undefined" &&  endereco.rua ? endereco.rua :  ''  %>">
                     </div>
                 </div>
                 
@@ -109,7 +113,7 @@
                 <div class="w-full">
                  
                     <label for="">Telefone: <span class="text-red-400">*</span></label><br>
-                    <input autocomplete="tel" onkeypress="mascara(this, '(##) #####-####')" maxlength="15" id="telefone" type="tel" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.telefone ? endereco.telefone :  ''   %>">
+                    <input autocomplete="tel" id="telefone" type="tel" name="telefone" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.telefone ? endereco.telefone :  ''   %>">
                 </div>
 
                 <div class="flex justify-between items-center space-x-4">
@@ -175,7 +179,7 @@
                 </h2>
             </div>
 
-            <button id="btnPagar" onclick="pagar(this, '<%= stringParaReal(carrinhoProcessado.total) %>')" class="bg-gradient-to-l bg-c1 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
+            <button id="btnPagar" onclick="pagar(this)" class="bg-gradient-to-l bg-c1 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
                 <img src="/icons/logo-pix-520x520.png" alt="" class="w-10 drop-shadow-lg">
                 <p class="text-xl leading-none drop-shadow-lg">PAGAR COM PIX</p>
             </button>
@@ -186,7 +190,7 @@
     </section>
 
     <!-- POPUP PAGAMENTO COM PIX -->
-    <section id="sectionPix" class="hidden  max-w-screen-md max-h-screen border shadow-lg fixed top-1/2 left-1/2 p-10 bg-gradient-to-r bg-white transform -translate-x-1/2 -translate-y-1/2 space-y-2  w-full ">
+    <section id="sectionPix" class="hidden  max-w-screen-md max-h-screen border shadow-lg fixed top-1/2 left-1/2 p-10 bg-gradient-to-r bg-white transform -translate-x-1/2 -translate-y-1/2 space-y-4  w-full ">
         <div class="flex items-center space-x-4 pt-5">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart-check-fill text-c1" viewBox="0 0 16 16">
                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708"/>

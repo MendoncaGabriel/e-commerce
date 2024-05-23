@@ -65,3 +65,11 @@ function animacao() {
     // Iniciar a animação
     animate();
 }
+
+
+// Formatação
+var cleaveTelefone = new Cleave('[name=telefone]', {
+    delimiters: ['(', ') ', '-', ' '],
+    blocks: [0, 2, 5, 4],
+    numericOnly: true
+});

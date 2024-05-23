@@ -10,6 +10,9 @@
     <!-- TAILWINDCSS -->
     <link rel="stylesheet" href="/css/output.css">
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+    <!-- Cleave.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"></script>
+    
 
 </head>
 <body class="bg-gradient-to-r from-c2 to-c1 flex items-center justify-center h-screen relative" >
@@ -28,7 +31,7 @@
             </div>
             <div class="flex flex-col">
                 <label for="telefone" class="text-sm">Telefone: <span class="text-red-400">*</span></label>
-                <input id="telefone" required type="text" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="tel">
+                <input id="telefone" name="telefone" required type="text" class="px-4 py-2 focus:outline-none bg-gray-100" autocomplete="tel">
             </div>
             <div class="flex flex-col">
                 <label for="email" class="text-sm">Email: <span class="text-red-400">*</span></label>

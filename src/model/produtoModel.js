@@ -3,34 +3,36 @@ const fs = require('fs');
 const path = require('path');
 const db = require('../../database/database');
 
+
 module.exports = {
-    crate: async (data) => {
-        try {
-            const sql = `INSERT INTO produtos ( nome, descricao, ativo, modelo, marca, categoria)
-            VALUES (?, ?, ?, ?, ?, ?);`;
 
-            const values = [data.nome, data.descricao, data.ativo, data.modelo, data.marca, data.categoria]
-
-            const result = await  executeSql(sql, values)
-            return result
-
-        } catch (error) {
-            console.log(error)
-            throw new Error("Erro ao salvar novo produto", error)
-        }
+    create: async (nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
+        return new Promise((resolve, reject) => {
+            const sql = `INSERT INTO produtos (nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+            const values = [nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem];
+            
+            db.query(sql, values, (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
     },
     getById: async (id) => {
-        try {
-            const sql = "SELECT * FROM produtos WHERE produtos.produto_id = ?"
-            const values = [id]
-            const result = await executeSql(sql, values)
-            return result
+        return new Promise((resolve, rejects) => {
+            const sql = "SELECT * FROM produtos WHERE produto_id = ?;";
+            const values = [id];
 
-            
-        } catch (error) {
-            console.log(error)
-            throw new Error("Erro ao pegar produto", error)
-        }
+            db.query(sql, values, (error, result) => {
+                if(error){
+                    rejects(error);
+                }else{
+                    resolve(result);
+                }
+            });
+        })
     },
     getProdutoWithVariantes: async (nome) => {
         try {
@@ -61,51 +63,44 @@ module.exports = {
         return result;
     },
     getbyOffset: async (offset, limit) => {
-        const sql = `
-        SELECT produtos.*, variantes.*
-        FROM produtos
-        JOIN variantes ON produtos.produto_id = variantes.produto_id
-        WHERE produtos.ativo = 1
-        AND variantes.imagem IS NOT NULL
-        AND variantes.imagem <> ''
-        AND variantes.estoque > 0
-        LIMIT ? OFFSET ?;
-        `;
+        const sql = `SELECT * FROM produtos LIMIT ? OFFSET ?;`;
     
         const values = [limit, offset];
         const result = await executeSql(sql, values);
         return result
     },
-    update: async (id, data) => {
-        try {
-            let updateFields = '';
-            const values = []
-
-            for (const key in data) {
-                if (Object.hasOwnProperty.call(data, key)) {
-                    updateFields += `${key} = ?, `;
-                    values.push(data[key]);
-                }
-            }
-
-            values.push(Number(id));
-
-            // Remova a vírgula extra do final da string updateFields
-            updateFields = updateFields.slice(0, -2);
-
-            //atualizar produto
-            const result = await  executeSql(`
-                UPDATE produtos
-                    SET ${updateFields}
+    update: async (id, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                UPDATE produtos SET 
+                    nome = ?, 
+                    modelo = ?, 
+                    marca = ?, 
+                    categoria = ?, 
+                    preco = ?, 
+                    tamanho = ?, 
+                    quantidade = ?, 
+                    referencia = ?, 
+                    ean = ?, 
+                    estoque = ?, 
+                    custo = ?, 
+                    descricao = ?, 
+                    imagem = ?
                 WHERE produto_id = ?;
-            `, values)
+            `;
 
-            return result
+            const values = [
+                nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem, id
+            ];
 
-        } catch (error) {
-            console.log(error)
-            throw new Error("Erro ao atualizar produto", error)
-        }
+            db.query(sql, values, (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
     },
     delete: async (id) => {
         try {

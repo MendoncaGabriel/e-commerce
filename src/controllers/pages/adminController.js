@@ -27,16 +27,12 @@ async function getDataEdicaoProduto(req){
         try {
             const id = parseInt(req.params.id);
             const produto = await produtoModel.getById(id);
-       
-            const variantes = await produtoModel.getProdutoWithVariantes(produto[0].nome);
-            const categorias = await caregoriaModel.categorias();
-
+     
             const data = {
                 conteudo: './conteudo/edicaoProduto', 
                 titulo: 'Edição de Produto',
-                produto: produto,
-                variantes: variantes,
-                categorias: categorias
+                produto: produto[0],
+
             }
             resolve(data)
         } catch (error) {
