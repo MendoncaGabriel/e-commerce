@@ -102,38 +102,38 @@ module.exports = {
         const result = await executeSql(sql, values);
         return result
     },
-
-
-    //!!!!!!!!!!!!! se não tiver imagem então não atualizar campo de imagem //!!!!!!!!!!!!!
     update: async (id, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
-        await apagarImagemAnterior(id)
-
+        if (imagem) {
+            await apagarImagemAnterior(id);
+        }
+    
         return new Promise((resolve, reject) => {
             let sql = `
-            UPDATE produtos SET 
-            nome = ?, 
-            modelo = ?, 
-            marca = ?, 
-            categoria = ?, 
-            preco = ?, 
-            tamanho = ?, 
-            quantidade = ?, 
-            referencia = ?, 
-            ean = ?, 
-            estoque = ?, 
-            custo = ?, 
-            descricao = ?`;
-        
+                UPDATE produtos SET 
+                nome = ?, 
+                modelo = ?, 
+                marca = ?, 
+                categoria = ?, 
+                preco = ?, 
+                tamanho = ?, 
+                quantidade = ?, 
+                referencia = ?, 
+                ean = ?, 
+                estoque = ?, 
+                custo = ?, 
+                descricao = ?
+            `;
+    
             const values = [nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao];
-            
-            if (imagem !== null) {
+    
+            if (imagem) {
                 sql += `, imagem = ?`;
                 values.push(imagem);
             }
-            
+    
             sql += ` WHERE produto_id = ?;`;
             values.push(id);
-
+    
             db.query(sql, values, (error, result) => {
                 if (error) {
                     reject(error);
@@ -143,6 +143,8 @@ module.exports = {
             });
         });
     },
+    
+    
     delete: async (id) => {
         try {
             // buscando produto 
