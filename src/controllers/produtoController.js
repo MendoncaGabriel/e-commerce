@@ -1,5 +1,7 @@
 const produtoModel = require('../model/produtoModel');
 
+
+
 module.exports = {
     create: async (req, res) => {
         try {
@@ -55,6 +57,7 @@ module.exports = {
     update: async (req, res) => {
         try {
             const id = req.params.id;
+            
             const { nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao } = req.body;
             const imagem = req.file ? req.file.filename : null;
 

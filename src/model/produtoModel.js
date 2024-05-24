@@ -3,9 +3,42 @@ const fs = require('fs');
 const path = require('path');
 const db = require('../../database/database');
 
+function checkFile(caminhoArquivo){
+    try{
+        if (fs.existsSync(caminhoArquivo)) {
+           return true
+        } else {
+            return false
+        }
+    }catch(error){
+        console.log(error.message)
+    }
+}
+function deleteFile(caminhoArquivo){
+    try {
+        fs.unlink(caminhoArquivo, function (error){
+            if (error) throw new Error(error);
+            console.log('Arquivo deletado!');
+        })
+    }
+    catch (error) {
+        console.log(error.message)
+    }
+}
+async function apagarImagemAnterior(id){
+    try {
+        const produto = await module.exports.getById(id)
+        const image = produto[0]?.imagem;
+        const caminhoArquivo = path.resolve('src', 'public', 'img', image);
+        if(!caminhoArquivo) throw new Error('Erro ao buscar caminho de arquivo!')
+        const existsFile = checkFile(caminhoArquivo);
+        if(existsFile) deleteFile(caminhoArquivo);
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 
 module.exports = {
-
     create: async (nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
         return new Promise((resolve, reject) => {
             const sql = `INSERT INTO produtos (nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
@@ -69,29 +102,37 @@ module.exports = {
         const result = await executeSql(sql, values);
         return result
     },
-    update: async (id, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
-        return new Promise((resolve, reject) => {
-            const sql = `
-                UPDATE produtos SET 
-                    nome = ?, 
-                    modelo = ?, 
-                    marca = ?, 
-                    categoria = ?, 
-                    preco = ?, 
-                    tamanho = ?, 
-                    quantidade = ?, 
-                    referencia = ?, 
-                    ean = ?, 
-                    estoque = ?, 
-                    custo = ?, 
-                    descricao = ?, 
-                    imagem = ?
-                WHERE produto_id = ?;
-            `;
 
-            const values = [
-                nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem, id
-            ];
+
+    //!!!!!!!!!!!!! se não tiver imagem então não atualizar campo de imagem //!!!!!!!!!!!!!
+    update: async (id, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
+        await apagarImagemAnterior(id)
+
+        return new Promise((resolve, reject) => {
+            let sql = `
+            UPDATE produtos SET 
+            nome = ?, 
+            modelo = ?, 
+            marca = ?, 
+            categoria = ?, 
+            preco = ?, 
+            tamanho = ?, 
+            quantidade = ?, 
+            referencia = ?, 
+            ean = ?, 
+            estoque = ?, 
+            custo = ?, 
+            descricao = ?`;
+        
+            const values = [nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao];
+            
+            if (imagem !== null) {
+                sql += `, imagem = ?`;
+                values.push(imagem);
+            }
+            
+            sql += ` WHERE produto_id = ?;`;
+            values.push(id);
 
             db.query(sql, values, (error, result) => {
                 if (error) {

@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const  upload = require('../../middlewares/multer');
-const compactarImagem = require('../../middlewares/compressImage');
 const produtoController = require('../../controllers/produtoController');
+const  upload = require('../../middlewares/upload');
+
 
 router.post('/create',  produtoController.create);
-router.patch('/update/:id', compactarImagem, upload.single('imagem'), produtoController.update);
+router.patch('/update/:id', upload ,produtoController.update);
 
 
 router.get('/getById/:id', produtoController.getById);
