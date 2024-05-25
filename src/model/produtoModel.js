@@ -37,6 +37,52 @@ async function apagarImagemAnterior(id){
         console.log(error.message)
     }
 }
+function getImagemProduto(produto_id){
+    return new Promise( (resolve, reject)=>{
+       db.query("select imagem from produtos where produto_id = ? AND imagem IS NOT NULL AND imagem != '';", [produto_id], (error, result) => {
+            if(error){
+                reject(error)
+            }else{
+                resolve(result)
+            }
+        })
+    })
+}
+function getImagemVariante(produto_id){
+    return new Promise( (resolve, reject)=>{
+
+       db.query("select imagem from variantes where produto_id = ? AND imagem IS NOT NULL AND imagem != '';", [produto_id], (error, result) => {
+            if(error){
+                reject(error)
+            }else{
+                resolve(result)
+            }
+        })
+    })
+}
+function deleteVariantes(produto_id) {
+    return new Promise((resolve, reject) => {
+        db.query("DELETE FROM variantes WHERE produto_id = ?", [produto_id], (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+function deleteProduto(produto_id) {
+    return new Promise((resolve, reject) => {
+        db.query("DELETE FROM produtos WHERE produto_id = ?", [produto_id], (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
 
 module.exports = {
     create: async (nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
@@ -102,7 +148,7 @@ module.exports = {
         const result = await executeSql(sql, values);
         return result
     },
-    update: async (id, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
+    update: async (id, ativo, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
         if (imagem) {
             await apagarImagemAnterior(id);
         }
@@ -110,6 +156,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             let sql = `
                 UPDATE produtos SET 
+                ativo = ?,
                 nome = ?, 
                 modelo = ?, 
                 marca = ?, 
@@ -124,7 +171,7 @@ module.exports = {
                 descricao = ?
             `;
     
-            const values = [nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao];
+            const values = [ativo, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao];
     
             if (imagem) {
                 sql += `, imagem = ?`;
@@ -143,63 +190,47 @@ module.exports = {
             });
         });
     },
-    
-    
     delete: async (id) => {
-        try {
-            // buscando produto 
-            const produto = await  executeSql(`
-                SELECT p.*, v.* 
-                FROM produtos p 
-                LEFT JOIN variantes v ON p.produto_id = v.produto_id 
-                WHERE p.produto_id = ${id}
-            `)
+        return new Promise( async(resolve, reject)=>{
+            try {
+                //pegar imagens de variantes 
+                const imagensVariantes = await getImagemVariante(id)
 
-            //separar imagens
-            const imagens = produto.map(produto => {
-                if (produto.imagem.length > 0) {
-                    return produto.imagem;
+                //remover imagens de variantes
+                if(imagensVariantes.length > 0){
+                    imagensVariantes.forEach(element => {
+                        const filePath = path.resolve('src', 'public', 'img', element.imagem);
+                        const fileExists = checkFile(filePath)
+                        if(fileExists){
+                            deleteFile(filePath)
+                        }
+                    });
                 }
-            });
+                    
+                //remover variantes relacionadas
+                await deleteVariantes(id)
+        
+                //remover imagem de produto
+                const imagemProduto = await getImagemProduto(id)
+                if(imagemProduto.length > 0){
+                    imagemProduto.forEach(element => {
+                        const filePath = path.resolve('src', 'public', 'img', element.imagem);
+                        const fileExists = checkFile(filePath)
+                        if(fileExists){
+                            deleteFile(filePath)
+                        }
+                    })
+                }
+
+                //remover produto
+                await deleteProduto(id)
+
+                resolve("item produtos, imagens e variantes deletados com sucesso!")
+
+            } catch (error) {
+                reject(error)
+            }
             
-  
-            
-            imagens.forEach(e =>{
-    
-                // verificar se existe imagem
-                const caminho = path.resolve('public', 'images', e)
-                fs.access(caminho, fs.constants.F_OK, (erro) => {
-                    if(erro){
-                        console.log('arquivo não existe')
-                    }else{
-                        console.log('arquivo existe, excluir')
-
-                        //excluir arquivos
-                        fs.unlink(caminho, (err)=>{
-                            if(err){
-                                console.log('erro ao excluir imagem', caminho)
-                            }else{
-                                console.log('arquivo excluido com sucesso!', caminho)
-                            }
-
-                        })
-    
-                    }
-                })
-
-            })
-       
-
-
-      
-
-            await executeSql('DELETE FROM variantes WHERE produto_id = ?;', [id])
-            const p = await executeSql('DELETE FROM produtos WHERE produto_id = ?;', [id])
-
-            return p
-
-        } catch (error) {
-            throw new Error("Erro ao remover produto")
-        }
+        })
     }
 }

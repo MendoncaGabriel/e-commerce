@@ -18,8 +18,7 @@ function createProduto(formData){
         alert('Erro ao salvar novo produto, confira os logs');
         console.log(error);
     });
-}
-
+};
 
 function loadFile(event) {
     var output = document.getElementById('imagem-preview');
@@ -27,4 +26,5 @@ function loadFile(event) {
     output.onload = function() {
         URL.revokeObjectURL(output.src) // free memory
     }
-}
+};
+

@@ -1,7 +1,5 @@
 const produtoModel = require('../model/produtoModel');
 
-
-
 module.exports = {
     create: async (req, res) => {
         try {
@@ -58,12 +56,10 @@ module.exports = {
         try {
             const id = req.params.id;
             
-            const { nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao } = req.body;
+            const { ativo, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao } = req.body;
             const imagem = req.file ? req.file.filename : null;
 
-            const result = await produtoModel.update(
-                id, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem
-            );
+            const result = await produtoModel.update(id, ativo, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem);
 
             res.status(200).json({ msg: "Produto atualizado com sucesso!", result });
         } catch (error) {
@@ -75,7 +71,7 @@ module.exports = {
         try {
             const id = req.params.id
             const result = await produtoModel.delete(Number(id))
-            res.status(200).json({msg: "Produto deletado com sucesso!", result})
+            res.status(200).json({msg: result})
         } catch (error) {
             console.log(error)
             res.status(500).json('Erro interno no servidor')

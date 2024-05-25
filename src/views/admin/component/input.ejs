@@ -1,0 +1,10 @@
+<div class="flex flex-col">
+    <label for="modelo"><%= typeof label !== 'undefined' ? label : '' %></label>
+    <input 
+        type="text" 
+        id="<%= typeof name !== 'undefined' ? name : '' %>" 
+        name="<%= typeof name !== 'undefined' ? name : '' %>" 
+        class="px-4 py-2" 
+        value="<%= typeof value !== 'undefined' ? value : '' %>"
+    >
+</div>

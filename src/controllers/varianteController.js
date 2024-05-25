@@ -4,7 +4,9 @@ module.exports = {
     create: async (req, res) => {
         try {   
             const data = req.body
-            const result = await varianteModel.create(data)
+            const produto_id = req.params.produto_id
+            const imagem = req.file;
+            const result = await varianteModel.create(data, produto_id, imagem && imagem.filename ? imagem.filename : null)
             res.status(200).json({msg: 'Nova variante de produto criada com sucesso!', result})
         } catch (error) {
             console.log(error)

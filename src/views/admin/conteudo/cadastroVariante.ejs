@@ -1,30 +1,31 @@
-<form id="formCreateProduto" class="text-gray-600 md:grid md:grid-cols-2 md:gap-5 md:max-w-screen-lg m-auto">
+<div class="flex items-center justify-end">
+    <button type="button" onclick="window.history.back();"  class="bg-orange-500 hover:bg-orange-600 duration-200  text-white font-semibold px-4 py-2 ml-auto   mb-5 flex items-center justify-center space-x-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-skip-backward-fill" viewBox="0 0 16 16">
+            <path d="M.5 3.5A.5.5 0 0 0 0 4v8a.5.5 0 0 0 1 0V8.753l6.267 3.636c.54.313 1.233-.066 1.233-.697v-2.94l6.267 3.636c.54.314 1.233-.065 1.233-.696V4.308c0-.63-.693-1.01-1.233-.696L8.5 7.248v-2.94c0-.63-.692-1.01-1.233-.696L1 7.248V4a.5.5 0 0 0-.5-.5"/>
+        </svg>
+        <span>Voltar</span>
+    </button>
+</div>
+
+<form id="cadastroVariante" class="text-gray-600 md:grid md:grid-cols-2 md:gap-5 md:max-w-screen-lg m-auto">
     <!-- Imagem do produto -->
     <div class="flex flex-col  items-center row-span-5">
         <label for="imagem">Imagem:</label>
-        <input type="file" id="imagem" name="imagem" class="input-file hidden" onchange="loadFile(event)">
+        <input type="file" id="imagem" name="imagem"  class="input-file hidden" onchange="loadFile(event)">
         <img src="/assets/produto-default.png" alt="imagem do produto" class="w-96 aspect-square object-cover" id="imagem-preview">
         <button type="button" onclick="document.getElementById('imagem').click()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Selecionar Imagem</button>
     </div>
 
-    <!-- Formulario de cadastro de produtos -->
-    <%- include('../component/input', {label: "Nome:", name:"name"}) %>
-    <%- include('../component/input', {label: "Modelo:", name:"modelo"}) %>
-    <%- include('../component/input', {label: "Marca:", name:"marca"}) %>
+    <%- include('../component/input', {label: "Preço:", name:"preco"}) %>
     <%- include('../component/input', {label: "Categoria:", name:"categoria"}) %>
-    <%- include('../component/input', {label: "Preco:", name:"preco"}) %>
     <%- include('../component/input', {label: "Tamanho:", name:"tamanho"}) %>
     <%- include('../component/input', {label: "Quantidade:", name:"quantidade"}) %>
     <%- include('../component/input', {label: "Referência:", name:"referencia"}) %>
     <%- include('../component/input', {label: "Código de Barras:", name:"ean"}) %>
     <%- include('../component/input', {label: "Estoque:", name:"estoque"}) %>
     <%- include('../component/input', {label: "Custo:", name:"custo"}) %>
-    
-    <div class="flex flex-col md:col-span-2 row-span-2 w-full">
-        <label for="descricao">Descrição:</label>
-        <textarea name="descricao" id="descricao" class="px-4 py-2 min-h-40 max-h-96"></textarea>
-    </div>
-    
+
+
     <button type="submit" class="bg-blue-600 hover:bg-blue-500 hover:drop-shadow-lg hover:scale-105 duration-200 px-4 py-2 rounded-md text-white font-semibold col-span-2 max-w-52 ml-auto flex items-center space-x-2">
         <span>CADASTRAR</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy2-fill" viewBox="0 0 16 16">
@@ -34,4 +35,5 @@
     </button>
 </form>
 
-<script src="/js/admin/cadastroProduto.js"></script>
+
+<script src="/js/admin/cadastroVariante.js"></script>
