@@ -35,7 +35,9 @@ module.exports = {
         try {
             const id = req.params.id;
             const data = req.body;
-            const result = await varianteModel.update(id, data)
+            const imagemFile = req.file;
+            const imagem =  imagemFile && imagemFile.filename ? imagemFile.filename : null;
+            const result = await varianteModel.update(id, data, imagem)
             res.status(200).json({msg: "Variante atualizada com sucesso", result})
         } catch (error) {
             res.status(500).json({msg: 'Erro ao atualizar'})

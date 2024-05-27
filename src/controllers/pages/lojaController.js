@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const produtoModel = require('../../model/produtoModel');
+const varianteModel = require('../../model/varianteModel');
 const empresaModel = require('../../model/empresaModel');
 const usuarioModel = require('../../model/usuarioModel');
 const checkoutModel = require('../../model/checkoutModel');
@@ -51,13 +52,16 @@ async function getDataProduto(req){
         try {
             const logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             const nome = req.params.nome;
-            const produto = await produtoModel.getProdutoWithVariantes(nome);
+            const produto = await produtoModel.getByName(nome)
+            const variantes = await varianteModel.getByProdutoId(produto[0].produto_id)
+      
             const redesSociais = await empresaModel.redesSociais();
             const dadosEmpresa = await empresaModel.dados();
             const enderecosEmpresa = await empresaModel.enderecos();
 
             const data = {
-                produto, 
+                produto,
+                variantes,
                 dadosEmpresa, 
                 logado:logado,
                 redesSociais: redesSociais,

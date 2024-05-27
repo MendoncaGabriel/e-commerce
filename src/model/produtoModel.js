@@ -18,7 +18,6 @@ function deleteFile(caminhoArquivo){
     try {
         fs.unlink(caminhoArquivo, function (error){
             if (error) throw new Error(error);
-            console.log('Arquivo deletado!');
         })
     }
     catch (error) {
@@ -37,6 +36,8 @@ async function apagarImagemAnterior(id){
         console.log(error.message)
     }
 }
+
+
 function getImagemProduto(produto_id){
     return new Promise( (resolve, reject)=>{
        db.query("select imagem from produtos where produto_id = ? AND imagem IS NOT NULL AND imagem != '';", [produto_id], (error, result) => {
@@ -87,9 +88,14 @@ function deleteProduto(produto_id) {
 module.exports = {
     create: async (nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO produtos (nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+            const sql = `
+            INSERT INTO produtos 
+                (nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) 
+            VALUES 
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+                
             const values = [nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem];
-            
+    
             db.query(sql, values, (error, result) => {
                 if (error) {
                     reject(error);
@@ -113,21 +119,25 @@ module.exports = {
             });
         })
     },
-    getProdutoWithVariantes: async (nome) => {
+    getByName: async (nome) => {
         try {
-            const sql = `
-            SELECT p.*, v.*
-            FROM produtos p
-            LEFT JOIN variantes v ON p.produto_id = v.produto_id
-            WHERE LOWER (REPLACE(p.nome, ' ', '-') = ?);`;
-
-            let nomeLoweCase = nome.toLowerCase()
-            const values = [nomeLoweCase]
-            const result = await executeSql(sql, values)
-            return result
+            const produto = await new Promise((resolve, rejects) => {
+                const sql = "SELECT * FROM produtos WHERE LOWER(REPLACE(nome, ' ', '-')) = ?";
+                let nomeLowerCase = nome.toLowerCase().replace(/ /g, '-');
+                const values = [nomeLowerCase];
+                db.query(sql, values, (error, result) => {
+                    if(error){
+                        rejects(error)
+                    }else{
+                        resolve(result)
+                    }
+                })
+            });
+ 
+            return produto;
         } catch (error) {
-            console.log(error)
-            throw new Error("Erro no modulo produtoComVariantes ao pegar produto", error)
+            console.log(error);
+            throw new Error("Erro no modulo produtoComVariantes ao pegar produto", error);
         }
     },
     getByCategoria: async (categoria) => {

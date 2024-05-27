@@ -1,7 +1,19 @@
 <section class="relative max-w-screen-md m-auto">
   <div id="containerSlideProduto" class="relative w-full aspect-square  flex overflow-x-auto lg:overflow-x-hidden space-x-5 snap-mandatory snap-x  ">
-    <% produto.forEach(e => { %>
-      <% if (typeof e.imagem != "undefined" && e.imagem != null && e.imagem) { %>
+    <!-- Produto -->
+    <% if (typeof produto[0] != "undefined" && produto[0].imagem) { %>
+      <img 
+        src="<%= '/img/' +  produto[0].imagem  %>" 
+        alt="imagem do produto"
+        class="imagemSlideProduto w-full aspect-square object-cover"
+        class="w-full rounded-xl overflow-hidden object-cover aspect-square flex-none snap-center border  "
+      >
+    <% } %>
+
+    <!-- Variantes -->
+    <% variantes.forEach(e => { %>
+    
+      <% if (typeof e.imagem != "undefined" && e.imagem) { %>
         <img 
           src="<%= '/img/' +  e.imagem %>" 
           alt="imagem do produto"

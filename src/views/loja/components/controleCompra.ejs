@@ -6,8 +6,6 @@
 </script>
 
 
-
-
 <section class="p-5 text-gray-700">
     <!-- NOME DO PRODUTO -->
     <h2 class=" text-2xl leading-7 font-bold "><%=typeof produto[0] != "undefined" && produto[0] ? produto[0].nome : ""  %></h2>
@@ -38,7 +36,8 @@
     <!-- SELEÇÃO DE VARIANTES -->
     <div class="space-y-2 my-2">
         <% if (produto) { %>
-            <%- include('./selectVariante', {titulo: 'OPÇÕES', opcoes: produto, id: 'variantesSelect'}) %>
+            <% const opcoes = [...produto, ...variantes] %>
+            <%- include('./selectVariante', {titulo: 'OPÇÕES', opcoes, selectId: 'variantesSelect'}) %>
         <% } %>
     </div>
 

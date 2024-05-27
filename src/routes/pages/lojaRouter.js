@@ -25,7 +25,7 @@ router.get('/error', pageController.error)
 router.get('/entrar', cacheMiddleware, pageController.entrar)
 router.get('/checkout', checkAuth, pageController.checkout)
 router.get('/criar-conta', cacheMiddleware, pageController.criarConta)
-router.get('/produto/:nome', cacheMiddleware, pageController.produto)
+router.get('/produto/:nome', pageController.produto)
 router.get('/categoria/:categoria', cacheMiddleware, pageController.categorias)
 
 module.exports = router

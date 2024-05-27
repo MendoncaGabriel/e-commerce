@@ -4,8 +4,10 @@ module.exports = {
     create: async (req, res) => {
         try {
             const { nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao } = req.body;
-            const imagem = req.file;
-            const result = await produtoModel.create(nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem && imagem.filename ? imagem.filename : null)
+            const imagemFile = req.file;
+            const imagem =  imagemFile && imagemFile.filename ? imagemFile.filename : null;
+
+            const result = await produtoModel.create(nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem)
 
             res.status(200).json({msg: "Novo produto criado com sucesso!", result})
         } catch (error) {
