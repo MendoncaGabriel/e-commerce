@@ -29,11 +29,10 @@
         <thead class="border text-left bg-gray-200 ">
             <tr >
                 <th class="p-2">Id</th>
+                <th class="p-2">Imagem</th>
                 <th class="p-2">Nome</th>
                 <th class="p-2">Status</th>
                 <th class="p-2">Modelo</th>
-                <th class="p-2">Categoria</th>
-                <th class="p-2">Marca</th>
                 <th class="p-2">Editar</th>
                 <th class="p-2">Variantes</th>
                 <th class="p-2">Deletar</th>
@@ -50,11 +49,12 @@
             <% apenasProdutos.forEach(e => { %>             
                 <tr class="border hover:bg-gray-100">
                     <th class="p-2 border"><%= e.produto_id %></th>
+                    <th class="p-2 border">
+                            <img src="/img/<%= e.imagem  %>" alt="" class="aspect-square object-cover w-20" onerror="this.onerror=null; this.src='/assets/produto-default.png'">
+                    </th>
                     <td class="p-2 border"><%= e.nome %></td>
                     <td class="p-2 border"><%= e.ativo == 1 ? 'Ativo' : 'Inativo'%></td>
                     <td class="p-2 border"><%= e.modelo %> z</td>
-                    <td class="p-2 border"><%= e.categoria %></td>
-                    <td class="p-2 border"><%= e.marca %></td>
                     <td class="p-2 border">
                         <a href="/admin/edicao/produto/<%= e.produto_id %>" class="w-24 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white flex items-center space-x-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">

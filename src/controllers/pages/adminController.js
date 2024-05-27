@@ -120,11 +120,13 @@ module.exports = {
 
         const id = req.params.id
         const variantes = await varianteModel.getByProdutoId(id)
+        const produto = await produtoModel.getById(id)
         const data = {
             titulo: 'Lista de variantes ',
             conteudo: './conteudo/listaVariante', 
             variantes: variantes,
-            produto_id: id
+            produto_id: id,
+            produto
         }
         res.render('admin/layout', data)
     },
