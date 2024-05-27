@@ -41,10 +41,18 @@ function fecharModal(){
 };
 
 //CARREGAR MODAL
-function carregarItemModal(data){
-    window.modalItem = JSON.parse(data);
+function carregarItemModal(element) {
+    // Extrair dados do botão
+    const data = {
+        variante_id: element.getAttribute('variante_id'),
+        produto_id: element.getAttribute('produto_id'),
+        imagem: element.getAttribute('imagem'),
+        estoque: element.getAttribute('estoque')
+    };
+    
+    window.modalItem = data;
 
-    //se item ja estiver no carrinho, atualiza o modal com suas informações
+    // Se item já estiver no carrinho, atualiza o modal com suas informações
     let resetarValoresInput = true;
     if(localStorage.carrinho){
         const carrinho = JSON.parse(localStorage.carrinho);
@@ -54,10 +62,10 @@ function carregarItemModal(data){
                 window.modalItem.qtd = e.qtd;
                 resetarValoresInput = false;
             };
-        })
+        });
     }
 
-    //se não reset o mocal q quantidade
+    // Se não, reseta o modal com quantidade 1
     if(resetarValoresInput){
         quantidade.value = 1;
         window.modalItem.qtd = 1;
@@ -65,9 +73,10 @@ function carregarItemModal(data){
 
     imagemModal.src = '/img/' + window.modalItem.imagem;
     nomeModal.innerText = window.modalItem.nome;
-    valorModal.innerText = 'Valor: ' +  converterEmReal(window.modalItem.preco);
-    totalModal.innerText = 'Total: ' +  converterEmReal(Number(window.modalItem.preco) * Number(quantidade.value));
-};
+    valorModal.innerText = 'Valor: ' + converterEmReal(window.modalItem.preco);
+    totalModal.innerText = 'Total: ' + converterEmReal(Number(window.modalItem.preco) * Number(quantidade.value));
+}
+
 
 //MUDAR QUANTIDADE MODAL
 function maisQtd(){
