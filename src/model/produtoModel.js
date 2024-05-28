@@ -87,10 +87,11 @@ function deleteProduto(produto_id) {
 
 module.exports = {
     create: async (nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
+        //categorias_categoria_id - e a chave estrangeira 
         return new Promise((resolve, reject) => {
             const sql = `
             INSERT INTO produtos 
-                (nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) 
+                (nome, modelo, marca, categorias_categoria_id, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) 
             VALUES 
                 (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
                 
@@ -107,7 +108,10 @@ module.exports = {
     },
     getById: async (id) => {
         return new Promise((resolve, rejects) => {
-            const sql = "SELECT * FROM produtos WHERE produto_id = ?;";
+            const sql = `
+            SELECT produtos.*, categorias.*
+            FROM produtos, categorias
+            WHERE produtos.produto_id = ?;`;
             const values = [id];
 
             db.query(sql, values, (error, result) => {
@@ -115,6 +119,7 @@ module.exports = {
                     rejects(error);
                 }else{
                     resolve(result);
+                    console.log(result)
                 }
             });
         })
@@ -140,19 +145,17 @@ module.exports = {
             throw new Error("Erro no modulo produtoComVariantes ao pegar produto", error);
         }
     },
+    
     getByCategoria: async (categoria) => {
-        const sql = `
-        SELECT produtos.*, variantes.*
-        FROM produtos 
-        JOIN variantes ON produtos.produto_id = variantes.produto_id
-        WHERE produtos.categoria = ?`;
-
+        console.log(categoria)
+        const sql = `SELECT * FROM produtos as p, categorias as c WHERE c.nome_categoria = ?;`;
+    
         const values = [categoria];
         const result = await  executeSql(sql, values);
         return result;
     },
     getbyOffset: async (offset, limit) => {
-        const sql = `SELECT * FROM produtos LIMIT ? OFFSET ?;`;
+        const sql = `SELECT * FROM produtos as p, categorias as c  LIMIT ? OFFSET ?;`;
     
         const values = [limit, offset];
         const result = await executeSql(sql, values);
@@ -170,7 +173,7 @@ module.exports = {
                 nome = ?, 
                 modelo = ?, 
                 marca = ?, 
-                categoria = ?, 
+                categorias_categoria_id = ?, 
                 preco = ?, 
                 tamanho = ?, 
                 quantidade = ?, 

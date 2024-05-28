@@ -10,7 +10,7 @@
         <% data.map((e, index) => { %>
         
             <li class=" bg-c0   text-c1 border  hover:shadow-md flex-none snap-start duration-100 ease-in md:text-xl font-medium px-4 md:px-8 md:py-2 py-1 rounded-full ">
-                <a href="/categoria/<%= tratarNome(e.categoria)  %>" class="lg:text-2xl"><%= e.categoria  %></a>
+                <a href="/categoria/<%= tratarNome(e.nome_categoria)  %>" class="lg:text-2xl"><%= e.nome_categoria  %></a>
             </li>
             
         <% }) %>

@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const db = require('./database/database')
 
 
+const categoriaRouter = require('./src/routes/api/categoriaRouter');
 const pesquisaRouter = require('./src/routes/api/pesquisaRouter');
 const authRouter = require('./src/routes/api/authRouter');
 const lojaRouter = require('./src/routes/pages/lojaRouter');
@@ -36,6 +37,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 // API
+app.use('/categoria', categoriaRouter);
 app.use('/pesquisa', pesquisaRouter);
 app.use('/variante', varianteRouter);
 app.use('/pagamento', pagamentoRouter);

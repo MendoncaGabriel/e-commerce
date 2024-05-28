@@ -9,9 +9,25 @@
 
     <!-- Formulario de cadastro de produtos -->
     <%- include('../component/input', {label: "Nome:", name:"nome"}) %>
+
+    <!-- Categorias -->
+    <div class="flex flex-col">
+        <label for="modelo">Categorias</label>
+        <select name="categoria" class="px-4 py-2">
+            <option value="" selected disabled>Selecione uma categoria</option>
+            
+            <% if (typeof categorias != "undefined" && categorias?.length > 0) { %>
+                <% categorias.forEach(element => { %>
+                    <option value="<%= element.categoria_id %>"><%= element.nome_categoria %></option>
+                <% }) %>
+            <% } %>
+        </select>
+    </div>
+    
+
+
     <%- include('../component/input', {label: "Modelo:", name:"modelo"}) %>
     <%- include('../component/input', {label: "Marca:", name:"marca"}) %>
-    <%- include('../component/input', {label: "Categoria:", name:"categoria"}) %>
     <%- include('../component/input', {label: "Preco:", name:"preco"}) %>
     <%- include('../component/input', {label: "Tamanho:", name:"tamanho"}) %>
     <%- include('../component/input', {label: "Quantidade:", name:"quantidade"}) %>

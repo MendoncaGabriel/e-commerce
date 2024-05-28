@@ -67,15 +67,26 @@ const itemCarrinho = (imagem, quantidade, preco, variante_id) => `
     </div>
 </li>`;
 
+//ULTILIRARIOS
+function removeItemByIndex(arr, index) {
+    if (index >= 0 && index < arr.length) {
+        arr.splice(index, 1);
+    }
+    return arr;
+}
+
 
 // MAIS OU MENOS NO CARRINHO
 function menosQtdCarrinho(variante_id) {
+
     if (localStorage.carrinho) {
         const carrinho = JSON.parse(localStorage.carrinho);
+        
         carrinho.forEach(item => {
-            if (item.variante_id == variante_id) {
+            if (Number(item.variante_id) == Number(variante_id) || Number(item.produto_id) == Number(variante_id)) {
+
                 const quantidade = document.getElementById(`qtdCarrinho${variante_id}`);
-                if (item.qtd > 1) {
+                if (Number(item.qtd) > 1) {
                     item.qtd--
                     quantidade.value--
                     localStorage.carrinho = JSON.stringify(carrinho);
@@ -90,10 +101,10 @@ function maisQtdCarrinho(variante_id) {
         const carrinho = JSON.parse(localStorage.carrinho);
 
         carrinho.forEach(item => {
-            if (item.variante_id == variante_id) {
+            if (Number(item.variante_id) == Number(variante_id) || Number(item.produto_id) == Number(variante_id)) {
                 const quantidade = document.getElementById(`qtdCarrinho${variante_id}`);
 
-                if (item.qtd < item.estoque) {
+                if (Number(item.qtd) < Number(item.estoque)) {
                     item.qtd++;
                     quantidade.value++;
                     localStorage.carrinho = JSON.stringify(carrinho);
@@ -104,11 +115,35 @@ function maisQtdCarrinho(variante_id) {
 
     }
 };
-function removerCarrinho(variante_id) {
+function removerCarrinho(id) {
+
+
     if (localStorage.carrinho) {
         const carrinho = JSON.parse(localStorage.carrinho);
-        const itemRemovido = carrinho.filter(e => e.variante_id != variante_id);
-        const li = document.getElementById(`li${variante_id}`);
+        for(let i = 0; i< carrinho.length; i++){
+            //saber se e uma variante ou produto,
+
+            //variante 
+            if(carrinho[i].variante_id &&  carrinho[i].variante_id != "" && id == carrinho[i].variante_id && carrinho[i].produto_id != id){
+                console.log('e uma variante')
+                if(!carrinho[i].variante_id || carrinho[i].variante_id == ""){
+                    const newCarrinho = removeItemByIndex(carrinho, i)
+                    localStorage.carrinho = JSON.stringify(newCarrinho)
+                }
+            }
+
+            //produto
+            if(!carrinho[i].variante_id || carrinho[i].variante_id == "" && carrinho[i].produto_id && carrinho[i].produto_id == id){
+                console.log('e um produto')
+                const newCarrinho = removeItemByIndex(carrinho, i)
+                localStorage.carrinho = JSON.stringify(newCarrinho)
+            }
+        
+        }
+        
+
+        const itemRemovido = carrinho.filter(e => e.variante_id !== id || (e.produto_id === id && e.variante_id === undefined));
+        const li = document.getElementById(`li${id}`);
         li.classList.add('transform', 'ease-linear', '-translate-x-full', 'opacity-0');
 
         setTimeout(() => {
@@ -117,8 +152,7 @@ function removerCarrinho(variante_id) {
             localStorage.carrinho = JSON.stringify(itemRemovido);
             carregarCarrinho();
             notificarItemCarrinho()
-
-        }, 250);
+        }, 300);
     }
 }
 
@@ -147,7 +181,8 @@ function carregarCarrinho() {
             total += Number(item.qtd) * Number(item.preco);
         }
 
-        listaProdutosCarrinho.innerHTML += itemCarrinho(item.imagem, item.qtd, item.preco, item.variante_id);
+        //se não tover variante_id vai passar produto_id
+        listaProdutosCarrinho.innerHTML += itemCarrinho(item.imagem, item.qtd, item.preco, item.variante_id || item.produto_id);
     });
 
     contaionerFinalizarCarrinho.classList.remove('hidden');

@@ -22,6 +22,20 @@
         <img src="/img/<%= variante.imagem %>" onerror="this.onerror=null; this.src='/assets/produto-default.png';" alt="imagem do produto" class="w-96 aspect-square object-cover" id="imagem-preview">
         <button type="button" onclick="document.getElementById('imagem').click()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Selecionar Imagem</button>
     </div>
+    
+    <!-- Categorias -->
+    <div class="flex flex-col">
+        <label for="modelo">Categorias</label>
+        <select name="categoria" class="px-4 py-2">
+            <option value="" selected disabled>Selecione uma categoria</option>
+            
+            <% if (typeof categorias != "undefined" && categorias?.length > 0) { %>
+                <% categorias.forEach(element => { %>
+                    <option value="<%= element.nome %>"><%= element.nome %></option>
+                <% }) %>
+            <% } %>
+        </select>
+    </div>
 
     <%- include('../component/input', {label: "Preço:", name:"preco", value: variante.preco }) %>
     <%- include('../component/input', {label: "Tamanho:", name:"tamanho", value: variante.tamanho }) %>

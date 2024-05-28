@@ -6,7 +6,9 @@ const caregoriaModel = require('../../model/categoriaModel');
 async function getDataHome(){
     return new Promise((resolve, reject) => {
         try {
-            const data = {titulo: 'home'}
+            const data = {
+                titulo: 'home'
+            }
             resolve(data)
         } catch (error) {
             reject(error)
@@ -16,7 +18,7 @@ async function getDataHome(){
 async function getDataCadastroProduto(){
     return new Promise(async (resolve, reject) => {
         try {
-            const categorias = await caregoriaModel.categorias()
+            const categorias = await caregoriaModel.getAll()
             const data = {conteudo: './conteudo/cadastroProduto', titulo: 'Cadastro de Produto', categorias}
             resolve(data)
         } catch (error) {
@@ -29,12 +31,13 @@ async function getDataEdicaoVariante(req){
         try {
             const id = parseInt(req.params.id);
             const variante = await varianteModel.getById(id);
-
+            const categorias = await caregoriaModel.getAll()
     
             const data = {
                 conteudo: './conteudo/edicaoVariante', 
                 titulo: 'Edição de Variante',
                 variante: variante[0],
+                categorias: categorias
             }
             resolve(data)
         } catch (error) {
@@ -47,11 +50,13 @@ async function getDataEdicaoProduto(req){
         try {
             const id = parseInt(req.params.id);
             const produto = await produtoModel.getById(id);
+            const categorias = await caregoriaModel.getAll()
      
             const data = {
                 conteudo: './conteudo/edicaoProduto', 
                 titulo: 'Edição de Produto',
                 produto: produto[0],
+                categorias: categorias
 
             }
             resolve(data)
@@ -75,21 +80,7 @@ async function getDataListaProduto(req){
         }
     })
 }
-async function getDataCategorias(){
-    return new Promise(async (resolve, reject) => {
-        try {
-            const categorias = await caregoriaModel.categorias();
-            const data = {
-                titulo: 'Categorias',
-                conteudo: './conteudo/categorias',
-                categorias: categorias
-            }
-            resolve(data)
-        } catch (error) {
-            reject(error)
-        }
-    })
-}
+
 
 module.exports = {
     home: async (req, res) => {
@@ -131,7 +122,17 @@ module.exports = {
         res.render('admin/layout', data)
     },
     categorias: async (req, res) => {
-       const data = await getDataCategorias();
-        res.render('admin/layout', data)
+        try {
+            const categorias = await caregoriaModel.getAll()
+            console.log(categorias)
+            const data = {
+                titulo: 'Categorias',
+                conteudo: './conteudo/categorias',
+                categorias: categorias
+            }
+            res.render('admin/layout', data)
+        } catch (error) {
+            res.render('500')
+        }
     }
 }

@@ -12,7 +12,7 @@ async function getDataHome(req){
     return new Promise( async(resolve, reject) => {
         try {
             const produtos = await produtoModel.getbyOffset(0, 10);
-            const categorias = await categoriaModel.categorias();
+            const categorias = await categoriaModel.getAll();
             const dadosEmpresa = await empresaModel.dados();
             const enderecosEmpresa = await empresaModel.enderecos();
             const banners = await empresaModel.bannerHome();
@@ -130,7 +130,7 @@ async function getDataCategorias(req){
         try {
             const titulo = req.params.categoria.replace(/-/g, ' ');
             const dadosEmpresa = await empresaModel.dados();
-            const categorias = await categoriaModel.categorias();
+            const categorias = await categoriaModel.getAll();
 
             let produtosCategoria = [];
             if (titulo == 'todos-os-produtos') {

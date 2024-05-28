@@ -38,7 +38,7 @@
             <img 
                 src="<%= data.imagem ? '/img/' + data.imagem : '/assets/produto-default.png' %>" 
                 alt="imagem do produto"
-                class="w-full  object-cover border-b aspect-square"
+                class="w-full  object-contain border-b aspect-square"
             >
         </a>
         <div class="px-4 py-2 pb-0  flex-none">
@@ -73,17 +73,12 @@
 
             <!-- ADICIONAR AO CARRINHO -->
             <button 
-                preco="<%= itemParametro.preco %>"
                 nome="<%= itemParametro.nome %>"
+                preco="<%= itemParametro.preco %>"
                 variante_id="<%= itemParametro.variante_id %>"
                 produto_id="<%= itemParametro.produto_id %>"
                 imagem="<%= itemParametro.imagem %>"
                 estoque="<%= itemParametro.estoque %>"
-                
-                <% console.log("=============================") %>
-                <% console.log(itemParametro) %>
-                <% console.log("=============================") %>
-
                 onclick="carregarItemModal(this); abrirModal()" 
                 class="border-2 border-c1 text-c1 hover:brightness-110 hover:drop-shadow-lg duration-100 w-full py-2 rounded-full text-center flex items-center justify-center space-x-2"
             >

@@ -23,10 +23,23 @@
         <button type="button" onclick="document.getElementById('imagem').click()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Selecionar Imagem</button>
     </div>
 
+    <!-- Categorias -->
+    <div class="flex flex-col">
+        <label for="modelo">Categorias</label>
+        <select name="categoria" class="px-4 py-2">
+            <option value="<%= produto.categoria_id %>" selected ><%= produto.nome_categoria %></option>
+            
+            <% if (typeof categorias != "undefined" && categorias?.length > 0) { %>
+                <% categorias.forEach(element => { %>
+                    <option value="<%= element.categoria_id %>"><%= element.nome_categoria %></option>
+                <% }) %>
+            <% } %>
+        </select>
+    </div>
+
     <%- include('../component/input', {label: "Nome:", name:"nome", value: produto.nome }) %>
     <%- include('../component/input', {label: "Modelo:", name:"modelo", value: produto.modelo }) %>
     <%- include('../component/input', {label: "Marca:", name:"marca", value: produto.marca }) %>
-    <%- include('../component/input', {label: "Categoria:", name:"categoria", value: produto.categoria }) %>
     <%- include('../component/input', {label: "Preço:", name:"preco", value: produto.preco }) %>
     <%- include('../component/input', {label: "Tamanho:", name:"tamanho", value: produto.tamanho }) %>
     <%- include('../component/input', {label: "Quantidade:", name:"quantidade", value: produto.quantidade }) %>
@@ -40,7 +53,6 @@
         <textarea name="descricao" id="descricao" class="px-4 py-2 min-h-40 max-h-96" value="<%= produto.descricao %>"><%= produto.descricao %></textarea>
     </div>
 
-    
     <button type="submit" class="bg-blue-600 hover:bg-blue-500 hover:drop-shadow-lg hover:scale-105 duration-200 px-4 py-2 rounded-md text-white font-semibold col-span-2 max-w-52 ml-auto flex items-center space-x-2">
         <span>ATUALIZAR</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy2-fill" viewBox="0 0 16 16">

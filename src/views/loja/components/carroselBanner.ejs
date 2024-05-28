@@ -1,9 +1,8 @@
 <section class="relative m-auto   overflow-hidden">
     
   <div id="containerSlideProduto" class="relative w-full  flex overflow-x-auto md:overflow-x-hidden space-x-5 snap-mandatory snap-x  ">
-       <% banners.forEach(element => { %>
+      <% banners.forEach(element => { %>
 
-        
         <picture class="imagemSlideProduto w-full overflow-hidden object-cover flex-none snap-center aspect-square md:aspect-[21/9]">
           <source media="(max-width: 768px)" srcset="/banner/mobile/<%= element.mobile %>">
           <img 
@@ -14,9 +13,6 @@
         </picture>
       <% }) %> 
 
-
-
-      
     </div>
    
     <button onclick="voltarSlide(), pausarRolagem()" class=" h-full lg:px-8 px-2  hover:text-c1 text-c0  absolute top-0 left-0 focus:outline-none ">
