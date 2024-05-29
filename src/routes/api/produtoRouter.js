@@ -3,9 +3,23 @@ const router = express.Router();
 const produtoController = require('../../controllers/produtoController');
 const upload = require('../../middlewares/upload');
 
+//converter R$10,00 para 10.00
+const tratarPreco = (req, res, next) => {
+    try {
+        const precoString = req.body.preco;
+        const custoString = req.body.custo;
 
-router.post('/create', upload, produtoController.create);
-router.patch('/update/:id', upload ,produtoController.update);
+        if (precoString) req.body.preco = parseFloat(precoString.replace(',', '.').replace(' ', '').toLowerCase().replace('r$', '')).toFixed(2);
+        if (custoString) req.body.custo = parseFloat(custoString.replace(',', '.').replace(' ', '').toLowerCase().replace('r$', '')).toFixed(2);
+    } catch (error) {
+        console.log(error);
+    }
+
+    next()
+};
+
+router.post('/create', upload, tratarPreco, produtoController.create);
+router.patch('/update/:id', upload, tratarPreco, produtoController.update);
 
 
 router.get('/getById/:id', produtoController.getById);

@@ -35,7 +35,6 @@
                 <th class="p-2">Preço</th>
                 <th class="p-2">Status</th>
                 <th class="p-2">Modelo</th>
-                <th class="p-2">Categoria</th>
                 <th class="p-2">Marca</th>
                 <th class="p-2">Editar</th>
             </tr>
@@ -53,7 +52,6 @@
                         <td class="p-2 border"><%= e.preco %></td>
                         <td class="p-2 border"><%= e.ativo == 1 ? 'Ativo' : 'Inativo'%></td>
                         <td class="p-2 border"><%= e.modelo %> z</td>
-                        <td class="p-2 border"><%= e.categoria %></td>
                         <td class="p-2 border"><%= e.marca %></td>
                         <td class="p-2 border">
                             <a href="/admin/edicao/variante/<%= e.variante_id %>" class="w-24 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white flex items-center space-x-2">

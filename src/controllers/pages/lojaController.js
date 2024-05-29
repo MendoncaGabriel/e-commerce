@@ -8,38 +8,41 @@ const usuarioModel = require('../../model/usuarioModel');
 const checkoutModel = require('../../model/checkoutModel');
 const categoriaModel = require('../../model/categoriaModel');
 
+
+async function getCarrosel() {
+    //por isto numa table para controlar melhor os carroseis
+    let carrosel = [{
+        titulo: 'Categoria 1',
+        produtos: await produtoModel.getByCategoria('Categoria 1')
+    },
+    {
+        titulo: 'Categoria 2',
+        produtos: await produtoModel.getByCategoria('Categoria 2')
+    }];
+   
+    return carrosel;
+}
+
+
+
 async function getDataHome(req){
-    return new Promise( async(resolve, reject) => {
+    return new Promise( async (resolve, reject) => {
         try {
-            const produtos = await produtoModel.getbyOffset(0, 10);
             const categorias = await categoriaModel.getAll();
             const dadosEmpresa = await empresaModel.dados();
             const enderecosEmpresa = await empresaModel.enderecos();
             const banners = await empresaModel.bannerHome();
             const redesSociais = await empresaModel.redesSociais();
-            
-            // Separar em grupos por categorias
-            const carroselProdutos = [];
-            produtos.forEach(produto => {
-              let categoriaExistente = carroselProdutos.find(categoria => categoria.titulo === produto.categoria);
-            
-              if (categoriaExistente) {
-                categoriaExistente.data.push(produto);
-              } else {
-                carroselProdutos.push({
-                  titulo: produto.categoria,
-                  data: [produto]
-                });
-              }
-            });
-            
+            const carroseis = await getCarrosel();
+
+        
             const data = {
                 banners: banners,
                 categorias: categorias,
                 redesSociais: redesSociais,
                 dadosEmpresa: dadosEmpresa,
                 enderecosEmpresa: enderecosEmpresa,
-                carroselProdutos: carroselProdutos
+                carroselProdutos: carroseis 
             };
             resolve(data);
         } catch (error) {
@@ -162,6 +165,7 @@ module.exports = {
             let data = await getDataHome(req);
             data.logado = req.cookies.token && req.cookies.token.length > 0 ? true : false;
             res.render('loja/home', data)
+            
         } catch (error) {
             console.log(error);
             res.redirect('/erro');

@@ -16,21 +16,9 @@
         <button type="button" onclick="document.getElementById('imagem').click()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Selecionar Imagem</button>
     </div>
 
-    <!-- Categorias -->
-    <div class="flex flex-col">
-        <label for="modelo">Categorias</label>
-        <select name="categoria" class="px-4 py-2">
-            <option value="" selected disabled>Selecione uma categoria</option>
-            
-            <% if (typeof categorias != "undefined" && categorias?.length > 0) { %>
-                <% categorias.forEach(element => { %>
-                    <option value="<%= element.nome %>"><%= element.nome %></option>
-                <% }) %>
-            <% } %>
-        </select>
-    </div>
-
+    <%- include('../component/input', {label: "Nome:", name:"nome"}) %>
     <%- include('../component/input', {label: "Preço:", name:"preco"}) %>
+    <%- include('../component/input', {label: "Cor:", name:"cor"}) %>
     <%- include('../component/input', {label: "Tamanho:", name:"tamanho"}) %>
     <%- include('../component/input', {label: "Quantidade:", name:"quantidade"}) %>
     <%- include('../component/input', {label: "Referência:", name:"referencia"}) %>

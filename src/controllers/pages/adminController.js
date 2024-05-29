@@ -49,7 +49,7 @@ async function getDataEdicaoProduto(req){
     return new Promise(async (resolve, reject) => {
         try {
             const id = parseInt(req.params.id);
-            const produto = await produtoModel.getById(id);
+            const produto = await produtoModel.getByIdWithCategoria(id);
             const categorias = await caregoriaModel.getAll()
      
             const data = {
@@ -68,7 +68,7 @@ async function getDataEdicaoProduto(req){
 async function getDataListaProduto(req){
     return new Promise(async(resolve, reject) => {
         try {
-            const produtos = await produtoModel.getbyOffset(0, 20)
+            const produtos = await produtoModel.getbyOffsetAll(0, 20)
             const data = {
                 titulo: 'Lista de produtos',
                 conteudo: './conteudo/listaProduto', 

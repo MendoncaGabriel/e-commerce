@@ -2,8 +2,10 @@ const inputUpdateCategoria = document.querySelector("#inputUpdateCategoria");
 const inputCreateCategoria = document.querySelector("#inputCreateCategoria");
 
 function editar(btn) {
+
     const id = btn.getAttribute('categoria_id');
     const nome = btn.getAttribute('nome');
+    console.log(id, nome)
 
     inputUpdateCategoria.value = nome;
     inputUpdateCategoria.setAttribute('categoria_id', id.toString());
@@ -12,6 +14,7 @@ function editar(btn) {
 document.getElementById("createForm").addEventListener("submit", function(event) {
     event.preventDefault(); 
     const nome = inputCreateCategoria.value;
+
 
     fetch('/categoria/create', {
         headers: {'Content-Type': 'application/json'},
@@ -49,17 +52,25 @@ document.getElementById("updateForm").addEventListener("submit", function(event)
 });
 
 
-function deleteCategoria(id){
-    fetch('/categoria/delete/' + id, {
+function deleteCategoria(id) {
+    const confirmation = prompt('Tem certeza de que deseja prosseguir? Alguns produtos podem estar relacionados a esta categoria. Por favor, escolha uma opção: sim / não.');
+    if (confirmation.toLowerCase() !== "sim") return;
+
+    fetch(`/categoria/delete/${id}`, {
         method: 'DELETE',
     })
-    .then(res => {
-        if(res.status == 200) {
-            location.reload()
+    .then(response => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            return response.json().then(errorData => {
+                throw new Error(errorData.error.sqlMessage || 'Erro desconhecido ao tentar deletar a categoria.');
+            });
         }
-        return res.json()
     })
     .catch(error => {
-        console.log(error)
-    })
+        alert('Não é possível apagar esta categoria, pois existem produtos associados a ela.');
+        console.log(error);
+    });
 }
+

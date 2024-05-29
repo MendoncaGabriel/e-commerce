@@ -32,8 +32,8 @@ const manipularImagem = (req, res, next) => {
             .jpeg({ quality: 80 })
             .toBuffer();
 
-           
-            const fileName = `${Date.now()}-${req.file.originalname}`;
+            //const fileName = `${Date.now()}-${req.file.originalname}`;
+            const fileName = `${Date.now()}`;
             const filePath = path.resolve('src', 'public', 'img', fileName);
 
             fs.writeFileSync(filePath, buffer);

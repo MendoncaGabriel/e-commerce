@@ -7,9 +7,7 @@ module.exports = {
         try {
             const tokenUsuario = req.cookies.token;
             const {idusuario} = jwt.verify(tokenUsuario, process.env.ASSINATURA_TOKEN)
-
             const enderecoUsuario = await  usuarioModel.getEndereco(idusuario);
-
            
             res.status(200).json(enderecoUsuario);
         } catch (error) {

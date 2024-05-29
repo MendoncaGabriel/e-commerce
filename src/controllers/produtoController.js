@@ -57,11 +57,10 @@ module.exports = {
     update: async (req, res) => {
         try {
             const id = req.params.id;
-            
             const { ativo, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao } = req.body;
+            console.log( '=====================> Cayegoria: ', categoria)
             const imagem = req.file ? req.file.filename : null;
-
-            const result = await produtoModel.update(id, ativo, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem);
+            const result = await produtoModel.update(id, ativo == 'on' ? 1 : 0, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem);
 
             res.status(200).json({ msg: "Produto atualizado com sucesso!", result });
         } catch (error) {

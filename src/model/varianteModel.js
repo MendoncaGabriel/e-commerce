@@ -43,11 +43,11 @@ module.exports = {
         return new Promise((resolve, reject) => {
             const sql = `
                 INSERT INTO variantes 
-                    (produto_id, preco, tamanho, quantidade, referencia, vendas, ean,  estoque, custo, imagem) 
+                    (produto_id, preco, nome, cor tamanho, quantidade, referencia, vendas, ean,  estoque, custo, imagem) 
                 VALUES 
                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             `;
-            const values = [produto_id, data.preco, data.tamanho, data.quantidade, data.referencia, data.vendas, data.ean, data.estoque, data.custo, imagem];
+            const values = [produto_id, data.preco, data.nome, data.cor, data.tamanho, data.quantidade, data.referencia, data.vendas, data.ean, data.estoque, data.custo, imagem];
 
             db.query(sql, values, (error, result) => {
                 if(error){
@@ -110,6 +110,8 @@ module.exports = {
                 UPDATE variantes SET
                 ativo = ?,
                 preco = ?,
+                nome = ?,
+                cor = ?,
                 tamanho = ?,
                 quantidade = ?,
                 referencia = ?,
@@ -122,6 +124,8 @@ module.exports = {
             const values = [
                 ativo = data.ativo == 'on' ? 1 : 0,
                 data.preco,
+                data.nome,
+                data.cor,
                 data.tamanho,
                 data.quantidade,
                 data.referencia,

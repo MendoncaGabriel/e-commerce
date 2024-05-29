@@ -21,11 +21,16 @@
         </h2>
  
         <!-- CARROSEL -->
-        <div id="<%= id %>" class="flex p-5 w-full space-x-5  overflow-x-auto snap-x snap-mandatory duration-300">
-            <% carrosel.data.forEach(produto => { %>
-                <%- include('cardProduto', { data: produto }) %>
+        <div id="<%= id %>" class="flex p-5 w-full space-x-5 overflow-x-auto snap-x snap-mandatory duration-300">
+            <% carrosel.produtos.forEach(produto => { %>
+
+
+                <% if (produto.nome_categoria === carrosel.titulo) { %>
+                    <%- include('cardProduto', { data: produto }) %>
+                <% } %>
             <% }) %>
         </div>
+
     
         <!-- BOTÕES -->
         <button id="<%= leftId %>" class="absolute top-0 left-0 z-10 px-2 h-full flex items-center justify-center text-4xl opacity-75 text-gray-500 hover:text-black">

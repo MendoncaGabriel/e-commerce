@@ -4,12 +4,12 @@ const db = require('../../database/database')
 module.exports = {
     create: (nome) =>{
         return new Promise((resolve, reject)=>{
-            const sql = "INSERT INTO categorias (nome) VALUES (?);";
+            const sql = "INSERT INTO categorias (nome_categoria) VALUES (?);";
             const values = [nome]
 
             db.query(sql, values, (error, result) => {
                 if(error){
-                    reject(error)
+                    return reject(error)
                 }else{
                     resolve(result)
                 }
@@ -22,7 +22,7 @@ module.exports = {
             const sql = "SELECT * FROM categorias ORDER BY categoria_id DESC;"
             db.query(sql, (error, result) => {
                 if(error){
-                    reject(error)
+                    return reject(error)
                 }else{
                     resolve(result)
                 }
@@ -31,12 +31,12 @@ module.exports = {
     },
     update: (id, nome) =>{
         return new Promise((resolve, reject)=>{
-            const sql = "UPDATE categorias SET nome = ?  WHERE categoria_id = ?;";
+            const sql = "UPDATE categorias SET nome_categoria = ?  WHERE categoria_id = ?;";
             const values = [nome, id];
 
             db.query(sql, values, (error, result) => {
                 if(error){
-                    reject(error)
+                    return reject(error)
                 }else{
                     resolve(result)
                 }
@@ -50,7 +50,7 @@ module.exports = {
 
             db.query(sql, values, (error, result) => {
                 if(error){
-                    reject(error)
+                    return reject(error)
                 }else{
                     resolve(result)
                 }

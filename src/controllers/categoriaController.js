@@ -4,7 +4,6 @@ module.exports = {
     create: async (req, res) => {
         try {
             const {nome} = req.body;
-            console.log(req.body)
             if(!nome) throw new Error('nome não foi passado')
 
             const result = await categoriaModel.create(nome)
@@ -42,7 +41,7 @@ module.exports = {
             res.status(200).json({msg: "ok", result})
         } catch (error) {
             console.log(error);
-            res.status(500).json({msg: 'Erro interno no servidor'})
+            res.status(500).json({msg: 'Erro interno no servidor', error})
         }
     },
 

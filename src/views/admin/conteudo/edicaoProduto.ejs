@@ -8,6 +8,7 @@
 </div>
 
 <form id="formUpdateProduto" class="text-gray-600 md:grid md:grid-cols-2 md:gap-5 md:max-w-screen-lg m-auto">
+
     <!-- ID DO PRODUTO -->
     <input type="text" name="id" value="<%= produto.produto_id %>" class="hidden">
     <div class="flex items-center space-x-2">
@@ -27,16 +28,22 @@
     <div class="flex flex-col">
         <label for="modelo">Categorias</label>
         <select name="categoria" class="px-4 py-2">
-            <option value="<%= produto.categoria_id %>" selected ><%= produto.nome_categoria %></option>
+            <% const selectedId = produto.categoria_id %>
             
-            <% if (typeof categorias != "undefined" && categorias?.length > 0) { %>
+            <!-- Opção selecionada -->
+            <option value="<%= produto.categoria_id %>" selected><%= produto.nome_categoria %></option>
+            
+            <!-- Outras opções -->
+            <% if (typeof categorias !== "undefined" && categorias.length > 0) { %>
                 <% categorias.forEach(element => { %>
-                    <option value="<%= element.categoria_id %>"><%= element.nome_categoria %></option>
+                    <% if (selectedId != element.categoria_id) { %>
+                        <option value="<%= element.categoria_id %>"><%= element.nome_categoria %></option>
+                    <% } %>
                 <% }) %>
             <% } %>
         </select>
     </div>
-
+    
     <%- include('../component/input', {label: "Nome:", name:"nome", value: produto.nome }) %>
     <%- include('../component/input', {label: "Modelo:", name:"modelo", value: produto.modelo }) %>
     <%- include('../component/input', {label: "Marca:", name:"marca", value: produto.marca }) %>

@@ -24,17 +24,17 @@
         </select>
     </div>
     
+    <%- include('../component/input', {label: "Preco:", name:"preco", type: "number", placeholder: "R$10,99"}) %>
+    <%- include('../component/input', {label: "Custo:", name:"custo", type: "number", placeholder: "R$10,99" }) %>
+    
 
-
-    <%- include('../component/input', {label: "Modelo:", name:"modelo"}) %>
+    <%- include('../component/input', {label: "Tamanho:", name:"tamanho", placeholder: '10cm ou 3,93"'}) %>
     <%- include('../component/input', {label: "Marca:", name:"marca"}) %>
-    <%- include('../component/input', {label: "Preco:", name:"preco"}) %>
-    <%- include('../component/input', {label: "Tamanho:", name:"tamanho"}) %>
-    <%- include('../component/input', {label: "Quantidade:", name:"quantidade"}) %>
+    <%- include('../component/input', {label: "Quantidade:", name:"quantidade", placeholder: "Quantidade no pacote, caixa etc..."}) %>
+    <%- include('../component/input', {label: "Modelo:", name:"modelo"}) %>
     <%- include('../component/input', {label: "Referência:", name:"referencia"}) %>
-    <%- include('../component/input', {label: "Código de Barras:", name:"ean"}) %>
-    <%- include('../component/input', {label: "Estoque:", name:"estoque"}) %>
-    <%- include('../component/input', {label: "Custo:", name:"custo"}) %>
+    <%- include('../component/input', {label: "Código de Barras:", name:"ean", placeholder: "1234567891011", mascara: "ean13"}) %>
+    <%- include('../component/input', {label: "Estoque:", name:"estoque", type: "number"}) %>
     
     <div class="flex flex-col md:col-span-2 row-span-2 w-full">
         <label for="descricao">Descrição:</label>

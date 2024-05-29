@@ -17,6 +17,8 @@ const varianteRouter = require('./src/routes/api/varianteRouter');
 const pagamentoRouter = require('./src/routes/api/pagamentoRouter');
 
 
+
+
 // arquivos estativos
 var app = express();
 app.use('/js', express.static(path.join(__dirname, 'src/public/js')));

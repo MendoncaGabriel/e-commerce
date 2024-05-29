@@ -18,10 +18,10 @@ module.exports = {
                     const result = await  executeSql(sql, values)
                     if(!result || result == []) throw new Error('1 Item não encontado no baco de dados');
 
-
+                    console.log(element)
                     //informando qtd e total selecionada pelo usuario
-                    result[0].qtd = Number(element?.qtd);
-                    result[0].total = Number(element?.qtd) * Number(result[0].preco);
+                    result[0].qtd = Number(element.qtd);
+                    result[0].total = Number(element.qtd) * Number(result[0].preco);
                   
                     resolve(result[0])
                 } catch (error) {

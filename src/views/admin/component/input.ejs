@@ -1,10 +1,13 @@
 <div class="flex flex-col">
-    <label for="modelo"><%= typeof label !== 'undefined' ? label : '' %></label>
+    <label for="<%= typeof name !== 'undefined' && name ? name : '' %>"><%= typeof label !== 'undefined' ? label : '' %></label>
     <input 
-        type="text" 
-        id="<%= typeof name !== 'undefined' ? name : '' %>" 
-        name="<%= typeof name !== 'undefined' ? name : '' %>" 
+        type="<%= typeof type !== 'undefined' && type ? type  : 'text' %>" 
+        id="<%= typeof name !== 'undefined' && name ? name : '' %>" 
+        name="<%= typeof name !== 'undefined' && name ? name : '' %>" 
         class="px-4 py-2" 
-        value="<%= typeof value !== 'undefined' ? value : '' %>"
+        value="<%= typeof value !== 'undefined' && value ? value : '' %>"
+        placeholder="<%= typeof placeholder !== 'undefined' && placeholder ? placeholder : '' %>"
+        data-mascara="<%= typeof mascara !== 'undefined' && mascara ? mascara : '' %>"
+        maxlength="<%= typeof maxlength !== 'undefined' && maxlength ? maxlength : '' %>"
     >
 </div>

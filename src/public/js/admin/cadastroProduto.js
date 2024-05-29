@@ -28,3 +28,11 @@ function loadFile(event) {
     }
 };
 
+
+
+document.querySelectorAll('[data-mascara="ean13"]').forEach(element => {
+    new Cleave(element, {
+        numericOnly: true, // Apenas números
+        blocks: [13], // Apenas um bloco de 13 dígitos
+    });
+});
