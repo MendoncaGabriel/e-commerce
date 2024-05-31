@@ -5,46 +5,65 @@ const db = require('../../database/database');
 
 module.exports = {
     processCheckout: async (carrinho) => {
-        if(!carrinho || carrinho.length == 0 ) throw new Error('Cairrinho esta vazio');
-        //array de promessas
-        const promessas = [];
-        
-        //interando sobre array do cookie e buscando itens na base de dados
-        carrinho.forEach(element => {
-            const item = new Promise(async (resolve, reject) => {
+        if (!carrinho || carrinho.length === 0) {
+            throw new Error('Carrinho está vazio');
+        }
+    
+        const promessas = carrinho.map(element => {
+            return new Promise(async (resolve, reject) => {
                 try {
-                    const sql = `SELECT produtos.*, variantes.* FROM variantes JOIN produtos ON produtos.produto_id = variantes.produto_id WHERE variantes.variante_id = ?;`;
-                    const values = [element.variante_id];
-                    const result = await  executeSql(sql, values)
-                    if(!result || result == []) throw new Error('1 Item não encontado no baco de dados');
+                    let sql = ''
+                    let values = []
 
-                    console.log(element)
-                    //informando qtd e total selecionada pelo usuario
-                    result[0].qtd = Number(element.qtd);
-                    result[0].total = Number(element.qtd) * Number(result[0].preco);
-                  
-                    resolve(result[0])
+                    if(typeof element.variante_id != "undefined" && element.variante_id){
+                        //e uma varianre
+                        sql = "SELECT produtos.*, variantes.* FROM variantes JOIN produtos ON produtos.produto_id = variantes.produto_id WHERE variantes.variante_id = ?;";
+                        values = [element.variante_id];
+                    }else{
+                        //e um produto
+                        sql = "SELECT * FROM produtos WHERE produtos.produto_id = ?;"
+                        values = [element.produto_id];
+                    }
+                    
+                    const result = await new Promise((resolve, reject) => {
+                        db.query(sql, values, (error, result) => {
+                            if(error){
+                                return reject(error)
+                            }else{
+                                return resolve(result)
+                            }
+                        })
+                    })
+    
+                    if (!result || result.length === 0) {
+                        throw new Error('Item não encontrado no banco de dados');
+                    }
+    
+                    const item = {
+                        ...result[0], // Copia todas as propriedades de result[0]
+                        qtd: Number(element.qtd),
+                        total: Number(element.qtd) * Number(result[0].preco)
+                    };
+    
+                    resolve(item);
                 } catch (error) {
-                    console.log(error)
-                    reject(error.message)
+                    console.error(error);
+                    reject(error.message);
                 }
             });
-
-            //adicionado promessa ao array
-            promessas.push(item);
         });
-
-        //resolvendo todas as promessas
-        const result = await Promise.all(promessas);
-        if(!result) throw new Error('Erro ao obter produtos do carrinho');
-
-        //calcular total
-        let total = 0;
-        result.forEach(e => total += e.total);
-
-
-
-        return {itens: result, total: total};
-
-    },
+    
+        try {
+            const itens = await Promise.all(promessas);
+    
+            let total = 0;
+            itens.forEach(item => {
+                total += item.total;
+            });
+    
+            return { itens, total };
+        } catch (error) {
+            throw new Error('Erro ao obter produtos do carrinho');
+        }
+    }
 }

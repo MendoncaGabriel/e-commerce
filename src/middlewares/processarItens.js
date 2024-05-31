@@ -11,21 +11,39 @@ async function verificarItens(data){
     data.forEach(element => {
 
         const item = new Promise((resolve, reject) =>{
-            const sql = "SELECT * FROM variantes WHERE variante_id = ?";
-            const values = [element.variante_id];
+            let sql = ""; 
+            let values = [];
+            
+            if (typeof element.variante_id !== "undefined" && element.variante_id) {
+                // É uma variante
+                sql = "SELECT * FROM variantes WHERE variante_id = ?";
+                values = [element.variante_id];
+            } else {
+                // É um produto
+                sql = "SELECT * FROM produtos WHERE produto_id = ?";
+                values = [element.produto_id];
+            }
 
-            db.query(sql, values, (error, dataDb)=>{
-                if(error){
-                    reject(error)
-                }else{
+
+            db.query(sql, values, (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    if (result.length === 0) {
+                        reject(new Error('Item não encontrado no banco de dados'));
+                        return;
+                    }
+        
                     const qtd = Number(element.qtd);
-                    const preco = Number(dataDb[0].preco);
+                    const preco = Number(result[0].preco);
                     const total = qtd * preco;
-                    dataDb[0].qtd = qtd;
-                    dataDb[0].total = total;
-                    resolve(dataDb[0])
+                    
+                    result[0].qtd = qtd;
+                    result[0].total = total;
+        
+                    resolve(result[0]);
                 }
-            })
+            });
         })
         promessas.push(item)
     });
