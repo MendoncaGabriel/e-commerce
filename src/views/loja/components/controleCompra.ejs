@@ -4,8 +4,6 @@
     <h2 class=" text-2xl leading-7 font-bold "><%=typeof produto[0] != "undefined" && produto[0] ? produto[0].nome : ""  %></h2>
     <hr>
 
-
-
     <!-- MEIOS DE PAGAMENTO -->
     <div class="p-2 text-gray-500  md:flex items-center justify-between ">
         <div>
@@ -24,7 +22,6 @@
             <span class="text-3xl text-c1 font-bold text-center lg:text-left block " id="preco">R$ <%= typeof produto[0] != "undefined" && produto[0].preco ? produto[0].preco.replace('.', ',') : ""  %></span>
         </div>
     </div>
-
 
     <!-- SELEÇÃO DE VARIANTES -->
     <div class="space-y-2 my-2">

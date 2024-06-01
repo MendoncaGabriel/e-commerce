@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="/css/output.css">
     <!-- Cleave.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"></script>
-    
-
 </head>
 <style>
     #listaProdutosCarrinho {
@@ -51,106 +49,104 @@
 
     <!-- FORMULARIOS -->
     <section id="carrinho" class=" m-auto w-[90%] z-50 duration-300 flex flex-col justify-between max-w-screen-md space-y-4 pt-5 ">
-        <!-- LISTA DE PRODUTOS NO CARRINHO -->
-        <div class="text-right text-gray-700 text-xl flex flex-col rounded-lg bg-white shadow-md">
-            <ul id="listaProdutosCarrinho" class="overflow-y-auto h-screen  text-xl text-left p-4  ">
-                <h2 class="w-full p-4 pt-0 text-lg text-center font-light">LISTA DE PRODUTOS</h2>
+            <!-- LISTA DE PRODUTOS NO CARRINHO -->
+            <div class="text-right text-gray-700 text-xl flex flex-col rounded-lg bg-white shadow-md">
+                <ul id="listaProdutosCarrinho" class="overflow-y-auto h-screen  text-xl text-left p-4  ">
+                    <h2 class="w-full p-4 pt-0 text-lg text-center font-light">LISTA DE PRODUTOS</h2>
+                    
+                    <!-- ITEM DA LISTA DE PRODUTOS -->
+                    <% if (typeof carrinhoProcessado.itens != 'undefined' && carrinhoProcessado.itens) { %>                 
+                        <% carrinhoProcessado.itens.forEach(e => { %>
+                    
+                            <li class="border-b-2 border-c1 text-gray-700 flex items-center justify-between border-dashed pb-2  gap-2 my-2 text-sm lg:text-lg md:text-md">
+                                <div class="flex items-center justify-center space-x-2 ">
+                                    <img src="/img/<%= e.imagem  %>" alt="" class="rounded-md aspect-square object-cover w-20 drop-shadow-lg border">
+                                    <span class="text-left ">
+                                        <% const url = e.nome.toLowerCase().replace(/ /g, '-') %>
+                                        <a href="/produto/<%= url %>" target="_blank" class="hover:underline"><%= e.nome %></a>
+                                        
+                                    </span> 
+                                </div>
+
+                    
+                                <span class="text-right  w-24  flex-none  ">
+                                    R$ <%= stringParaReal(e.preco) %> x  <%= e.qtd %> <br>
+                                    <span class="px-2  rounded-full bg-c1 text-white  leading-5">= R$ <%= stringParaReal(e.total) %></span>
+                                </span>
+                            </li>
+                        <% }) %>
+                    <% } %>
+
+                </ul>
+            </div>
+
+            <!-- ENDEREÇO DE ENTREGA -->
+            <div class="text-xl text-left p-4 bg-white rounded-lg   shadow-md">
+                <h2 class="w-full p-4 pt-0 text-lg text-center font-light">ENDEREÇO DE ENTREGA</h2>
                 
-                <!-- ITEM DA LISTA DE PRODUTOS -->
-                <% if (typeof carrinhoProcessado.itens != 'undefined' && carrinhoProcessado.itens) { %>                 
-                    <% carrinhoProcessado.itens.forEach(e => { %>
-                 
-                        <li class="border-b-2 border-c1 text-gray-700 flex items-center justify-between border-dashed pb-2  gap-2 my-2 text-sm lg:text-lg md:text-md">
-                            <div class="flex items-center justify-center space-x-2 ">
-                                <img src="/img/<%= e.imagem  %>" alt="" class="rounded-md aspect-square object-cover w-20 drop-shadow-lg border">
-                                <span class="text-left ">
-                                    <% const url = e.nome.toLowerCase().replace(/ /g, '-') %>
-                                    <a href="/produto/<%= url %>" target="_blank" class="hover:underline"><%= e.nome %></a>
-                                    
-                                </span> 
-                            </div>
+                <div class="text-gray-700 lg:text-lg md:text-md text-sm  m-auto space-y-2 ">
 
-                
-                            <span class="text-right  w-24  flex-none  ">
-                                R$ <%= stringParaReal(e.preco) %> x  <%= e.qtd %> <br>
-                                <span class="px-2  rounded-full bg-c1 text-white  leading-5">= R$ <%= stringParaReal(e.total) %></span>
-                            </span>
-                        </li>
-                    <% }) %>
-                <% } %>
+                    <div class="flex justify-between items-center space-x-4">
+                        <div class="w-full">
+                            <label for="">Cep: </label><br>
+                            <input id="cep"name="cep" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.cep ? endereco.cep :  ''  %>">
+                        </div>
+                        <div>
+                            <label for="numero">Numero: <span class="text-red-400">*</span></label><br>
+                            <input autocomplete="address-line2" id="numero" type="number"  min="1" max="3" class="bg-gray-100 focus:outline-none focus:border-c1 px-2 py-1 w-20 md:w-24" value="<%=  typeof  endereco != "undefined" &&  endereco.numero_casa ? endereco.numero_casa :  ''  %>">
+                        </div>
+                    </div>
+                    
+                    <div class="w-full">
+                        <label for="">Rua: <span class="text-red-400">*</span></label><br>
+                        <input id="rua" maxlength="45" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.rua ? endereco.rua :  ''  %>">
+                    </div>
+                    <div class="w-full">
+                        <label for="">Bairro: <span class="text-red-400">*</span></label><br>
+                        <input autocomplete="address-level3" id="bairro" maxlength="30" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%=  typeof  endereco != "undefined" &&  endereco.bairro ? endereco.bairro :  ''   %>">
+                    </div>
 
-            </ul>
-        </div>
+                    <div class="w-full">
+                    
+                        <label for="">Telefone: <span class="text-red-400">*</span></label><br>
+                        <input autocomplete="tel" id="telefone" type="tel" name="telefone" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.telefone ? endereco.telefone :  ''   %>">
+                    </div>
 
-
-        <!-- ENDEREÇO DE ENTREGA -->
-        <div class="text-xl text-left p-4 bg-white rounded-lg   shadow-md">
-            <h2 class="w-full p-4 pt-0 text-lg text-center font-light">ENDEREÇO DE ENTREGA</h2>
+                    <div class="flex justify-between items-center space-x-4">
+                        <div class="w-full">
+                            <label for="">Cidade:</label><br>
+                            <select id="cidade" class="px-2 py-1 w-full  bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.cidade ? endereco.cidade :  ''   %>">
+                                <option value="Manaus" >Manaus</option>
+                            </select>
+                        </div>
+                        <div class="w-20 ">
+                            <label for="">UF:</label><br>
+                            <select id="estado" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.estado ? endereco.estado :  ''   %>">
+                                <option value="AM" >AM</option>
+                            </select>
+                        </div>
             
-            <div class="text-gray-700 lg:text-lg md:text-md text-sm  m-auto space-y-2 ">
+                    </div>
 
-                <div class="flex justify-between items-center space-x-4">
                     <div class="w-full">
-                        <label for="">Cep: </label><br>
-                        <% console.log(endereco) %>
-                        <input id="cep"name="cep" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.cep ? endereco.cep :  ''  %>">
+                        <label for="">Ponto de referência:</label><br>
+                        <input autocomplete="landmark" maxlength="45" id="referencia" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%=  typeof  endereco != "undefined" &&  endereco.referencia ? endereco.referencia :  ''   %>">
                     </div>
-                    <div>
-                        <label for="">Numero: <span class="text-red-400">*</span></label><br>
-                        <input autocomplete="address-line2" id="numero" type="number"  min="1" max="3" class="bg-gray-100 focus:outline-none focus:border-c1 px-2 py-1 w-20 md:w-24" value="<%=  typeof  endereco != "undefined" &&  endereco.rua ? endereco.rua :  ''  %>">
+
+    
+    
+                    <div class="pt-2 " >
+
+                        <button onclick="salvarFormulario()" id="btnSalvarEndereco" class="hidden py-2 px-4 text-white bg-green-500 duration-200 text-lg w-full ">SALVAR </button>
                     </div>
-                </div>
-                
-                <div class="w-full">
-                    <label for="">Rua: <span class="text-red-400">*</span></label><br>
-                    <input id="rua" maxlength="45" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.rua ? endereco.rua :  ''  %>">
-                </div>
-                <div class="w-full">
-                    <label for="">Bairro: <span class="text-red-400">*</span></label><br>
-                    <input autocomplete="address-level3" id="bairro" maxlength="30" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%=  typeof  endereco != "undefined" &&  endereco.bairro ? endereco.bairro :  ''   %>">
-                </div>
-
-                <div class="w-full">
-                 
-                    <label for="">Telefone: <span class="text-red-400">*</span></label><br>
-                    <input autocomplete="tel" id="telefone" type="tel" name="telefone" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.telefone ? endereco.telefone :  ''   %>">
-                </div>
-
-                <div class="flex justify-between items-center space-x-4">
-                    <div class="w-full">
-                        <label for="">Cidade:</label><br>
-                        <select id="cidade" class="px-2 py-1 w-full  bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.cidade ? endereco.cidade :  ''   %>">
-                            <option value="Manaus" >Manaus</option>
-                        </select>
-                    </div>
-                    <div class="w-20 ">
-                        <label for="">UF:</label><br>
-                        <select id="estado" class="px-2 py-1 w-full bg-gray-100" value="<%= typeof  endereco != "undefined" &&  endereco.estado ? endereco.estado :  ''   %>">
-                            <option value="AM" >AM</option>
-                        </select>
-                    </div>
-        
-                </div>
-
-                <div class="w-full">
-                    <label for="">Ponto de referência:</label><br>
-                    <input autocomplete="landmark" maxlength="45" id="referencia" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%=  typeof  endereco != "undefined" &&  endereco.referencia ? endereco.referencia :  ''   %>">
-                </div>
-
-  
-  
-                <div class="pt-2 " >
-
-                    <button onclick="salvarFormulario()" id="btnSalvarEndereco" class="hidden py-2 px-4 text-white bg-green-500 duration-200 text-lg w-full ">SALVAR </button>
                 </div>
             </div>
-        </div>
-            
-        <!-- PAGAMENTO -->
-        <div class="text-xl text-left p-4 bg-white rounded-lg   shadow-md">
+                
+            <!-- PAGAMENTO -->
+            <div class="text-xl text-left p-4 bg-white rounded-lg   shadow-md">
 
             <!-- METODOS DE ENTREGA -->
-            <div class="space-y-2 py-4">
+            <div class="space-y-2 py-4" id="metodos-entrega-container">
                 <% if (typeof metodosEntrega != "undefined" && metodosEntrega) { %>
                     <% metodosEntrega.map((element, index) => { %>
                         <div class=" ps-4 border  border-gray-200 rounded py-2 ">
@@ -170,7 +166,6 @@
             </div>
 
             <h2 class="w-full p-4 pt-0 text-lg text-center font-light">PAGAMENTO</h2>
-
             <div class="flex justify-between items-center font-semibold text-gray-700">
                 <h2 class="p-4 text-xl " >TOTAL: </h2>
                 <h2 class="p-4 text-xl flex space-x-2" id="subtotal">
@@ -185,8 +180,6 @@
             </button>
             <a class="text-center text-sm m-auto block hover:text-c1 font-light p-4" href="/">Voltar a Home</a>
         </div>
-
-
     </section>
 
     <!-- POPUP PAGAMENTO COM PIX -->

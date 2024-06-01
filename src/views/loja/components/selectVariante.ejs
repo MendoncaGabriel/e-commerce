@@ -1,45 +1,43 @@
 <div>
     <label for="selecao" class="text-sm text-gray-600">Selecione uma opção</label>
     <select id="<%= selectId %>" class="px-4 py-2 w-full border-2 border-c1 focus:outline-none rounded-lg">
-        <% if (variantes.length > 0) { %>
-            <option value="" selected disabled>Selecione uma opção</option>
+ 
+        <option value="" selected disabled>Selecione uma opção</option>
 
-            <!-- produto -->
+        <!-- produto -->
+        <option 
+            estoque="<%= produto[0].estoque || 0 %>" 
+            produto_id="<%= produto[0].produto_id %>" 
+            preco="<%= produto[0].preco %>"
+            class="w-full bg-white block shadow-sm"
+            nome="<%= produto[0].nome %>"
+            imagem="<%= produto[0].imagem %>"
+        >
+            1: 
+            <%= produto[0].tamanho ? `TAMANHO: ${produto[0].tamanho}` : '' %>
+            <%= produto[0].referencia ? ` REF: ${produto[0].referencia}` : '' %>
+            <%= produto[0].quantidade ? ` QTD: ${produto[0].quantidade}` : '' %>
+        </option>
+
+        <!-- Variantes -->
+        <% variantes.map((e, index) => { %>
             <option 
-                estoque="<%= produto[0].estoque || 0 %>" 
-                produto_id="<%= produto[0].produto_id %>" 
-                preco="<%= produto[0].preco %>"
-                class="w-full bg-white block shadow-sm"
+                estoque="<%= e.estoque || 0 %>" 
+                variante_id="<%= e.variante_id %>" 
+                produto_id="<%= e.produto_id %>" 
+                preco="<%= e.preco %>"
                 nome="<%= produto[0].nome %>"
-                imagem="<%= produto[0].imagem %>"
+                imagem="<%= e.imagem %>"
+                class="w-full bg-white block shadow-sm"
             >
-                1: 
-                <%= produto[0].tamanho ? `Tamanho: ${produto[0].tamanho}` : '' %>
-                <%= produto[0].referencia ? ` ref: ${produto[0].referencia}` : '' %>
-                <%= produto[0].quantidade ? ` Qtd: ${produto[0].quantidade}` : '' %>
+                <%= index+2 %>:
+                <%= e.tamanho ? `TAMANHO: ${e.tamanho}` : '' %>
+                <%= e.referencia ? ` REF: ${e.referencia}` : '' %>
+                <%= e.quantidade ? ` QTD: ${e.quantidade}` : '' %>
             </option>
-
-            <!-- Variantes -->
-            <% variantes.map((e, index) => { %>
-                <option 
-                    estoque="<%= e.estoque || 0 %>" 
-                    variante_id="<%= e.variante_id %>" 
-                    produto_id="<%= e.produto_id %>" 
-                    preco="<%= e.preco %>"
-                    nome="<%= produto[0].nome %>"
-                    imagem="<%= e.imagem %>"
-                    class="w-full bg-white block shadow-sm"
-                >
-                    <%= index+2 %>:
-                    <%= e.tamanho ? `Tamanho: ${e.tamanho}` : '' %>
-                    <%= e.referencia ? ` ref: ${e.referencia}` : '' %>
-                    <%= e.quantidade ? ` Qtd: ${e.quantidade}` : '' %>
-                </option>
-            <% }); %>
+        <% }); %>
 
         
-        <% } else { %>
-            <option selected disabled >Nenhuma opção disponivel</option>
-        <% } %>
+      
     </select>
 </div>

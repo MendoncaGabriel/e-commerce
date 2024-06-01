@@ -19,6 +19,7 @@ pontoReferencia.addEventListener('input', ()=> exibirBtnSalvar());
 telefone.addEventListener('input', ()=> exibirBtnSalvar());
 
 
+
 function exibirBtnSalvar(){
     btnSalvarEndereco.classList.replace('hidden', 'block');
 };
@@ -27,16 +28,16 @@ function esconderBtnSalvar(){
 };
 function salvarFormulario(){
     if(!validarFormulario()) return;
+  
 
     const data = {
         cep: document.getElementById('cep').value,
         rua: document.getElementById('rua').value,
-        numero: document.getElementById('numero').value,
+        numero_casa: document.getElementById('numero').value,
         bairro: document.getElementById('bairro').value,
         cidade: document.getElementById('cidade').value,
         estado: document.getElementById('estado').value,
         referencia: document.getElementById('referencia').value,
-        telefone: document.getElementById('telefone').value
     }
 
     fetch('/usuario/endereco', {
@@ -124,12 +125,6 @@ function pagar(btn) {
             <p class="text-xl leading-none drop-shadow-lg">PAGAR COM PIX</p>
         `;
     })
-
-
-
-
-
-    
 };
 
 async function motrarModalQrCode(copiarColar, CodeQr){

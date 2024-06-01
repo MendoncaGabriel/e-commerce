@@ -63,6 +63,7 @@ module.exports = {
     
             return { itens, total };
         } catch (error) {
+            console.log(error)
             throw new Error('Erro ao obter produtos do carrinho');
         }
     }

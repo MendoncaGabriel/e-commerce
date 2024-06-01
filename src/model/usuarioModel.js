@@ -4,7 +4,6 @@ const db = require('../../database/database');
 module.exports = {
     updateEndereco: async (rua, bairro, cep, cidade, estado, pais, numero_casa, referencia, telefone, idusuarios) => {
         return new Promise(async (resolve, reject) => {
-         
             const sql = `
             UPDATE usuarios SET 
                 rua = ?, 
@@ -24,6 +23,7 @@ module.exports = {
                     reject(error)
                 }else{
                     resolve(result)
+                    
                 }
            })
         })
@@ -33,6 +33,21 @@ module.exports = {
 
         const sql = `SELECT rua, bairro, cep, cidade, estado, pais, numero_casa, referencia, telefone FROM usuarios WHERE  idusuarios = ?`;
         const values = [idusuarios];
+    
+        return new Promise(async (resolve, reject) => {
+            db.query(sql, values, (error, result) => {
+                if(error){
+                    reject(error)
+                }else{
+                    resolve(result[0])
+                }
+            })
+        });
+    },
+    getById: async (id) => {
+
+        const sql = `SELECT * FROM usuarios WHERE  idusuarios = ?`;
+        const values = [id];
     
         return new Promise(async (resolve, reject) => {
             db.query(sql, values, (error, result) => {

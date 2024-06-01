@@ -1,133 +1,212 @@
 require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
-const { Payment, MercadoPagoConfig,  } = require('mercadopago');
 
-function base64 (){
-    const Client_ID = process.env.Client_ID;
-    const Client_Secret = process.env.Client_Secret;
-    const token = Client_ID + ':' + Client_Secret
-    return btoa(token)
-}
 
-function authorization(){
-    const formData = new URLSearchParams();
-    formData.append('scoop', 'oob');
-    formData.append('grant_type', 'client_credentials');
+//GERAR CHAVE EM BASE 64
+class KeyBase64 {
+    #Client_ID = process.env.Client_ID;
+    #Client_Secret = process.env.Client_Secret;
 
-    return new Promise((resolve, reject)=> {
-        fetch('https://api.getnet.com.br/auth/oauth/v2/token', {
-            method: 'POST',
-            headers: {
-                "Content-type": "application/x-www-form-urlencoded",
-                "Authorization": `Basic ${base64()}`
-            },
-            body: formData
-        })
-        .then(response =>  response.json())
-        .then(response => {
-            resolve(response)
-        })
-        .catch(error => {
-            reject(error)
-        });
-    })
-}
-
-module.exports = {
-    mercadoPagoPix: async (transaction_amount, description, paymentMethodId, email, identificationType, number) => {
-        try {
-            const client = new MercadoPagoConfig({ accessToken: process.env.ACCESSTOKEN });
-            const payment = new Payment(client);
-            const uuid = uuidv4();
-            
-            const result = await payment.create({
-                body: { 
-                    transaction_amount: transaction_amount,
-                    description: description,
-                    payment_method_id: paymentMethodId,
-                    payer: {
-                        email: email,
-                        identification: {
-                            type: identificationType,
-                            number: number
-                        }
-                    }
-                },
-                requestOptions: { idempotencyKey: uuid }
-            });
-    
-            result.idempotencyKey = uuid;
-            return result;
-        } catch (error) {
-            throw new Error(`Erro ao processar pagamento via Mercado Pago: ${error.message}`);
+    constructor() {
+        if (!this.#Client_ID || !this.#Client_Secret) {
+            throw new Error('!!! Client_ID e Client_Secret não foram definidos corretamente.');
         }
-    },
-    getnetPix: async (valorCentavos) => {
-        return new Promise( async (resolve, reject) => {
+        this.key = btoa(`${this.#Client_ID}:${this.#Client_Secret}`);
+    }
 
-            function tranformCentavos(real){
-                const centavos = real * 100
-                return centavos
-            }
+    get auth() {
+        return this.key;
+    }
+}
 
-            const auth = await authorization();
-            const seller_id = process.env.Client_ID;
-            const uuid = `M-${uuidv4()}`;
+//SOLICITAR TOKEN DE ACESSO
+class Authorization {
+    #base64 = new KeyBase64();
 
-            fetch('https://api.getnet.com.br/v1/payments/qrcode/pix', {
+    async getAuth() {
+        try {
+            const url = 'https://api.getnet.com.br/auth/oauth/v2/token';
+            const formData = new URLSearchParams();
+            formData.append('scope', 'oob');
+            formData.append('grant_type', 'client_credentials');
+
+            const configs = { 
                 method: 'POST',
                 headers: {
-                    "seller_id": seller_id,
+                    "Content-type": "application/x-www-form-urlencoded",
+                    "Authorization": `Basic ${this.#base64.auth}`
+                },
+                body: formData
+            };
+
+            const response = await fetch(url, configs);
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(`Erro ao solicitar token: ${data.error_description}`);
+            }
+
+            return data;
+        } catch (error) {
+            console.error('Erro na solicitação de token:', error);
+            throw error;
+        }
+    }
+}
+
+//SOLICITAR PAGAMENTOS
+class Pagamento {
+    #seller_id = process.env.Seller_ID;
+    #uuid = uuidv4()
+    #auth = null
+
+    constructor(){
+        this.expirationTime = "180" //3min 
+    }
+
+    #formatValor(valor) {
+        if (typeof valor == 'string') {
+            const valorSemSimbolo = valor.replace(/R\$|\s+/g, '');
+            const valorEmCentavos = valorSemSimbolo.replace(',', '');
+            return parseInt(valorEmCentavos, 10);
+        }else{
+            return parseInt(valor, 10);
+        }
+    }
+
+    async qrcodePix(valor){
+        this.valor = this.#formatValor(valor)
+        const authorization = new Authorization();
+        this.#auth = await authorization.getAuth();
+            
+        return new Promise( async (resolve, reject) => {
+            const url = 'https://api.getnet.com.br/v1/payments/qrcode/pix';
+
+            const config = {
+                method: 'POST',
+                headers: {
+                    "seller_id": this.#seller_id,
                     "Content-Type": "application/json; charset=utf-8",
-                    "Authorization": `Bearer ${auth.access_token}`,
-                    "x-qrcode-expiration-time": "180" // 3min
+                    "Authorization": `Bearer ${this.#auth.access_token}`,
+                    "x-qrcode-expiration-time": this.expirationTime 
                 },
                 body: JSON.stringify({
-                    amount: tranformCentavos(valorCentavos),
+                    amount: this.valor,
                     currency: "BRL",
                     customer_id: "string",
-                    order_id: uuid   
+                    order_id: this.#uuid   
                 })
-            })
+            }
+            fetch(url, config)
             .then(res =>  res.json())
             .then(res => {
-                res.uuid = uuid;
-                resolve(res)
+                res.uuid = this.#uuid;
+                return resolve(res)
             })
             .catch(error => {
-                reject(error)
+                return reject(error)
             });
         })
-    },
-    consultarStatus: async (payment_id) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const url = `https://api.getnet.com.br/v1/payments/qrcode/${payment_id}`;
-                const auth = await authorization();
-                const seller_id = process.env.Client_ID;
-
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        "seller_id": seller_id,
-                        "Content-Type": "application/json; charset=utf-8",
-                        "Authorization": `Bearer ${auth.access_token}`,
-                    }
-                });
-    
-                const data = await response.json();
-                resolve(data);
-            } catch (error) {
-                reject(error);
-            }
-        });
     }
-    
-    
-    
+}
+
+// FERIFICAR STATUS DE PAGAMENTO
+class Notificacao {
+    #auth = null;
+    #seller_id = process.env.Seller_ID;
+ 
+    async statusPayment(payment_id) {
+        try {
+            const authorization = new Authorization();
+            this.#auth = await authorization.getAuth();
+
+            const url = `https://api.getnet.com.br/v1/payments/qrcode/${payment_id}`;
+            const config = {
+                method: 'GET',
+                headers: {
+                    "seller_id": this.#seller_id,
+                    "Authorization": `Bearer ${this.#auth.access_token}`,
+                }
+            };
+
+            const maxTimeout = 110000; // 1 minuto e 50 segundos em milissegundos
+            const startTime = Date.now();
+
+            const checkPaymentStatus = async () => {
+                try {
+                    const response = await fetch(url, config);
+                    const data = await response.json();
+
+                    // if (!response.ok) {
+                    //     console.log(`Erro na requisição:`,  data);
+
+                    //     return
+                    // }
+
+                    // ver status
+                    if(!data.status){
+                        console.log(data)
+                    }else{
+                        console.log(`Status atual: ${data.status}`);
+                    }
+
+                    // Verifica se o pagamento foi confirmado
+                    if (data.status === 'APPROVED') {
+                        console.log('Pagamento confirmado!');
+                        return data;
+                    }
+
+                    // Verifica se o pagamento foi negado
+                    if (data.status === 'DENIED') {
+                        console.log('Pagamento negado!');
+                        return data;
+                    }
+
+                    // Verifica se atingiu o tempo máximo de espera
+                    const elapsedTime = Date.now() - startTime;
+                    if (elapsedTime >= maxTimeout) {
+                        console.log('Tempo máximo de espera atingido. Status ainda é PENDING.');
+                        return data;
+                    }
+
+                    // Aguarda e verifica novamente
+                    setTimeout(async () => {
+                        await checkPaymentStatus();
+                    }, 110000 ); // Aguarda 1 min e 50 segundos entre cada verificação
+                } catch (error) {
+                    console.error('Erro na requisição:', error.message);
+                    throw error; // Propaga o erro para ser tratado externamente, se necessário
+                }
+            };
+
+            // Inicia o processo de verificação do status do pagamento
+            await checkPaymentStatus();
+        } catch (error) {
+            console.error('Erro ao verificar status de pagamento:', error);
+            //throw error; // Propaga o erro para ser tratado externamente, se necessário
+        }
+    }
 }
 
 
 
+module.exports = {
+    getnetPix: async (valor) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const pagamento = new Pagamento()
+                const pix = await pagamento.qrcodePix(valor)
 
+                const consulta = new Notificacao()
 
+                // testando novo modulo de consulta
+                consulta.statusPayment(pix.payment_id)
+                
+             
+                resolve(pix)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+}
