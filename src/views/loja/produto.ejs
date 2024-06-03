@@ -27,7 +27,7 @@
     </div>
 
     <!-- BTN WHATSAPP -->
-    <% if (typeof dadosEmpresa[0].whatsapp != "undefined" && dadosEmpresa[0].whatsapp ) { %>
+    <% if (typeof dadosEmpresa[0] != "undefined" && dadosEmpresa[0].whatsapp ) { %>
         <%- include('components/btnWhatsapp', {whatsapp: dadosEmpresa[0].whatsapp}) %>
     <% } %>
 

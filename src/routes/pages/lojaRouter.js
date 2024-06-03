@@ -16,6 +16,7 @@ const checkAuth = (req, res, next) => {
 
         next()
     } catch (error) {
+        console.log(error)
         res.redirect('/criar-conta')
     }
 }

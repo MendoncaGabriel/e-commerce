@@ -17,10 +17,10 @@ const tratarPreco = (req, res, next) => {
 
     next()
 };
+router.use(tratarPreco)
 
-router.post('/create', upload, tratarPreco, produtoController.create);
-router.patch('/update/:id', upload, tratarPreco, produtoController.update);
-
+router.post('/create', upload, produtoController.create);
+router.patch('/update/:id', tratarPreco, upload, produtoController.update);
 
 router.get('/getById/:id', produtoController.getById);
 router.get('/getByCategoria', produtoController.getByCategoria);

@@ -13,8 +13,8 @@
     <!-- Categorias -->
     <div class="flex flex-col">
         <label for="modelo">Categorias</label>
-        <select name="categoria" class="px-4 py-2">
-            <option value="" selected disabled>Selecione uma categoria</option>
+        <select required name="categoria" class="px-4 py-2">
+            <option selected disabled>Selecione uma categoria</option>
             
             <% if (typeof categorias != "undefined" && categorias?.length > 0) { %>
                 <% categorias.forEach(element => { %>
@@ -24,17 +24,15 @@
         </select>
     </div>
     
-    <%- include('../component/input', {label: "Preco:", name:"preco", type: "number", placeholder: "R$10,99"}) %>
+    <%- include('../component/input', {label: "Preco:", name:"preco", type: "number", placeholder: "R$10,99", required: true}) %>
     <%- include('../component/input', {label: "Custo:", name:"custo", type: "number", placeholder: "R$10,99" }) %>
-    
-
     <%- include('../component/input', {label: "Tamanho:", name:"tamanho", placeholder: '10cm ou 3,93"'}) %>
     <%- include('../component/input', {label: "Marca:", name:"marca"}) %>
     <%- include('../component/input', {label: "Quantidade:", name:"quantidade", placeholder: "Quantidade no pacote, caixa etc..."}) %>
     <%- include('../component/input', {label: "Modelo:", name:"modelo"}) %>
     <%- include('../component/input', {label: "Referência:", name:"referencia"}) %>
     <%- include('../component/input', {label: "Código de Barras:", name:"ean", placeholder: "1234567891011", mascara: "ean13"}) %>
-    <%- include('../component/input', {label: "Estoque:", name:"estoque", type: "number"}) %>
+    <%- include('../component/input', {label: "Estoque:", name:"estoque", type: "number", required: true}) %>
     
     <div class="flex flex-col md:col-span-2 row-span-2 w-full">
         <label for="descricao">Descrição:</label>

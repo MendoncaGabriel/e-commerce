@@ -4,20 +4,15 @@ const subtotal = document.getElementById('subtotal');
 const itensNoCarrinho = document.getElementById('itensNoCarrinho');
 const btnFinalizarCompra = document.getElementById('btnFinalizarCompra');
 const contaionerFinalizarCarrinho = document.getElementById('contaionerFinalizarCarrinho');
-const btnAbrirCarrinho = document.getElementById('btnAbrirCarrinho')
-const btnFecharCarrinho = document.getElementById('btnFecharCarrinho')
+const BtnAbrirCarrinho = document.getElementById('btnAbrirCarrinho')
+const BtnFecharCarrinho = document.getElementById('btnFecharCarrinho')
 
 //ABRIR E FECHAR
-btnAbrirCarrinho.addEventListener('click', ()=> {
-    carregarCarrinho();
-    carrinhoComponent.classList.replace('hidden', 'flex');
-    setTimeout(() => carrinhoComponent.classList.replace('left-[-100%]', 'left-[0%]'), 100);
-})
+BtnAbrirCarrinho.addEventListener('click', abrirCarrinho)
+BtnFecharCarrinho.addEventListener('click', btnFecharCarrinho)
 
-btnFecharCarrinho.addEventListener('click', () => {
-    carrinhoComponent.classList.replace('left-[0%]', 'left-[-100%]');
-    setTimeout(() => carrinhoComponent.classList.replace('flex', 'hidden'), 250);
-})
+
+
 
 function converterEmRealCarrinho(precoString) {
     const precoNumero = Number(precoString).toFixed(2);
@@ -190,6 +185,16 @@ function carregarCarrinho() {
     subtotal.innerText = converterEmRealCarrinho(total);
     notificarItemCarrinho()
 };
+
+function abrirCarrinho(){
+    carregarCarrinho();
+    carrinhoComponent.classList.replace('hidden', 'flex');
+    setTimeout(() => carrinhoComponent.classList.replace('left-[-100%]', 'left-[0%]'), 100);
+}
+function btnFecharCarrinho(){
+    carrinhoComponent.classList.replace('left-[0%]', 'left-[-100%]');
+    setTimeout(() => carrinhoComponent.classList.replace('flex', 'hidden'), 250);
+}
 
 btnFinalizarCompra.addEventListener('click', ()=>{
     function setCookie(name, value, days) {

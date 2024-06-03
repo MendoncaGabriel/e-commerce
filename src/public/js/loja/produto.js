@@ -79,7 +79,6 @@ menosQtd.addEventListener('click', ()=> {
         preco.innerHTML = converterEmReal(Number(produtoSelecionado.preco) * Number(produtoSelecionado.qtd));
         inputQtd.value = produtoSelecionado.qtd
     }
-
 })
 
 

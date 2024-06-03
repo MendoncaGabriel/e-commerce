@@ -85,28 +85,41 @@ function deleteProduto(produto_id) {
 
 
 module.exports = {
-create: async (nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
-    //categorias_categoria_id - e a chave estrangeira 
-    return new Promise((resolve, reject) => {
-        const sql = `
-        INSERT INTO produtos 
-            (nome, modelo, marca, categorias_categoria_id, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) 
-        VALUES 
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
-            
-        const values = [nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem];
+    create: async (data, imagem) => {
 
-        db.query(sql, values, (error, result) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(result);
-            }
+        return new Promise((resolve, reject) => {
+            const sql = `
+            INSERT INTO produtos 
+                (nome, descricao, ativo, marca, modelo, preco, tamanho, quantidade, referencia, vendas, ean, estoque, custo, imagem, categorias_categoria_id) 
+            VALUES 
+                (?, ?, 1, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?);`;
+    
+            const values = [
+                data.nome,
+                data.descricao,
+                data.marca,
+                data.modelo,
+                data.preco,
+                data.tamanho,
+                data.quantidade,
+                data.referencia,
+                data.ean,
+                data.estoque || 0,
+                data.custo || null,
+                imagem,
+                data.categoria
+            ];
+    
+            db.query(sql, values, (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
         });
-    });
-},
-
-//-----------------
+    },
+    //-----------------
     getById: async (id) => {
         return new Promise((resolve, rejects) => {
             const sql = `SELECT * FROM produtos WHERE produto_id = ?;`;
@@ -165,8 +178,9 @@ create: async (nome, modelo, marca, categoria, preco, tamanho, quantidade, refer
                 };
             });
         });
-
     },
+
+
     getbyOffsetAll: async (offset, limit) => { 
         return new Promise((resolve, reject) => {
             const sql = `SELECT * FROM produtos  LIMIT ? OFFSET ?;`;
@@ -196,91 +210,92 @@ create: async (nome, modelo, marca, categoria, preco, tamanho, quantidade, refer
             });
         });
     },
-//-----------------
-
-update: async (id, ativo, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
-    if (imagem) {
-        await apagarImagemAnterior(id);
-    }
-
-    return new Promise((resolve, reject) => {
-        let sql = `
-            UPDATE produtos SET 
-            ativo = ?,
-            nome = ?, 
-            modelo = ?, 
-            marca = ?, 
-            categorias_categoria_id = ?, 
-            preco = ?, 
-            tamanho = ?, 
-            quantidade = ?, 
-            referencia = ?, 
-            ean = ?, 
-            estoque = ?, 
-            custo = ?, 
-            descricao = ?
-        `;
-
-        const values = [ativo, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao];
-
+    //-----------------
+    update: async (id, ativo, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem) => {
         if (imagem) {
-            sql += `, imagem = ?`;
-            values.push(imagem);
+            await apagarImagemAnterior(id);
         }
 
-        sql += ` WHERE produto_id = ?;`;
-        values.push(id);
+        return new Promise((resolve, reject) => {
+            let sql = `
+                UPDATE produtos SET 
+                ativo = ?,
+                nome = ?, 
+                modelo = ?, 
+                marca = ?, 
+                categorias_categoria_id = ?, 
+                preco = ?, 
+                tamanho = ?, 
+                quantidade = ?, 
+                referencia = ?, 
+                ean = ?, 
+                estoque = ?, 
+                custo = ?, 
+                descricao = ?
+            `;
 
-        db.query(sql, values, (error, result) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(result);
+            const values = [ativo, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao];
+
+            if (imagem) {
+                sql += `, imagem = ?`;
+                values.push(imagem);
             }
+
+            sql += ` WHERE produto_id = ?;`;
+            values.push(id);
+
+            db.query(sql, values, (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
         });
-    });
-},
-delete: async (id) => {
-    return new Promise( async(resolve, reject)=>{
-        try {
-            //pegar imagens de variantes 
-            const imagensVariantes = await getImagemVariante(id)
-
-            //remover imagens de variantes
-            if(imagensVariantes.length > 0){
-                imagensVariantes.forEach(element => {
-                    const filePath = path.resolve('src', 'public', 'img', element.imagem);
-                    const fileExists = checkFile(filePath)
-                    if(fileExists){
-                        deleteFile(filePath)
-                    }
-                });
-            }
-                
-            //remover variantes relacionadas
-            await deleteVariantes(id)
+    },
+    delete: async (id) => {
+        return new Promise((resolve, reject)=>{
+            (async ()=>{
+                try {
+                    //pegar imagens de variantes 
+                    const imagensVariantes = await getImagemVariante(id)
     
-            //remover imagem de produto
-            const imagemProduto = await getImagemProduto(id)
-            if(imagemProduto.length > 0){
-                imagemProduto.forEach(element => {
-                    const filePath = path.resolve('src', 'public', 'img', element.imagem);
-                    const fileExists = checkFile(filePath)
-                    if(fileExists){
-                        deleteFile(filePath)
+                    //remover imagens de variantes
+                    if(imagensVariantes.length > 0){
+                        imagensVariantes.forEach(element => {
+                            const filePath = path.resolve('src', 'public', 'img', element.imagem);
+                            const fileExists = checkFile(filePath)
+                            if(fileExists){
+                                deleteFile(filePath)
+                            }
+                        });
                     }
-                })
-            }
-
-            //remover produto
-            await deleteProduto(id)
-
-            resolve("item produtos, imagens e variantes deletados com sucesso!")
-
-        } catch (error) {
-            reject(error)
-        }
-        
-    })
-}
+                        
+                    //remover variantes relacionadas
+                    await deleteVariantes(id)
+            
+                    //remover imagem de produto
+                    const imagemProduto = await getImagemProduto(id)
+                    if(imagemProduto.length > 0){
+                        imagemProduto.forEach(element => {
+                            const filePath = path.resolve('src', 'public', 'img', element.imagem);
+                            const fileExists = checkFile(filePath)
+                            if(fileExists){
+                                deleteFile(filePath)
+                            }
+                        })
+                    }
+    
+                    //remover produto
+                    await deleteProduto(id)
+    
+                    resolve("item produtos, imagens e variantes deletados com sucesso!")
+    
+                } catch (error) {
+                    reject(error)
+                }
+            })()
+            
+        })
+    }
 }

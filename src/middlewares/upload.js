@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 const storage = multer.memoryStorage();
+
 const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
@@ -33,7 +34,7 @@ const manipularImagem = (req, res, next) => {
             .toBuffer();
 
             //const fileName = `${Date.now()}-${req.file.originalname}`;
-            const fileName = `${Date.now()}`;
+            const fileName = `${Date.now()}.webp`;
             const filePath = path.resolve('src', 'public', 'img', fileName);
 
             fs.writeFileSync(filePath, buffer);

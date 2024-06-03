@@ -8,6 +8,7 @@ formUpdateProduto.addEventListener('submit', function(event) {
 });
 
 function updateProduto(formData, id) {
+
     fetch(`/produto/update/${id}`, {
         method: 'PATCH',
         body: formData

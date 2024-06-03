@@ -1,6 +1,7 @@
 <div class="flex flex-col">
     <label for="<%= typeof name !== 'undefined' && name ? name : '' %>"><%= typeof label !== 'undefined' ? label : '' %></label>
     <input 
+        
         type="<%= typeof type !== 'undefined' && type ? type  : 'text' %>" 
         id="<%= typeof name !== 'undefined' && name ? name : '' %>" 
         name="<%= typeof name !== 'undefined' && name ? name : '' %>" 
@@ -9,5 +10,7 @@
         placeholder="<%= typeof placeholder !== 'undefined' && placeholder ? placeholder : '' %>"
         data-mascara="<%= typeof mascara !== 'undefined' && mascara ? mascara : '' %>"
         maxlength="<%= typeof maxlength !== 'undefined' && maxlength ? maxlength : '' %>"
+        <% if (typeof required != "undefined" && required) { %> required <% } %>
+
     >
 </div>

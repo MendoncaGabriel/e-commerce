@@ -21,11 +21,11 @@ var app = express();
 // middlewares
 const limiter = rateLimit({
 	windowMs: 60 * 60 * 1000, // 1 hora
-	limit: 300, // Limitar cada IP a 300 requisições por `window` (aqui, por 1 hora).
+	limit: 500, // Limitar cada IP a 300 requisições por `window` (aqui, por 1 hora).
 	standardHeaders: 'draft-7', // draft-6: cabeçalhos `RateLimit-*`; draft-7: cabeçalho combinado `RateLimit`
 	legacyHeaders: false, // Desabilitar os cabeçalhos `X-RateLimit-*`.
 })
-app.use(limiter)
+//  app.use(limiter)
 
 
 

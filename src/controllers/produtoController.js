@@ -3,11 +3,11 @@ const produtoModel = require('../model/produtoModel');
 module.exports = {
     create: async (req, res) => {
         try {
-            const { nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao } = req.body;
+            const data = req.body;
             const imagemFile = req.file;
             const imagem =  imagemFile && imagemFile.filename ? imagemFile.filename : null;
 
-            const result = await produtoModel.create(nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem)
+            const result = await produtoModel.create(data, imagem)
 
             res.status(200).json({msg: "Novo produto criado com sucesso!", result})
         } catch (error) {
@@ -58,9 +58,14 @@ module.exports = {
     },
     update: async (req, res) => {
         try {
+            console.log( '=====================> categoria: ', req.body)
+
+
+
+
+
             const id = req.params.id;
             const { ativo, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao } = req.body;
-            console.log( '=====================> Cayegoria: ', categoria)
             const imagem = req.file ? req.file.filename : null;
             const result = await produtoModel.update(id, ativo == 'on' ? 1 : 0, nome, modelo, marca, categoria, preco, tamanho, quantidade, referencia, ean, estoque, custo, descricao, imagem);
 
