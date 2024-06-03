@@ -1,7 +1,7 @@
 const db = require('../../database/database');
 
 
-module.exports ={
+module.exports = {
 
     getBySearchTerm: (termo) => {
         return new Promise((resolve, reject) => {
@@ -50,7 +50,4 @@ module.exports ={
             });
         });
     }
-    
-    
-    
 }

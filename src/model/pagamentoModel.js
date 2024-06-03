@@ -79,7 +79,7 @@ class Pagamento {
         const authorization = new Authorization();
         this.#auth = await authorization.getAuth();
             
-        return new Promise( async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             const url = 'https://api.getnet.com.br/v1/payments/qrcode/pix';
 
             const config = {
@@ -192,21 +192,27 @@ class Notificacao {
 
 module.exports = {
     getnetPix: async (valor) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const pagamento = new Pagamento()
-                const pix = await pagamento.qrcodePix(valor)
-
-                const consulta = new Notificacao()
-
-                // testando novo modulo de consulta
-                consulta.statusPayment(pix.payment_id)
-                
-             
-                resolve(pix)
-            } catch (error) {
-                reject(error)
-            }
+        return new Promise((resolve, reject) => {
+            (async () => {
+                try {
+                    const pagamento = new Pagamento()
+                    const pix = await pagamento.qrcodePix(valor)
+    
+                    const consulta = new Notificacao()
+    
+                    // testando novo modulo de consulta
+                    consulta.statusPayment(pix.payment_id)
+                    
+                 
+                    resolve(pix)
+                } catch (error) {
+                    reject(error)
+                }
+            })();
         })
     }
 }
+
+
+// mysql://mysql:@Gam1997Vsc*@db_maquiagem_db_maquiagem:3306/db_maquiagem
+// 

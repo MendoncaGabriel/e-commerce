@@ -3,8 +3,7 @@ const path = require('path');
 const logger = require('morgan');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const db = require('./database/database')
-
+const rateLimit = require('express-rate-limit')
 
 const categoriaRouter = require('./src/routes/api/categoriaRouter');
 const pesquisaRouter = require('./src/routes/api/pesquisaRouter');
@@ -16,11 +15,21 @@ const produtoRouter = require('./src/routes/api/produtoRouter');
 const varianteRouter = require('./src/routes/api/varianteRouter');
 const pagamentoRouter = require('./src/routes/api/pagamentoRouter');
 
+var app = express();
+
+
+// middlewares
+const limiter = rateLimit({
+	windowMs: 60 * 60 * 1000, // 1 hora
+	limit: 300, // Limitar cada IP a 300 requisições por `window` (aqui, por 1 hora).
+	standardHeaders: 'draft-7', // draft-6: cabeçalhos `RateLimit-*`; draft-7: cabeçalho combinado `RateLimit`
+	legacyHeaders: false, // Desabilitar os cabeçalhos `X-RateLimit-*`.
+})
+app.use(limiter)
 
 
 
 // arquivos estativos
-var app = express();
 app.use('/js', express.static(path.join(__dirname, 'src/public/js')));
 app.use('/css', express.static(path.join(__dirname, 'src/public/css')));
 app.use('/img', express.static(path.join(__dirname, 'src/public/img')));
@@ -51,8 +60,6 @@ app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
 app.use('/', lojaRouter);
 
-app.use((req, res, next) => {
-    res.status(404).render('404'); 
-});
+
 
 module.exports = app;

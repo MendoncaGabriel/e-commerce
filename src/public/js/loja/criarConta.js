@@ -1,4 +1,6 @@
-function enviar(){
+const criarContaBtn = document.getElementById('criarContaBtn')
+
+criarContaBtn.addEventListener('click', ()=> {
     if(document.getElementById('senha').value != document.getElementById('confirmarSenha').value){
         document.getElementById('confirmarSenha').value = ''
         document.getElementById('senha').style.border = '2px solid #EF4947'
@@ -30,17 +32,16 @@ function enviar(){
         alert(JSON.stringify(error.msg))
         window.location.reload();
     })
-}
+})
 
 
 
-window.addEventListener('DOMContentLoaded', (event) => {
+window.addEventListener('DOMContentLoaded', () => {
     animacao();
 });
 function animacao() {
     const container = document.getElementById('container');
     const images = container.querySelectorAll('img');
-    const duration = 1500; // Duração da animação em milissegundos
     const pauseDuration = 4000; // Duração da pausa em milissegundos
     const imageWidth = images[0].offsetWidth; // Largura de cada imagem
     let index = 0; // Índice da imagem atual

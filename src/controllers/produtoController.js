@@ -21,6 +21,7 @@ module.exports = {
             const result = await produtoModel.getById(id)
             res.status(200).json({msg: "Produto resgatado com sucesso!", result})
         } catch (error) {
+            console.log(error)
             res.status(500).json({msg: 'Erro interno no servidor'})
         }
     },
@@ -30,6 +31,7 @@ module.exports = {
             const result = await produtoModel.getProdutoWithVariantes(id);
             res.status(200).json({msg: "Produto resgatado com sucesso!", result});
         } catch (error) {
+            console.log(error)
             res.status(500).json({msg: 'Erro interno no servidor'});
         }
     },

@@ -4,8 +4,6 @@ const bycript = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = process.env.ASSINATURA_TOKEN;
 
-
-
 function buscarUsuario(email){
     return new Promise((resolve, reject) => {
         const sql = "SELECT * FROM usuarios WHERE email = ?"

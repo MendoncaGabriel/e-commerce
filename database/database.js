@@ -5,13 +5,14 @@ const host = process.env.LOCALADDRESS;
 const user = process.env.USER;
 const password = process.env.PASS;
 const database = process.env.DATABASE;
+const port = process.env.MYSQLPORT
 
 const pool = mysql.createPool({
     host: host,
     user: user,
     password: password,
     database: database,
-    port: 3306,
+    port: port,
     waitForConnections: true,
     connectionLimit: 10, // Número máximo de conexões no pool
     queueLimit: 0

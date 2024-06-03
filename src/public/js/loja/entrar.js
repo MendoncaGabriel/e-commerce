@@ -1,4 +1,6 @@
-function enviar(){
+const btnEntrar = document.getElementById('btnEntrar')
+
+btnEntrar.addEventListener('click', ()=>{
     if(document.getElementById('senha').value.length == 0 || document.getElementById('email').value.length == 0)  alert("Preencha o formulario!");
 
     fetch('/auth/login', {
@@ -16,18 +18,15 @@ function enviar(){
         alert('Logado com sucesso!')
         window.location.href = '/'
     })
-}
+})
 
-
-
-window.addEventListener('DOMContentLoaded', (event) => {
+window.addEventListener('DOMContentLoaded', () => {
     animacao();
 });
 
 function animacao() {
     const container = document.getElementById('container');
     const images = container.querySelectorAll('img');
-    const duration = 1500; // Duração da animação em milissegundos
     const pauseDuration = 4000; // Duração da pausa em milissegundos
     const imageWidth = images[0].offsetWidth; // Largura de cada imagem
     let index = 0; // Índice da imagem atual

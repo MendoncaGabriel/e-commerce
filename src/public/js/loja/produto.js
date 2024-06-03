@@ -1,6 +1,10 @@
 const inputQtd = document.querySelector('#inputQtd');
 const variantesSelect = document.querySelector('#variantesSelect');
 const preco = document.querySelector('#preco');
+const maisQtd = document.getElementById('maisQtd')
+const menosQtd = document.getElementById('menosQtd')
+const finalizarCompraProduto = document.getElementById('finalizarCompraProduto')
+const btnAdicionarProdutoAoCarrinho = document.getElementById('btnAdicionarProdutoAoCarrinho')
 
 var produtoSelecionado = {qtd: 1};
 
@@ -59,15 +63,16 @@ function verificarItemSelecionado(){
 };
 
 //MAIS E MENOS  
-function maisQtd(){
+maisQtd.addEventListener('click', ()=> {
     if(verificarItemSelecionado() == false)  return ;
     if(produtoSelecionado.estoque > produtoSelecionado.qtd){
         produtoSelecionado.qtd++;
         preco.innerHTML = converterEmReal(Number(produtoSelecionado.preco) * Number(produtoSelecionado.qtd));
         inputQtd.value = produtoSelecionado.qtd
     }
-}
-function menosQtd(){
+})
+
+menosQtd.addEventListener('click', ()=> {
     if(verificarItemSelecionado() == false)  return ;
     if(produtoSelecionado.qtd > 1){
         produtoSelecionado.qtd--
@@ -75,15 +80,11 @@ function menosQtd(){
         inputQtd.value = produtoSelecionado.qtd
     }
 
-}
+})
 
 
-
-
-function finalizarCompraProduto(){
+finalizarCompraProduto.addEventListener('click', ()=>{
     if(verificarItemSelecionado() == false)  return ;
-
-
     if(!localStorage.carrinho){
         localStorage.carrinho = JSON.stringify([produtoSelecionado]);
     }else{
@@ -128,9 +129,10 @@ function finalizarCompraProduto(){
     setCookie("carrinho", JSON.stringify(itens), 30)
 
     window.location.href = '/checkout'
-}
+})
 
-function adicionarAoCarrinho(){
+
+btnAdicionarProdutoAoCarrinho.addEventListener('click', ()=>{
     if(verificarItemSelecionado() == false)  return ;
 
     if(!localStorage.carrinho || localStorage.carrinho == '[]'){
@@ -155,7 +157,7 @@ function adicionarAoCarrinho(){
         localStorage.carrinho = JSON.stringify(carrinho);
     };
 
-    notificarItemCarrinho();
-    abrirCarrinho();
+    window.notificarItemCarrinho();
+    window.abrirCarrinho();
         
-}
+})

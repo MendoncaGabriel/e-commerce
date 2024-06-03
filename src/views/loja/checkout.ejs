@@ -133,11 +133,9 @@
                         <input autocomplete="landmark" maxlength="45" id="referencia" type="text" class="px-2 py-1 w-full bg-gray-100" value="<%=  typeof  endereco != "undefined" &&  endereco.referencia ? endereco.referencia :  ''   %>">
                     </div>
 
-    
-    
                     <div class="pt-2 " >
 
-                        <button onclick="salvarFormulario()" id="btnSalvarEndereco" class="hidden py-2 px-4 text-white bg-green-500 duration-200 text-lg w-full ">SALVAR </button>
+                        <button id="btnSalvarEndereco" class="hidden py-2 px-4 text-white bg-green-500 duration-200 text-lg w-full ">SALVAR</button>
                     </div>
                 </div>
             </div>
@@ -174,7 +172,9 @@
                 </h2>
             </div>
 
-            <button id="btnPagar" onclick="pagar(this)" class="bg-gradient-to-l bg-c1 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
+            <button 
+            id="btnPagar" 
+            class="bg-gradient-to-l bg-c1 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
                 <img src="/icons/logo-pix-520x520.png" alt="" class="w-10 drop-shadow-lg">
                 <p class="text-xl leading-none drop-shadow-lg">PAGAR COM PIX</p>
             </button>
@@ -196,7 +196,7 @@
             <p id="ContadorTempo" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">3:00</p>
         </div>
 
-        <button onclick="fecharSectionPix()" class="absolute top-2 right-3">
+        <button id="fecharSectionPix" class="absolute top-2 right-3">
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-lg text-red-500" viewBox="0 0 16 16">
                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
             </svg>
@@ -206,7 +206,7 @@
        <img src="" alt=""  id="qrCode" class="m-auto p-1 bg-white rounded-lg ticket__qrcode-canva--desktop max-w-[90%]">
     
 
-        <button chaveCopiarColar="" id="btnCopiarPix" onclick="copiarPix(this)" class="bg-c1 duration-300 font-semibold text-white rounded-md  w-52 flex items-center justify-center space-x-2 px-4 py-2 m-auto">
+        <button chaveCopiarColar="" id="btnCopiarPix"  class="bg-c1 duration-300 font-semibold text-white rounded-md  w-52 flex items-center justify-center space-x-2 px-4 py-2 m-auto">
            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>

@@ -4,17 +4,21 @@ const subtotal = document.getElementById('subtotal');
 const itensNoCarrinho = document.getElementById('itensNoCarrinho');
 const btnFinalizarCompra = document.getElementById('btnFinalizarCompra');
 const contaionerFinalizarCarrinho = document.getElementById('contaionerFinalizarCarrinho');
+const btnAbrirCarrinho = document.getElementById('btnAbrirCarrinho')
+const btnFecharCarrinho = document.getElementById('btnFecharCarrinho')
 
 //ABRIR E FECHAR
-function abrirCarrinho() {
+btnAbrirCarrinho.addEventListener('click', ()=> {
     carregarCarrinho();
     carrinhoComponent.classList.replace('hidden', 'flex');
     setTimeout(() => carrinhoComponent.classList.replace('left-[-100%]', 'left-[0%]'), 100);
-};
-function fecharCarrinho() {
+})
+
+btnFecharCarrinho.addEventListener('click', () => {
     carrinhoComponent.classList.replace('left-[0%]', 'left-[-100%]');
     setTimeout(() => carrinhoComponent.classList.replace('flex', 'hidden'), 250);
-};
+})
+
 function converterEmRealCarrinho(precoString) {
     const precoNumero = Number(precoString).toFixed(2);
 
@@ -31,7 +35,8 @@ const carrinhovazio = () => `
 <li class="py-2 px-4 border border-c1 rounded-full text-c1 flex items-center  space-x-2 w-[80%] m-auto ">
 <i class="bi bi-exclamation-circle leading-3"></i>
 <p class="text-sm">O carrinho de compras esta vazio</p>
-</li>`
+</li>`;
+
 const itemCarrinho = (imagem, quantidade, preco, variante_id) => `
 <li id="li${variante_id}" class="bg-gray-100 p-2 border grid grid-cols-10  duration-300">
     <div class="col-span-3 aspect-square  border-c1 ">
@@ -75,10 +80,8 @@ function removeItemByIndex(arr, index) {
     return arr;
 }
 
-
 // MAIS OU MENOS NO CARRINHO
 function menosQtdCarrinho(variante_id) {
-
     if (localStorage.carrinho) {
         const carrinho = JSON.parse(localStorage.carrinho);
         
@@ -96,6 +99,7 @@ function menosQtdCarrinho(variante_id) {
         });
     };
 };
+
 function maisQtdCarrinho(variante_id) {
     if (localStorage.carrinho) {
         const carrinho = JSON.parse(localStorage.carrinho);
@@ -115,9 +119,8 @@ function maisQtdCarrinho(variante_id) {
 
     }
 };
+
 function removerCarrinho(id) {
-
-
     if (localStorage.carrinho) {
         const carrinho = JSON.parse(localStorage.carrinho);
         for(let i = 0; i< carrinho.length; i++){
@@ -154,12 +157,10 @@ function removerCarrinho(id) {
             notificarItemCarrinho()
         }, 300);
     }
-}
-
+};
 
 //CARREGAR
 function carregarCarrinho() {
-
     if (!localStorage.carrinho) {
         listaProdutosCarrinho.innerHTML = carrinhovazio();
         return;
@@ -190,7 +191,7 @@ function carregarCarrinho() {
     notificarItemCarrinho()
 };
 
-function finalizarCompraCarrinho() {
+btnFinalizarCompra.addEventListener('click', ()=>{
     function setCookie(name, value, days) {
         if (typeof name !== 'string' || typeof value !== 'string' || typeof days !== 'number' || days <= 0) {
             console.error('Parâmetros inválidos para setCookie.');
@@ -213,4 +214,4 @@ function finalizarCompraCarrinho() {
     setCookie("carrinho", JSON.stringify(itens), 30)
 
     window.location.href = "/checkout"
-};
+})

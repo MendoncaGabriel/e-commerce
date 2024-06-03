@@ -16,57 +16,64 @@ async function getDataHome(){
     })
 }
 async function getDataCadastroProduto(){
-    return new Promise(async (resolve, reject) => {
-        try {
-            const categorias = await caregoriaModel.getAll()
-            const data = {conteudo: './conteudo/cadastroProduto', titulo: 'Cadastro de Produto', categorias}
-            resolve(data)
-        } catch (error) {
-            reject(error)
-        }
+    return new Promise((resolve, reject) => {
+        (async () => {
+            try {
+                const categorias = await caregoriaModel.getAll()
+                const data = {conteudo: './conteudo/cadastroProduto', titulo: 'Cadastro de Produto', categorias}
+                resolve(data)
+            } catch (error) {
+                reject(error)
+            }
+        })()
     })
 } 
 async function getDataEdicaoVariante(req){
-    return new Promise(async (resolve, reject) => {
-        try {
-            const id = parseInt(req.params.id);
-            const variante = await varianteModel.getById(id);
-            const categorias = await caregoriaModel.getAll()
-    
-            const data = {
-                conteudo: './conteudo/edicaoVariante', 
-                titulo: 'Edição de Variante',
-                variante: variante[0],
-                categorias: categorias
+    return new Promise((resolve, reject) => {
+        (async () => {
+            try {
+                const id = parseInt(req.params.id);
+                const variante = await varianteModel.getById(id);
+                const categorias = await caregoriaModel.getAll()
+        
+                const data = {
+                    conteudo: './conteudo/edicaoVariante', 
+                    titulo: 'Edição de Variante',
+                    variante: variante[0],
+                    categorias: categorias
+                }
+                resolve(data)
+            } catch (error) {
+                reject(error)
             }
-            resolve(data)
-        } catch (error) {
-            reject(error)
-        }
+        })()
     })
 }
 async function getDataEdicaoProduto(req){
-    return new Promise(async (resolve, reject) => {
-        try {
-            const id = parseInt(req.params.id);
-            const produto = await produtoModel.getByIdWithCategoria(id);
-            const categorias = await caregoriaModel.getAll()
-     
-            const data = {
-                conteudo: './conteudo/edicaoProduto', 
-                titulo: 'Edição de Produto',
-                produto: produto[0],
-                categorias: categorias
-
+    return new Promise((resolve, reject) => {
+        (async ()=>{
+            try {
+                const id = parseInt(req.params.id);
+                const produto = await produtoModel.getByIdWithCategoria(id);
+                const categorias = await caregoriaModel.getAll()
+         
+                const data = {
+                    conteudo: './conteudo/edicaoProduto', 
+                    titulo: 'Edição de Produto',
+                    produto: produto[0],
+                    categorias: categorias
+    
+                }
+                resolve(data)
+            } catch (error) {
+                reject(error)
             }
-            resolve(data)
-        } catch (error) {
-            reject(error)
-        }
+        })()
     })
 }
-async function getDataListaProduto(req){
-    return new Promise(async(resolve, reject) => {
+async function getDataListaProduto(){
+    return new Promise((resolve, reject) => {
+       (async ()=>{
         try {
             const produtos = await produtoModel.getbyOffsetAll(0, 20)
             const data = {
@@ -78,6 +85,7 @@ async function getDataListaProduto(req){
         } catch (error) {
             reject(error)
         }
+       })()
     })
 }
 
@@ -132,6 +140,7 @@ module.exports = {
             }
             res.render('admin/layout', data)
         } catch (error) {
+            console.log(error)
             res.render('500')
         }
     }

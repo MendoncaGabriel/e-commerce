@@ -58,21 +58,6 @@ module.exports = {
             })
         })
     },
-    getByProdutoId: async (id) => {
-        return new Promise((resolve, reject) => {
-            const sql = "SELECT * FROM variantes WHERE produto_id = ?";
-            const values = [id];
-            db.query(sql, values, (error, result) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(result);
-                }
-            });
-        });
-        
-        
-    },
     getById: async (id) => {
         return new Promise((resolve, reject) => {
             const sql = "SELECT * FROM variantes WHERE variante_id = ?";
@@ -122,7 +107,7 @@ module.exports = {
                 WHERE variante_id = ?;
             `;
             const values = [
-                ativo = data.ativo == 'on' ? 1 : 0,
+                data.ativo = data.ativo == 'on' ? 1 : 0,
                 data.preco,
                 data.nome,
                 data.cor,

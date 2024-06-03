@@ -19,6 +19,7 @@ module.exports = {
             const result = await varianteModel.getById(id)
             res.status(200).json({msg: "Variante resgatado com sucesso!", result})
         } catch (error) {
+            console.log(error)
             res.status(500).json({msg: 'Erro interno no servidor'})
         }
     },
@@ -28,6 +29,7 @@ module.exports = {
             const result = await varianteModel.getByProdutoId(id)
             res.status(200).json({msg: "Variante resgatado com sucesso!", result})
         } catch (error) {
+            console.log(error)
             res.status(500).json({msg: 'Erro interno no servidor'})
         }
     },
@@ -40,6 +42,8 @@ module.exports = {
             const result = await varianteModel.update(id, data, imagem)
             res.status(200).json({msg: "Variante atualizada com sucesso", result})
         } catch (error) {
+            console.log(error)
+
             res.status(500).json({msg: 'Erro ao atualizar'})
         }
     },

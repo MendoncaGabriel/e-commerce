@@ -4,35 +4,35 @@
         <h2 class="text-center text-xl font-semibold mb-5 text-c1 bg-c0 px-10 m-auto py-2 rounded-full w-72">REDES SOCIAIS</h2>
         <div class="  p-4 rounded-xl flex  items-end justify-center space-x-4">
             <!-- FACEBOOK -->
-            <% if (typeof redesSociais.facebook != "undefined" && redesSociais.facebook) { %>         
+            <% if (typeof redesSociais != "undefined" && redesSociais.facebook) { %>         
                 <a href="<%= redesSociais.facebook  %>" target="_blank" >
                     <img src="/assets/facebook.png" alt="" class="w-16 h-16 aspect-square bg-white p-1  object-cover rounded-full hover:scale-110 duration-200">
                 </a>
             <% } %>
     
             <!-- INSTAGRAM -->
-            <% if (typeof redesSociais.instagram != "undefined" && redesSociais.instagram) { %>
+            <% if (typeof redesSociais != "undefined" && redesSociais.instagram) { %>
                 <a href="<%= redesSociais.instagram %>"  target="_blank">
                     <img src="/assets/instagram.png" alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
                 </a>
             <% } %>
     
             <!-- WHATSAPP -->
-            <% if (typeof redesSociais.whatsapp != "undefined" && redesSociais.whatsapp) { %>         
+            <% if (typeof redesSociais != "undefined" && redesSociais.whatsapp) { %>         
                 <a href="https://api.whatsapp.com/send?phone=<%= redesSociais.whatsapp %>" target="_blank">
                     <img src="/assets/whatsapp2.png"  alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
                 </a>
             <% } %>
     
             <!-- TIKTOK -->
-            <% if (typeof redesSociais.tiktok != "undefined" && redesSociais.tiktok) { %>         
+            <% if (typeof redesSociais != "undefined" && redesSociais.tiktok) { %>         
                 <a href="<%= redesSociais.tiktok %>" target="_blank">
                     <img src="/assets/tiktok.png"  alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
                 </a>
             <% } %>
     
             <!-- PINTEREST -->
-            <% if (typeof redesSociais.pinterest != "undefined" && redesSociais.pinterest) { %>         
+            <% if (typeof redesSociais != "undefined" && redesSociais.pinterest) { %>         
                 <a href="<%= redesSociais.pinterest %>" target="_blank">
                     <img src="/assets/pinterest.png"  alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
                 </a>
@@ -121,12 +121,12 @@
     
         <img src="/assets/logo.png" alt="logo" class="w-[80%] m-auto max-w-80">
     
-        <% const cnpj =  data[0].cnpj ?? '' %>
-        <% const nome_fantasia =  data[0].nome_fantasia.toUpperCase() ?? '' %>
-        <% const data_criacao =  data[0].data_criacao ?? '' %>
+        <% const cnpj =  typeof data[0] != "undefined" &&  data[0].cnpj ? data[0].cnpj : "" %>
+        <% const nome_fantasia = typeof data[0] != "undefined" && data[0].nome_fantasia ? data[0].nome_fantasia.toUpperCase() : "" %>
+        <% const data_criacao = typeof  data[0] != "undefined" &&  data[0].data_criacao ?  data[0].data_criacao : "" %>
     
     
-        <% if ( nome_fantasia != ''  ) { %>
+        <% if ( cnpj && nome_fantasia && data_criacao ) { %>
             <p class="text-sm text-c0 pt-5 pb-1 text-center">Copyright <%= nome_fantasia  %> - <%= data_criacao %> <br> <%= 'CNPJ: ' + cnpj %> <br> Todos os direitos reservados.</p>
         <% } %>
     </div>
