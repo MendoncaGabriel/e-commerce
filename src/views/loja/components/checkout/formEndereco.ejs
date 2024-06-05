@@ -1,0 +1,59 @@
+
+<!-- ENDEREÇO DE ENTREGA -->
+<div class="text-xl text-left p-4 bg-white rounded-lg   shadow-md">
+    <h2 class="w-full p-4 pt-0 text-2xl text-center font-mediu text-gray-700">ENDEREÇO DE ENTREGA</h2>
+    
+    <div class="text-gray-700 lg:text-lg md:text-md text-sm  m-auto space-y-2 ">
+
+        <div class="flex justify-between items-center space-x-4">
+            <div class="w-full">
+                <label for="">Cep: </label><br>
+                <input id="cep"name="cep" type="text" class="px-4 py-2 w-full bg-gray-50 border rounded-lg shadow-sm" value="<%= typeof  endereco != "undefined" &&  endereco.cep ? endereco.cep :  ''  %>">
+            </div>
+            <div>
+                <label for="numero">Numero: <span class="text-red-400">*</span></label><br>
+                <input autocomplete="address-line2" id="numero" type="number"  min="1" max="3" class=" bg-gray-50 border rounded-lg shadow-sm px-4 py-2 w-20 md:w-24" value="<%=  typeof  endereco != "undefined" &&  endereco.numero_casa ? endereco.numero_casa :  ''  %>">
+            </div>
+        </div>
+        
+        <div class="w-full">
+            <label for="">Rua: <span class="text-red-400">*</span></label><br>
+            <input id="rua" maxlength="45" type="text" class="px-4 py-2 w-full bg-gray-50 border rounded-lg shadow-sm" value="<%= typeof  endereco != "undefined" &&  endereco.rua ? endereco.rua :  ''  %>">
+        </div>
+
+        <div class="w-full">
+            <label for="">Bairro: <span class="text-red-400">*</span></label><br>
+            <input autocomplete="address-level3" id="bairro" maxlength="30" type="text" class="px-4 py-2 w-full bg-gray-50 border rounded-lg shadow-sm" value="<%=  typeof  endereco != "undefined" &&  endereco.bairro ? endereco.bairro :  ''   %>">
+        </div>
+        <div class="w-full">
+            <label for="telefone">Telefone: <span class="text-red-400">*</span></label><br>
+            <input autocomplete="tel" id="telefone" type="tel" name="telefone" class="px-4 py-2 w-full bg-gray-50 border rounded-lg shadow-sm" value="<%= typeof  endereco != "undefined" &&  endereco.telefone ? endereco.telefone :  ''   %>">
+        </div>
+
+        <div class="flex justify-between items-center space-x-4">
+            <div class="w-full">
+                <label for="">Cidade:</label><br>
+                <select id="cidade" class="px-4 py-2 w-full bg-gray-50 border rounded-lg shadow-sm" value="<%= typeof  endereco != "undefined" &&  endereco.cidade ? endereco.cidade :  ''   %>">
+                    <option value="Manaus" >Manaus</option>
+                </select>
+            </div>
+            <div>
+                <label for="">UF:</label><br>
+                <select id="estado" class="bg-gray-50 border rounded-lg shadow-sm px-4 py-2 w-20 md:w-24" value="<%= typeof  endereco != "undefined" &&  endereco.estado ? endereco.estado :  ''   %>">
+                    <option value="AM" >AM</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="w-full">
+            <label for="">Ponto de referência:</label><br>
+            <input autocomplete="landmark" maxlength="45" id="referencia" type="text" class="px-4 py-2 w-full bg-gray-50 border rounded-lg shadow-sm" value="<%=  typeof  endereco != "undefined" &&  endereco.referencia ? endereco.referencia :  ''   %>">
+        </div>
+
+        <div class="pt-2 " >
+
+            <button id="btnSalvarEndereco" class="hidden py-2 px-4 text-white bg-green-500 duration-200 text-lg w-full ">SALVAR</button>
+        </div>
+    </div>
+</div>

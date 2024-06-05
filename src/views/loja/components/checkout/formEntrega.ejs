@@ -1,0 +1,25 @@
+ <!-- PAGAMENTO -->
+ <div class="text-xl text-left p-4 bg-white rounded-lg   shadow-md">
+    <h2 class="w-full p-4 pt-0 text-2xl text-center font-mediu text-gray-700">FORMA DE ENTREGA</h2>
+    <!-- METODOS DE ENTREGA -->
+    <div class="space-y-2 py-4" id="metodos-entrega-container">
+        <% if (typeof metodosEntrega != "undefined" && metodosEntrega) { %>
+            <% metodosEntrega.map((element, index) => { %>
+                <div class=" ps-4 border  bg-gray-50 rounded-lg shadow-sm py-2 ">
+                    <div class="flex items-center">
+                        <input  id="bordered-radio-<%= index %>" <%= index == 0 ? 'checked' : '' %> type="radio" value="<%= element.taxa %>" name="entrega" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2  ">
+                        <label for="bordered-radio-<%= index %>" class="w-full ms-2  font-medium py-2 px-4 ">
+                            <span><%= element.nome  %></span>
+                            <span class="text-gray-600 <%= Number(element.taxa) > 1 ? 'text-green-600' : '' %>">R$<%= String(element.taxa).replace('.', ',') %></span>
+                        </label>
+                    </div>
+                    <% if (typeof element != "undefined" && element.descricao) { %>
+                        <span class="text-sm text-gray-500"><%= element.descricao  %></span>
+                    <% } %>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
+
+</div>
+

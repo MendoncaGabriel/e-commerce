@@ -83,7 +83,10 @@ async function getDataCheckout(req) {
     if (!endereco) throw new Error('Endereço do usuário não definido');
     if (!metodosEntrega) throw new Error('Métodos de entrega não definidos');
 
-    return { carrinhoProcessado, endereco, metodosEntrega };
+    // ferramentas
+    const { stringParaReal } = require('../../views/loja/components/checkout/utilities')
+
+    return { carrinhoProcessado, endereco, metodosEntrega, stringParaReal };
 };
 async function getDataCriarConta() {
     const bannerAuth = await empresaModel.bannerAuth();
@@ -143,6 +146,7 @@ module.exports = {
     checkout: async (req, res) => {
         try {
             const  data = await getDataCheckout(req)
+
             res.render('loja/checkout', data )
         } catch (error) {
             console.log(error)
@@ -176,6 +180,57 @@ module.exports = {
             res.redirect('/erro')
         }
     },
+    meusPedidos: async (req, res) => {
+        try {
+            const dadosProdutos = [
+                {
+                    produto: "Produto 1",
+                    status: true,
+                    preco: "R$ 10,00",
+                    quantidade: 2,
+                    total: "R$ 20,00",
+                    data: "01/06/2024"
+                },
+                {
+                    produto: "Produto 2",
+                    status: true,
+                    preco: "R$ 15,00",
+                    quantidade: 1,
+                    total: "R$ 15,00",
+                    data: "02/06/2024"
+                },
+                {
+                    produto: "Produto 3",
+                    status: true,
+                    preco: "R$ 20,00",
+                    quantidade: 3,
+                    total: "R$ 60,00",
+                    data: "03/06/2024"
+                },
+                {
+                    produto: "Produto 4",
+                    status: false,
+                    preco: "R$ 5,00",
+                    quantidade: 5,
+                    total: "R$ 25,00",
+                    data: "04/06/2024"
+                },
+                {
+                    produto: "Produto 5",
+                    status: false,
+                    preco: "R$ 12,00",
+                    quantidade: 2,
+                    total: "R$ 24,00",
+                    data: "05/06/2024"
+                }
+            ]
+            res.render('loja/meusPedidos', {dadosProdutos});
+        } catch (error) {
+            console.log(error)
+            res.redirect('/erro')
+        }
+    },
+    
     error: (req, res) =>{
         try {
             res.render('500')
@@ -184,3 +239,5 @@ module.exports = {
         }
     }
 };
+
+

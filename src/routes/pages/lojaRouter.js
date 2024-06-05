@@ -28,5 +28,6 @@ router.get('/checkout', checkAuth, pageController.checkout)
 router.get('/criar-conta', cacheMiddleware, pageController.criarConta)
 router.get('/produto/:nome', pageController.produto)
 router.get('/categoria/:categoria', cacheMiddleware, pageController.categorias)
+router.get('/meus-pedidos', pageController.meusPedidos)
 
 module.exports = router

@@ -1,0 +1,28 @@
+<!-- LISTA DE PRODUTOS NO CARRINHO -->
+<div class="text-right text-gray-700 text-xl flex flex-col rounded-lg bg-white shadow-md">
+    <ul id="listaProdutosCarrinho" class="overflow-y-auto h-screen  text-xl text-left p-4  ">
+        <h2 class="w-full p-4 pt-0 text-2xl text-center font-mediu text-gray-700">LISTA DE PRODUTOS</h2>
+        
+        <!-- ITEM DA LISTA DE PRODUTOS -->
+        <% if (typeof carrinhoProcessado.itens != 'undefined' && carrinhoProcessado.itens) { %>                 
+            <% carrinhoProcessado.itens.forEach(e => { %>
+        
+                <li class="border-b-2 border-c1 text-gray-700 flex items-center justify-between border-dashed pb-2  gap-2 my-2 text-sm lg:text-lg md:text-md">
+                    <div class="flex items-center justify-center space-x-2 ">
+                        <img src="/img/<%= e.imagem  %>" alt="" class="rounded-md aspect-square object-cover w-20 drop-shadow-lg border">
+                        <span class="text-left ">
+                            <% const url = e.nome.toLowerCase().replace(/ /g, '-') %>
+                            <a href="/produto/<%= url %>" target="_blank" class="hover:underline"><%= e.nome %></a>
+                        </span> 
+                    </div>
+
+                    <span class="text-right  md:min-w-40 min-w-32  flex-none  ">
+                        R$ <%= stringParaReal(e.preco) %> x  <%= e.qtd %> <br>
+                        <span class="px-2  rounded-full bg-c1 text-white  leading-5">= R$ <%= stringParaReal(e.total) %></span>
+                    </span>
+                </li>
+            <% }) %>
+        <% } %>
+
+    </ul>
+</div>

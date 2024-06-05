@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Meus pedidos</title>
+    <!-- BOOTSTRAP ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- TAILWINDCSS -->
+    <link rel="stylesheet" href="/css/output.css">
+   
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
+<body>
+    <%- include('components/navbar') %>
+
+    <section class="overflow-x-auto">
+        <h2 class="max-w-screen-lg m-auto text-2xl font-semibold text-c1">Meus Pedidos</h2>
+        <table class=" table-auto border-collapse border border-c1 w-full max-w-screen-lg m-auto">
+            <thead>
+                <tr class="bg-c1 text-c5">
+                    <th class="px-4 py-2 text-left">PRODUTO</th>
+                    <th class="px-4 py-2 text-left">STATUS</th>
+                    <th class="px-4 py-2 text-left">PREÇO</th>
+                    <th class="px-4 py-2 text-left">QUANTIDADE</th>
+                    <th class="px-4 py-2 text-left">TOTAL</th>
+                    <th class="px-4 py-2 text-left">DATA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% dadosProdutos.forEach(element => { %>             
+                    <tr class="border-b border-c1">
+                        <td class="px-4 py-2 whitespace-nowrap"><%= element.produto %></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-white font-semibold text-center <%= element.status ? "bg-green-400" : "bg-red-400" %>"><%= element.status ? "FINALIZADO" : "PENDENTE" %></td>
+                        <td class="px-4 py-2 whitespace-nowrap"><%= element.preco %></td>
+                        <td class="px-4 py-2 whitespace-nowrap"><%= element.quantidade %></td>
+                        <td class="px-4 py-2 whitespace-nowrap"><%= element.total %></td>
+                        <td class="px-4 py-2 whitespace-nowrap"><%= element.data %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </section>
+    <div class="max-w-screen-lg m-auto flex items-center justify-end p-4">
+
+        <button class="border px-4 py-2 rounded-lg bg-c1 duration-200 hover:scale-110 hover:shadow-lg text-c5 " onclick="history.back()">Voltar</button>
+    </div>
+
+    
+</body>
+</html>
+
+
