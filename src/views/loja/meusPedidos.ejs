@@ -13,8 +13,8 @@
 <body>
     <%- include('components/navbar') %>
 
+    <h2 class="max-w-screen-lg m-auto text-2xl font-semibold text-c1 pl-5">Meus Pedidos</h2>
     <section class="overflow-x-auto">
-        <h2 class="max-w-screen-lg m-auto text-2xl font-semibold text-c1">Meus Pedidos</h2>
         <table class=" table-auto border-collapse border border-c1 w-full max-w-screen-lg m-auto">
             <thead>
                 <tr class="bg-c1 text-c5">
@@ -30,7 +30,7 @@
                 <% dadosProdutos.forEach(element => { %>             
                     <tr class="border-b border-c1">
                         <td class="px-4 py-2 whitespace-nowrap"><%= element.produto %></td>
-                        <td class="px-4 py-2 whitespace-nowrap text-white font-semibold text-center <%= element.status ? "bg-green-400" : "bg-red-400" %>"><%= element.status ? "FINALIZADO" : "PENDENTE" %></td>
+                        <td class="px-4 py-2 whitespace-nowrap  font-bold text-center <%= element.status ? "text-green-500" : "text-red-500" %>"><%= element.status ? "FINALIZADO" : "PENDENTE" %></td>
                         <td class="px-4 py-2 whitespace-nowrap"><%= element.preco %></td>
                         <td class="px-4 py-2 whitespace-nowrap"><%= element.quantidade %></td>
                         <td class="px-4 py-2 whitespace-nowrap"><%= element.total %></td>
