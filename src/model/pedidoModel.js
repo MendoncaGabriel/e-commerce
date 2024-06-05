@@ -9,15 +9,16 @@ async function getUser(userToken){
     return user
 }
 
-function savePedidoProduto(status, produto_id, qtd, total, preco){
+function savePedidoProduto(status_pedido, data_pedido, usuarios_idusuarios){
     const pedido = {
-        status: status,
+        status: status_pedido,
         produto_id: produto_id,
-        status: status,
         qtd: qtd,
         total: total,
         preco: preco
     }
+    const sql = "INSERT INTO pedidos (status_pedido, data_pedido, usuarios_idusuarios) VALUES (?, ?, ?, ?);";
+    const values = [status_pedido, data_pedido, usuarios_idusuarios]
     console.log(pedido)
 }
 

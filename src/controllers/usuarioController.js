@@ -20,8 +20,9 @@ module.exports = {
             const tokenUsuario = req.cookies.token;
             const {idusuario} = jwt.verify(tokenUsuario, process.env.ASSINATURA_TOKEN)
 
-            const {rua, bairro, cep, cidade, estado, pais, numero_casa, referencia, telefone} = req.body
-            await  usuarioModel.updateEndereco(rua, bairro, cep, cidade, estado, pais, numero_casa, referencia, telefone, idusuario);
+
+            const data = req.body
+            await  usuarioModel.updateEndereco(data, idusuario);
 
             res.status(200).json({msg: 'Endereço atualizado com sucesso!'});
         } catch (error) {

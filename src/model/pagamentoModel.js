@@ -2,6 +2,7 @@ require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 
 
+
 //GERAR CHAVE EM BASE 64
 class KeyBase64 {
     #Client_ID = process.env.Client_ID;
@@ -11,7 +12,7 @@ class KeyBase64 {
         if (!this.#Client_ID || !this.#Client_Secret) {
             throw new Error('!!! Client_ID e Client_Secret não foram definidos corretamente.');
         }
-        this.key = btoa(`${this.#Client_ID}:${this.#Client_Secret}`);
+        this.key = Buffer.from(`${this.#Client_ID}:${this.#Client_Secret}`).toString('base64');
     }
 
     get auth() {
@@ -54,14 +55,15 @@ class Authorization {
     }
 }
 
+
 //SOLICITAR PAGAMENTOS
 class Pagamento {
     #seller_id = process.env.Seller_ID;
-    #uuid = uuidv4()
-    #auth = null
+    #uuid = uuidv4();
+    #auth = null;
 
-    constructor(){
-        this.expirationTime = "180" //3min 
+    constructor() {
+        this.expirationTime = "180"; // 3min 
     }
 
     #formatValor(valor) {
@@ -69,13 +71,13 @@ class Pagamento {
             const valorSemSimbolo = valor.replace(/R\$|\s+/g, '');
             const valorEmCentavos = valorSemSimbolo.replace(',', '');
             return parseInt(valorEmCentavos, 10);
-        }else{
+        } else {
             return parseInt(valor, 10);
         }
     }
 
-    async qrcodePix(valor){
-        this.valor = this.#formatValor(valor)
+    async qrcodePix(valor) {
+        this.valor = this.#formatValor(valor);
         const authorization = new Authorization();
         this.#auth = await authorization.getAuth();
             
@@ -96,97 +98,64 @@ class Pagamento {
                     customer_id: "string",
                     order_id: this.#uuid   
                 })
-            }
+            };
+
             fetch(url, config)
-            .then(res =>  res.json())
-            .then(res => {
-                res.uuid = this.#uuid;
-                return resolve(res)
-            })
-            .catch(error => {
-                return reject(error)
-            });
-        })
+                .then(res => res.json())
+                .then(res => {
+                    res.uuid = this.#uuid;
+                    return resolve(res);
+                })
+                .catch(error => {
+                    return reject(error);
+                });
+        });
     }
 }
+
 
 // FERIFICAR STATUS DE PAGAMENTO
 class Notificacao {
     #auth = null;
     #seller_id = process.env.Seller_ID;
- 
+
     async statusPayment(payment_id) {
         try {
+            console.log('===> payment_id: ', payment_id);
             const authorization = new Authorization();
             this.#auth = await authorization.getAuth();
-
+    
             const url = `https://api.getnet.com.br/v1/payments/qrcode/${payment_id}`;
             const config = {
                 method: 'GET',
                 headers: {
                     "seller_id": this.#seller_id,
                     "Authorization": `Bearer ${this.#auth.access_token}`,
+                    "Content-Type": "application/json; charset=utf-8",
                 }
             };
-
-            const maxTimeout = 110000; // 1 minuto e 50 segundos em milissegundos
-            const startTime = Date.now();
-
-            const checkPaymentStatus = async () => {
+    
+            const intervalId = setInterval(async () => {
                 try {
                     const response = await fetch(url, config);
                     const data = await response.json();
+                    console.log(data);
 
-                    // if (!response.ok) {
-                    //     console.log(`Erro na requisição:`,  data);
-
-                    //     return
-                    // }
-
-                    // ver status
-                    if(!data.status){
-                        console.log(data)
-                    }else{
-                        console.log(`Status atual: ${data.status}`);
+                    // Verifique o status de pagamento e pare o intervalo se o pagamento estiver concluído
+                    if (data.status === 'completed') {
+                        clearInterval(intervalId);
+                        console.log('Pagamento concluído.');
                     }
-
-                    // Verifica se o pagamento foi confirmado
-                    if (data.status === 'APPROVED') {
-                        console.log('Pagamento confirmado!');
-                        return data;
-                    }
-
-                    // Verifica se o pagamento foi negado
-                    if (data.status === 'DENIED') {
-                        console.log('Pagamento negado!');
-                        return data;
-                    }
-
-                    // Verifica se atingiu o tempo máximo de espera
-                    const elapsedTime = Date.now() - startTime;
-                    if (elapsedTime >= maxTimeout) {
-                        console.log('Tempo máximo de espera atingido. Status ainda é PENDING.');
-                        return data;
-                    }
-
-                    // Aguarda e verifica novamente
-                    setTimeout(async () => {
-                        await checkPaymentStatus();
-                    }, 110000 ); // Aguarda 1 min e 50 segundos entre cada verificação
-                } catch (error) {
-                    console.error('Erro na requisição:', error.message);
-                    throw error; // Propaga o erro para ser tratado externamente, se necessário
+                } catch (innerError) {
+                    console.error('Erro ao buscar status de pagamento:', innerError);
                 }
-            };
-
-            // Inicia o processo de verificação do status do pagamento
-            await checkPaymentStatus();
+            }, 5000);
         } catch (error) {
             console.error('Erro ao verificar status de pagamento:', error);
-            //throw error; // Propaga o erro para ser tratado externamente, se necessário
         }
     }
 }
+
 
 
 
@@ -198,10 +167,11 @@ module.exports = {
                     const pagamento = new Pagamento()
                     const pix = await pagamento.qrcodePix(valor)
     
-                    const consulta = new Notificacao()
+                    // const consulta = new Notificacao()
+                    // console.log(pix.payment_id)
+                    // console.log(pix)
     
-                    // testando novo modulo de consulta
-                    consulta.statusPayment(pix.payment_id)
+                  
                     
                  
                     resolve(pix)

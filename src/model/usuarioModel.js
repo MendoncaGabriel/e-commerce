@@ -2,7 +2,7 @@ require('dotenv').config();
 const db = require('../../database/database');
 
 module.exports = {
-    updateEndereco: async (rua, bairro, cep, cidade, estado, pais, numero_casa, referencia, telefone, idusuarios) => {
+    updateEndereco: async (data, idusuarios) => {
         return new Promise((resolve, reject) => {
             (async () => {
                 const sql = `
@@ -18,7 +18,7 @@ module.exports = {
                     telefone = ? 
                 WHERE idusuarios = ?;`;
     
-               const values = [rua, bairro, cep, cidade, estado, pais, numero_casa, referencia, telefone, idusuarios];
+               const values = [data.rua, data.bairro, data.cep, data.cidade, data.estado, data.pais, data.numero_casa, data.referencia, data.telefone, idusuarios];
                db.query(sql, values, (error, result) => {
                     if(error){
                         reject(error)

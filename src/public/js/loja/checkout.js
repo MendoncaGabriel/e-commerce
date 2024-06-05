@@ -12,6 +12,8 @@ const fecharSectionPix = document.getElementById('fecharSectionPix');
 const adicionalEntrega = document.getElementById('adicionalEntrega');
 const entrega = document.querySelectorAll('[name=entrega]');
 const inputCep = document.getElementById('cep');
+const valorPix = document.getElementById('valorPix');
+const btnConfirmarPagamento = document.getElementById('btnConfirmarPagamento');
 
 //DETECTAR ALTERAÇÃO
 rua.addEventListener('input', ()=> exibirBtnSalvar());
@@ -80,6 +82,7 @@ function indicadorDeProgresso(){
         if (tempo <= 0) {
             clearInterval(contador);
             alert('Pix Inspirado! Atualize a página se precisar gerar outro.');
+            window.location.reload()
         }
     }, 1000);
 };
@@ -106,7 +109,7 @@ async function handleInputCep(cep){
 };
 async function mostrarModalQrCode(copiarColar, CodeQr){
     const qrCode = document.getElementById('qrCode')
-    qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(CodeQr)}`; // Correção aqui
+    qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(CodeQr)}`; // Correção aqui
     btnCopiarPix.setAttribute('chaveCopiarColar', copiarColar)
 
     setTimeout(()=> {
@@ -115,6 +118,12 @@ async function mostrarModalQrCode(copiarColar, CodeQr){
         indicadorDeProgresso();
     },500)
 };
+
+function showBtnConfirmarPagamento(){
+    setTimeout(() => {
+        btnConfirmarPagamento.classList.replace('hidden', 'flex')
+    }, 30 * 1000);
+}
 
 // EVENTOS
 btnPagar.addEventListener('click', (event) => {
@@ -149,6 +158,8 @@ btnPagar.addEventListener('click', (event) => {
             <img src="/icons/logo-pix-520x520.png" alt="" class="w-10 drop-shadow-lg">
             <p class="text-xl leading-none drop-shadow-lg">PAGAR COM PIX</p>
         `;
+
+        showBtnConfirmarPagamento()
     })
     .catch((error) => {
         console.error(error);
@@ -159,10 +170,11 @@ btnPagar.addEventListener('click', (event) => {
         `;
     });
 });
+
+
 btnSalvarEndereco.addEventListener('click', ()=>{
     if(!validarFormulario()) return;
   
-
     const data = {
         cep: document.getElementById('cep').value,
         rua: document.getElementById('rua').value,
@@ -170,6 +182,7 @@ btnSalvarEndereco.addEventListener('click', ()=>{
         bairro: document.getElementById('bairro').value,
         cidade: document.getElementById('cidade').value,
         estado: document.getElementById('estado').value,
+        telefone: document.getElementById('telefone').value,
         referencia: document.getElementById('referencia').value,
     }
 
