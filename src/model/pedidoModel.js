@@ -11,11 +11,11 @@ async function getUser(userToken){
 
 function savePedidoProduto(status_pedido, data_pedido, usuarios_idusuarios){
     const pedido = {
-        status: status_pedido,
+        status: status_pedido, //Pendende / Finalizado
         produto_id: produto_id,
+        preco: preco,
         qtd: qtd,
-        total: total,
-        preco: preco
+        total: total
     }
     const sql = "INSERT INTO pedidos (status_pedido, data_pedido, usuarios_idusuarios) VALUES (?, ?, ?, ?);";
     const values = [status_pedido, data_pedido, usuarios_idusuarios]
