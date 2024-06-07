@@ -58,22 +58,39 @@ async function decrementarEstoque(produto_id, variante_id, qtd){
     };
 };
 
+function esvaziarCarrinho(req, res) {
+    res.clearCookie('carrinho');
+
+    console.log('Carrinho foi limpo')
+    console.log(req.cookies)
+}
+
 
 module.exports = {
     createPedido: async (req, res) => {
         try {
+            if (!req.cookies || typeof req.cookies.carrinho === "undefined") {
+                return res.status(400).json({ msg: 'Não há itens no carrinho para registrar pedido!' });
+            };
+
             const usuario_id = req.locals.idusuario;
             const carrinhoCookies = JSON.parse(req.cookies.carrinho);
+            console.log(carrinhoCookies)
 
             await registrarPedido(usuario_id, carrinhoCookies);
 
             //limpar carrinho
+            await esvaziarCarrinho(req, res);
+
+            //notificar responsaveis
+            console.log('notificar responsaveis')
 
        
 
 
             res.status(200).json({msg: "Pedido registrado com sucesso!"})
         } catch (error) {
+            console.log(error)
             res.status(500).json({msg: "Erro interno no servidor", error})
         }
     

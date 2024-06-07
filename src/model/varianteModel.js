@@ -92,6 +92,18 @@ module.exports = {
         
         
     },
+    getImagem: (produto_id) => {
+        return new Promise( (resolve, reject)=>{
+    
+           db.query("select imagem from variantes where produto_id = ? AND imagem IS NOT NULL AND imagem != '';", [produto_id], (error, result) => {
+                if(error){
+                   return reject(error)
+                }else{
+                    resolve(result)
+                }
+            })
+        })
+    },
     getByProdutoId: async (id) => {
         return new Promise((resolve, reject) => {
             const sql = "SELECT * FROM variantes WHERE produto_id = ?";
@@ -161,5 +173,26 @@ module.exports = {
                 }
             })
         })
+    },
+    deleteByProdutoId(produto_id) {
+        return new Promise((resolve, reject) => {
+            db.query("DELETE FROM variantes WHERE produto_id = ?", [produto_id], (error, result) => {
+                if (error) {
+                   return reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+}
+
+class Crud {
+
+}
+
+class Variante extends Crud {
+    constructor(){
+        
     }
 }

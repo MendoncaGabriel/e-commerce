@@ -22,11 +22,10 @@ class Pedido {
 
                 db.query(sql, values, (error, result) => {
                     if(error){
-                        reject(error)
                         console.log(error)
+                        return  reject(error)
                     }else{
                         resolve(result)
-                        console.log(result)
                     }
                 })
 
