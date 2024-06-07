@@ -165,6 +165,27 @@ module.exports = {
             })
         })
     },
+    updateStock: async (productId, decrementAmount) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                UPDATE produtos 
+                 SET estoque = GREATEST(estoque - ?, 0)
+                WHERE produto_id = ?;
+            `;
+            const values = [decrementAmount, productId];
+    
+            db.query(sql, values, (error, result) => {
+                if (error) {
+                    console.log(error)
+                    return reject(error);
+                } else {
+                    console.log(result)
+                    resolve(result);
+                }
+            });
+        });
+    },
+    
     getByCategoria: async (categoria) => {
         return new Promise((resolve, reject) => {
             const sql = `SELECT * FROM produtos JOIN categorias ON categorias.nome_categoria = ? AND categorias.categoria_id = produtos.categorias_categoria_id;`;
@@ -179,8 +200,6 @@ module.exports = {
             });
         });
     },
-
-
     getbyOffsetAll: async (offset, limit) => { 
         return new Promise((resolve, reject) => {
             const sql = `SELECT * FROM produtos  LIMIT ? OFFSET ?;`;

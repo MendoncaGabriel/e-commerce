@@ -3,20 +3,20 @@ const path = require('path');
 const logger = require('morgan');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const rateLimit = require('express-rate-limit')
+const rateLimit = require('express-rate-limit');
 
-const categoriaRouter = require('./src/routes/api/categoriaRouter');
-const pesquisaRouter = require('./src/routes/api/pesquisaRouter');
 const authRouter = require('./src/routes/api/authRouter');
 const lojaRouter = require('./src/routes/pages/lojaRouter');
+const pedidoRouder = require('./src/routes/api/pedidoRouder');
 const adminRouter = require('./src/routes/pages/adminRouter');
-const usuarioRouter = require('./src/routes/api/usuarioRouter');
 const produtoRouter = require('./src/routes/api/produtoRouter');
+const usuarioRouter = require('./src/routes/api/usuarioRouter');
 const varianteRouter = require('./src/routes/api/varianteRouter');
+const pesquisaRouter = require('./src/routes/api/pesquisaRouter');
 const pagamentoRouter = require('./src/routes/api/pagamentoRouter');
+const categoriaRouter = require('./src/routes/api/categoriaRouter');
 
 var app = express();
-
 
 // middlewares
 const limiter = rateLimit({
@@ -24,10 +24,8 @@ const limiter = rateLimit({
 	limit: 500, // Limitar cada IP a 300 requisições por `window` (aqui, por 1 hora).
 	standardHeaders: 'draft-7', // draft-6: cabeçalhos `RateLimit-*`; draft-7: cabeçalho combinado `RateLimit`
 	legacyHeaders: false, // Desabilitar os cabeçalhos `X-RateLimit-*`.
-})
+});
 //  app.use(limiter)
-
-
 
 // arquivos estativos
 app.use('/js', express.static(path.join(__dirname, 'src/public/js')));
@@ -41,7 +39,7 @@ app.use('/banner', express.static(path.join(__dirname, 'src/public/banner')));
 app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'ejs');
 
-app.use(cors())
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(cookieParser());
@@ -54,12 +52,11 @@ app.use('/variante', varianteRouter);
 app.use('/pagamento', pagamentoRouter);
 app.use('/produto', produtoRouter);
 app.use('/usuario', usuarioRouter);
+app.use('/pedido', pedidoRouder);
 app.use('/auth', authRouter);
 
 // Paginas
 app.use('/admin', adminRouter);
 app.use('/', lojaRouter);
-
-
 
 module.exports = app;

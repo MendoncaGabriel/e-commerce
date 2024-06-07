@@ -58,6 +58,25 @@ module.exports = {
             })
         })
     },
+    updateStock: async (productId, decrementAmount) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                UPDATE produtos 
+                 SET estoque = GREATEST(estoque - ?, 0) 
+                WHERE produto_id = ?;
+            `;
+            const values = [decrementAmount, productId];
+    
+            db.query(sql, values, (error, result) => {
+                if (error) {
+                    return reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    },
+    
     getById: async (id) => {
         return new Promise((resolve, reject) => {
             const sql = "SELECT * FROM variantes WHERE variante_id = ?";
