@@ -1,30 +1,27 @@
 <section class="relative m-auto   overflow-hidden">
-    
-  <div id="containerSlideProduto" class="relative w-full  flex overflow-x-auto md:overflow-x-hidden space-x-5 snap-mandatory snap-x  ">
-      <% banners.forEach(element => { %>
 
-        <picture class="imagemSlideProduto w-full overflow-hidden object-cover flex-none snap-center aspect-square md:aspect-[21/9]">
-          <source media="(max-width: 768px)" srcset="/banner/mobile/<%= element.mobile %>">
-          <img 
-            src="/banner/<%= element.pc %>" 
-            alt="imagem de banners"
-            
-          >
-        </picture>
-      <% }) %> 
+  <div id="containerSlideProduto" class="relative w-full flex overflow-x-auto md:overflow-x-hidden space-x-5 snap-mandatory snap-x">
+    <% banners.forEach(element => { %>
+      <img 
+        src="/img/<%= element.img %>" 
+        alt="imagem de banners para mobile"
+        class="imagemSlideProduto w-full overflow-hidden object-cover flex-none snap-center aspect-square md:aspect-[21/9] <%= element.pc ? 'hidden md:block' : '' %> <%= element.mobile ? 'block md:hidden' : '' %>"
+        >
+    <% }) %>    
+  </div>
+  
+  
+  <button onclick="voltarSlide(), pausarRolagem()" class=" h-full lg:px-8 px-2  hover:text-c1 text-c0  absolute top-0 left-0 focus:outline-none ">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="duration-200 hover:scale-110 bi bi-chevron-left focus:outline-none" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+    </svg>
+  </button>
 
-    </div>
-   
-    <button onclick="voltarSlide(), pausarRolagem()" class=" h-full lg:px-8 px-2  hover:text-c1 text-c0  absolute top-0 left-0 focus:outline-none ">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="duration-200 hover:scale-110 bi bi-chevron-left focus:outline-none" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
-      </svg>
-    </button>
-    <button onclick="passarSlide(), pausarRolagem()" class=" h-full lg:px-8 px-2  hover:text-c1 text-c0  absolute top-0 right-0 focus:outline-none">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="duration-200 hover:scale-110 bi bi-chevron-right" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
-      </svg>
-    </button>
+  <button onclick="passarSlide(), pausarRolagem()" class=" h-full lg:px-8 px-2  hover:text-c1 text-c0  absolute top-0 right-0 focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="duration-200 hover:scale-110 bi bi-chevron-right" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+    </svg>
+  </button>
    
 </section>
 

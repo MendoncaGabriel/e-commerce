@@ -1,20 +1,23 @@
-const cors = require('cors')
+const cors = require('cors');
 const path = require('path');
 const logger = require('morgan');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 
-const authRouter = require('./src/routes/api/authRouter');
-const lojaRouter = require('./src/routes/pages/lojaRouter');
-const pedidoRouder = require('./src/routes/api/pedidoRouder');
-const adminRouter = require('./src/routes/pages/adminRouter');
-const produtoRouter = require('./src/routes/api/produtoRouter');
-const usuarioRouter = require('./src/routes/api/usuarioRouter');
-const varianteRouter = require('./src/routes/api/varianteRouter');
-const pesquisaRouter = require('./src/routes/api/pesquisaRouter');
-const pagamentoRouter = require('./src/routes/api/pagamentoRouter');
-const categoriaRouter = require('./src/routes/api/categoriaRouter');
+// API
+const authRouter = require('./src/routes/api/auth.router');
+const pedidoRouder = require('./src/routes/api/pedido.router');
+const usuarioRouter = require('./src/routes/api/usuario.router');
+const produtoRouter = require('./src/routes/api/produto.router');
+const varianteRouter = require('./src/routes/api/variante.router');
+const pesquisaRouter = require('./src/routes/api/pesquisa.router');
+const pagamentoRouter = require('./src/routes/api/pagamento.router');
+const categoriaRouter = require('./src/routes/api/categoria.router');
+
+// PAGES
+const adminRouter = require('./src/routes/pages/admin.router');
+const lojaRouter = require('./src/routes/pages/loja.router');
 
 var app = express();
 
