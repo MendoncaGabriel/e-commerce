@@ -1,8 +1,9 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const db = require('../database');
+const Loja = require('../schemas/loja.schema');
 
-const EnderecoLoja = sequelize.define('EnderecoLoja', {
-  endereco_empresa_id: {
+const EnderecoLoja = db.define('EnderecoLoja', {
+  id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
@@ -46,18 +47,13 @@ const EnderecoLoja = sequelize.define('EnderecoLoja', {
   link_maps: {
     type: DataTypes.STRING,
     allowNull: true,
-  },
-  loja_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'lojas',
-      key: 'id',
-    },
-  },
+  }
 }, {
   tableName: 'enderecos',
   timestamps: false,
 });
+
+Loja.hasMany(EnderecoLoja);
+EnderecoLoja.belongsTo(Loja);
 
 module.exports = EnderecoLoja;

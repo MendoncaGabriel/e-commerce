@@ -180,3 +180,4 @@ exports.getBySearchTerm = async (termo) => {
         throw error;
     }
 };
+

@@ -1,10 +1,10 @@
-// models/usuario.js
-
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const db = require('../database');
 
-const Usuario = sequelize.define('Usuario', {
-  idusuarios: {
+const Loja = require('../schemas/loja.schema');
+
+const Usuario = db.define('Usuario', {
+  id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
@@ -52,7 +52,7 @@ const Usuario = sequelize.define('Usuario', {
   pais: {
     type: DataTypes.STRING,
     allowNull: true,
-    defaultValue: 'Brasil', // Valor padrão para o país
+    defaultValue: 'Brasil', 
   },
   numero_casa: {
     type: DataTypes.STRING,
@@ -64,7 +64,10 @@ const Usuario = sequelize.define('Usuario', {
   },
 }, {
   tableName: 'usuarios',
-  timestamps: false, // Se não quiser timestamps automáticos (created_at, updated_at)
+  timestamps: false, 
 });
+
+Loja.hasMany(Usuario);
+Usuario.belongsTo(Loja);
 
 module.exports = Usuario;

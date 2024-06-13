@@ -110,11 +110,10 @@ exports.home = async (req, res) => {
             dadosEmpresa: [], 
             categorias: [],
             enderecosEmpresa: [], 
-            carroselProdutos: []
+            carroselProdutos: [] //carroselProdutos
         };
 
-
-
+        //carroselProdutos
         for(let e of carrosel){
             data.carroselProdutos.push({
                 titulo: e.nome, 
@@ -123,7 +122,6 @@ exports.home = async (req, res) => {
             })
         }
     
- 
         res.render('loja/home', data); 
     } catch (error) {
         console.error(error);

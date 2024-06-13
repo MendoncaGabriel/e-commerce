@@ -1,4 +1,4 @@
-const Carrosel = require('../../database/schemas/carrosel.schema');
+const Carrosel = require('../../database/schemas/carrossel.schema');
 
 exports.getAll = async (loja_id) => {
     try {

@@ -1,7 +1,10 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const db = require('../database');
 
-const Categoria = sequelize.define('Categoria', {
+const Loja = require('../schemas/loja.schema');
+const Produto = require('../schemas/produto.schema');
+
+const CategoriaProduto = db.define('categoriaProduto', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -12,8 +15,13 @@ const Categoria = sequelize.define('Categoria', {
     allowNull: false,
   },
 }, {
-  tableName: 'categorias',
+  tableName: 'categoriasProduto',
   timestamps: false,
 });
 
-module.exports = Categoria;
+Loja.hasMany(CategoriaProduto);
+CategoriaProduto.belongsTo(Loja);
+
+Produto.belongsTo(CategoriaProduto)
+
+module.exports = CategoriaProduto;

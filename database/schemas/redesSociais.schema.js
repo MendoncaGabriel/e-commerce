@@ -1,7 +1,9 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const db = require('../database');
 
-const RedeSocial = sequelize.define('RedeSocial', {
+const Loja = require('../schemas/loja.schema');
+
+const RedeSocial = db.define('RedeSocial', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -15,12 +17,15 @@ const RedeSocial = sequelize.define('RedeSocial', {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      isUrl: true, // Valida se é uma URL válida
+      isUrl: true, 
     },
   },
 }, {
-  tableName: 'redes_sociais', // Nome da tabela no banco de dados
+  tableName: 'redes_sociais', 
   timestamps: false, 
 });
+
+Loja.hasMany(RedeSocial);
+RedeSocial.belongsTo(Loja);
 
 module.exports = RedeSocial;

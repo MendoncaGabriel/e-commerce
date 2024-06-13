@@ -1,10 +1,13 @@
-// models/pedido.js
-
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const db = require('../database');
 
-const Pedido = sequelize.define('Pedido', {
-  pedido_id: {
+const Loja = require('../schemas/loja.schema');
+const Produto = require('../schemas/produto.schema');
+const Variante = require('../schemas/variante.produto.schema');
+const Usuario = require('../schemas/usuario.schema');
+
+const Pedido = db.define('Pedido', {
+  id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
@@ -22,33 +25,33 @@ const Pedido = sequelize.define('Pedido', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  produto_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  variante_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  usuario_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
   qtd: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
   total: {
-    type: DataTypes.DECIMAL(10, 2), // Exemplo para valores monetários
+    type: DataTypes.DECIMAL(10, 2), 
     allowNull: false,
   },
   preco: {
-    type: DataTypes.DECIMAL(10, 2), // Exemplo para valores monetários
+    type: DataTypes.DECIMAL(10, 2), 
     allowNull: false,
-  },
+  }
 }, {
-  tableName: 'pedidos', // Nome da tabela no banco de dados
-  timestamps: false, // Se não quiser timestamps automáticos (created_at, updated_at)
+  tableName: 'pedidos', 
+  timestamps: false,
 });
+
+Loja.hasMany(Pedido);
+Pedido.belongsTo(Loja);
+
+Produto.hasMany(Pedido);
+Pedido.belongsTo(Produto);
+
+Variante.hasMany(Pedido);
+Pedido.belongsTo(Variante);
+
+Usuario.hasMany(Pedido);
+Pedido.belongsTo(Usuario);
 
 module.exports = Pedido;

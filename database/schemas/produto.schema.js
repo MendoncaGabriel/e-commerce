@@ -1,8 +1,14 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
-const Loja = require('../schemas/loja.schema'); // Verifique o caminho correto do arquivo Loja
+const db = require('../database');
 
-const Produto = sequelize.define('Produto', {
+const Loja = require('../schemas/loja.schema'); 
+
+const Produto = db.define('Produto', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   nome: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -62,27 +68,14 @@ const Produto = sequelize.define('Produto', {
   imagem: {
     type: DataTypes.STRING,
     allowNull: true,
-  },
-  categoria_id: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-  },
-  loja_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'lojas',
-      key: 'id',
-    },
-  },
+  }
 }, {
   tableName: 'produtos',
   timestamps: false,
 });
 
-// Configuração da associação
-Produto.belongsTo(Loja, { foreignKey: 'loja_id', as: 'loja' }); // Um Produto pertence a uma Loja
-Loja.hasMany(Produto, { foreignKey: 'loja_id', as: 'produtos' }); // Uma Loja tem muitos Produtos
+Loja.hasMany(Produto);
+Produto.belongsTo(Loja);
 
 
 module.exports = Produto;

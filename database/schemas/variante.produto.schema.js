@@ -1,20 +1,12 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const db = require('../database');
 const Produto = require('./produto.schema');
 
-const VarianteProduto = sequelize.define('VarianteProduto', {
-  variante_id: {
+const Variante = db.define('VarianteProduto', {
+  id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
-  },
-  produto_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Produto,
-      key: 'id', // Aqui deve ser 'id', que é a chave primária de Produto
-    },
   },
   preco: {
     type: DataTypes.DECIMAL(10, 2),
@@ -70,4 +62,7 @@ const VarianteProduto = sequelize.define('VarianteProduto', {
   timestamps: false,
 });
 
-module.exports = VarianteProduto;
+Produto.hasMany(Variante);
+Variante.belongsTo(Produto);
+
+module.exports = Variante;
