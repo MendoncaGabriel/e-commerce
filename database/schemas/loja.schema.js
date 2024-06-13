@@ -27,6 +27,22 @@ const Loja = db.define('Loja', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  logo: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  fundo: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  favicon: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  data_criacao: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 }, {
   tableName: 'lojas',
   timestamps: false,

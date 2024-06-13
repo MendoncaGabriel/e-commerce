@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const db = require('../database');
 
 const Loja = require('../schemas/loja.schema'); 
+const Categoria = require('../schemas/categoria.produto.shchema')
 
 const Produto = db.define('Produto', {
   id: {
@@ -76,6 +77,8 @@ const Produto = db.define('Produto', {
 
 Loja.hasMany(Produto);
 Produto.belongsTo(Loja);
+
+Produto.belongsTo(Categoria)
 
 
 module.exports = Produto;

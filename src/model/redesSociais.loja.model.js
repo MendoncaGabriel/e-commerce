@@ -12,9 +12,10 @@ exports.create = async (nome, url) => {
     }
 }
 
-exports.getAll = async () => {
+exports.getAll = async (loja_id) => {
     try {
-        return await RedeSocial.findAll();
+        const redes = await RedeSocial.findAll({where: {LojaId: loja_id}});
+        return redes.map(e => e.dataValues);
     } catch (error) {
         console.error(error);
         throw error;

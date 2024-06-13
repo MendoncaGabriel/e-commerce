@@ -3,7 +3,7 @@ const Carrosel = require('../../database/schemas/carrossel.schema');
 exports.getAll = async (loja_id) => {
     try {
         const carrosel = await Carrosel.findAll({where: {
-            loja_id: loja_id
+            lojaId: loja_id
         }})
 
         return carrosel.map(e => e.dataValues)

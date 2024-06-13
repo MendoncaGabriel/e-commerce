@@ -13,9 +13,10 @@ const Produto = require('../database/schemas/produto.schema');
 const RedesSociais = require('../database/schemas/redesSociais.schema');
 const Usuario = require('../database/schemas/usuario.schema');
 const VarianteProduto = require('../database/schemas/variante.produto.schema');
+const PaletaCores = require('../database/schemas/paleta.cores.schema');
 
 
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
 .then(() => {
   console.log('Tabelas sincronizadas com sucesso.');
   process.exit(0); // Encerra o script com sucesso

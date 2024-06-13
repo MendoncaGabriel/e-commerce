@@ -107,13 +107,13 @@ exports.delete = async (id) => {
     }
 };
 
-exports.getbyOffset = async (offset, limit, loja_id, titulo) => {
+exports.getbyOffset = async (offset, limit, lojaId, titulo) => {
   try {
     const produtos = await Produto.findAll({
         offset: offset,
         limit: limit,
         where: { 
-            loja_id: loja_id,
+            lojaId: lojaId,
             carrosel: titulo
         }
     })

@@ -1,6 +1,6 @@
 <% function tratarNome(nome) {
-        return nome.toLowerCase().replace(/ /g, '-')
-    } %>
+    return nome.toLowerCase().replace(/ /g, '-')
+} %>
 
 <% function converterEmReal(precoString){
     const precoNumero = parseFloat(precoString);
@@ -33,7 +33,7 @@
     <div class="relative">
         <a href="/produto/<%= tratarNome(data.nome) %>">
             <img 
-                src="<%= data.imagem ? '/img/' + data.imagem : '/assets/produto-default.png' %>" 
+                src="<%= typeof data.imagem != 'undefined' && data.imagem ? '/img/produtos/' + data.imagem : '/assets/produto-default.png' %>" 
                 alt="imagem do produto"
                 class="w-full  object-contain border-b aspect-square"
             >

@@ -5,12 +5,12 @@
 %>
 
 <ul id="categorias" class="flex items-center justify-start md:p-2 space-x-4  col-span-2 md:space-x-4 overflow-x-auto  pb-2 snap-x snap-mandatory md:max-w-screen-2xl  m-auto px-4">
-    <% if (typeof data != 'undefined' && data) { %>
+    <% if (typeof categorias != 'undefined' && categorias) { %>
         
-        <% data.map((e, index) => { %>
+        <% categorias.map((e, index) => { %>
         
             <li class=" bg-c0   text-c1 border  hover:shadow-md flex-none snap-start duration-100 ease-in md:text-xl font-medium px-4 md:px-8 md:py-2 py-1 rounded-full ">
-                <a href="/categoria/<%= tratarNome(e.nome_categoria)  %>" class="lg:text-2xl"><%= e.nome_categoria  %></a>
+                <a href="/categoria/<%= tratarNome(e.nome)  %>" class="lg:text-2xl"><%= e.nome  %></a>
             </li>
             
         <% }) %>

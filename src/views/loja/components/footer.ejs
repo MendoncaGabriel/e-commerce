@@ -1,77 +1,50 @@
-<footer class="w-full p-5 md:p-8 lg:p-16  bg-c4  " style="background-image: url('/assets/fundo.png'); background-size: 50%;">
+<footer 
+    class="w-full p-5 md:p-8 lg:p-16 <%= `bg-[${paleta.c4}]` %>" 
+    <% if (typeof loja !== 'undefined' && loja.fundo) { %>
+        style="background-image: url('<%= '/img/loja/fundo/' + loja.fundo %>'); background-size: 50%;"
+    <% } %>
+>
     <div class="m-auto max-w-screen-xl">
 
         <!-- REDES SOCIAIS -->
-        <% if (typeof redesSociais != "undefined" && redesSociais && redesSociais.length > 0) { %>
-            <h2 class="text-center text-xl font-semibold mb-5 text-c1 bg-c0 px-10 m-auto py-2 rounded-full w-72">REDES SOCIAIS</h2>
-            <div class="  p-4 rounded-xl flex  items-end justify-center space-x-4">
-                <!-- FACEBOOK -->
-                <% if (typeof redesSociais != "undefined" && redesSociais.facebook) { %>         
-                    <a href="<%= redesSociais.facebook  %>" target="_blank" >
-                        <img src="/assets/facebook.png" alt="" class="w-16 h-16 aspect-square bg-white p-1  object-cover rounded-full hover:scale-110 duration-200">
+        <% if (typeof redesSociais !== "undefined" && redesSociais && redesSociais.length > 0) { %>
+            <h2 class="text-center text-xl font-semibold mb-5 <%= `text-[${paleta.c1}]` %> bg-white px-10 m-auto py-2 rounded-full w-72">REDES SOCIAIS</h2>
+            <div class="p-4 rounded-xl flex items-end justify-center space-x-4">
+                <% redesSociais.forEach(element => { %>
+                    <a href="<%= element.url %>" target="_blank">
+                        <img src="/assets/<%= element.nome.toLowerCase() %>.png" alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full hover:scale-110 duration-200">
                     </a>
-                <% } %>
-        
-                <!-- INSTAGRAM -->
-                <% if (typeof redesSociais != "undefined" && redesSociais.instagram) { %>
-                    <a href="<%= redesSociais.instagram %>"  target="_blank">
-                        <img src="/assets/instagram.png" alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
-                    </a>
-                <% } %>
-        
-                <!-- WHATSAPP -->
-                <% if (typeof redesSociais != "undefined" && redesSociais.whatsapp) { %>         
-                    <a href="https://api.whatsapp.com/send?phone=<%= redesSociais.whatsapp %>" target="_blank">
-                        <img src="/assets/whatsapp2.png"  alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
-                    </a>
-                <% } %>
-        
-                <!-- TIKTOK -->
-                <% if (typeof redesSociais != "undefined" && redesSociais.tiktok) { %>         
-                    <a href="<%= redesSociais.tiktok %>" target="_blank">
-                        <img src="/assets/tiktok.png"  alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
-                    </a>
-                <% } %>
-        
-                <!-- PINTEREST -->
-                <% if (typeof redesSociais != "undefined" && redesSociais.pinterest) { %>         
-                    <a href="<%= redesSociais.pinterest %>" target="_blank">
-                        <img src="/assets/pinterest.png"  alt="" class="w-16 h-16 aspect-square bg-white p-1 object-cover rounded-full  hover:scale-110 duration-200">
-                    </a>
-                <% } %>
+                <% }) %>
             </div>
             <br><hr class="border border-blue-300"><br>
         <% } %>
 
         <!-- ENDEREÇOS -->
-        <% if (typeof enderecosEmpresa != "undefined" && enderecosEmpresa.length > 0) { %>
-            <h2 class="text-center text-xl font-semibold mb-5 text-c1 bg-c0 px-10 m-auto py-2 rounded-full w-52">UNIDADES</h2>
+        <% if (typeof enderecosLoja !== "undefined" && enderecosLoja.length > 0) { %>
+            <h2 class="text-center text-xl font-semibold mb-5 <%= `text-[${paleta.c1}]` %> <%= `bg-[${paleta.c5}]` %> px-10 m-auto py-2 rounded-full w-52">UNIDADES</h2>
             <div class="bg-gray-50 p-4 rounded-xl">
                 <ul class="space-y-5 grid md:grid-cols-2 md:gap-5 items-baseline">
                     <!-- MAPS -->
-                    <% if (typeof enderecosEmpresa[0] != "undefined" && enderecosEmpresa[0]) { %>
-                        <% enderecosEmpresa.forEach(element => { %>
-                            <%- include('maps', {data: element}) %>
-                        <% }) %>
-                    <% } %>
+                    <% enderecosLoja.forEach(element => { %>
+                        <%- include('maps', {data: element}) %>
+                    <% }) %>
                 </ul>
             </div>
             <br><hr class="border border-blue-300"><br>
         <% } %>
     
-
         <!-- PAGINAS  -->
-        <% if (typeof paginas != "undefined" && paginas && paginas.length > 0) { %>  <!--- futuramente por aqui uma lista vinda do banco de dados para listar as paginas -->        
-            <h2 class="text-center text-xl font-semibold mb-5 text-c1 bg-c0 px-10 m-auto py-2 rounded-full w-40">Páginas</h2>
+        <% if (typeof paginas !== "undefined" && paginas && paginas.length > 0) { %>
+            <h2 class="text-center text-xl font-semibold mb-5 <%= `text-[${paleta.c1}]` %> bg-c0 px-10 m-auto py-2 rounded-full w-40">Páginas</h2>
             <div class="bg-gray-50 p-4 rounded-xl">
                 <ul class="space-y-1 text-gray-700 text-md lg:text-lg md:grid md:grid-cols-2 lg:grid-cols-3">
-                    <% paginas.forEach(element => { %>                     
+                    <% paginas.forEach(element => { %>
                         <li>
-                            <a href="<%= (element.nome_pagina).replace(/ /g, '-') %>" class="flex items-center space-x-2">
-                                <svg class="text-c1 "  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                            <a href="<%= element.nome_pagina.replace(/ /g, '-') %>" class="flex items-center space-x-2">
+                                <svg class="<%= `text-[${paleta.c1}]` %>" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
                                 </svg>
-                                <p class="hover:text-c1 underline"><%= element.nome_pagina %></p>
+                                <p class="<%= `hover:text-[${paleta.c1}]` %> underline"><%= element.nome_pagina %></p>
                             </a>
                         </li>
                     <% }) %>
@@ -80,20 +53,16 @@
             <br><hr class="border border-blue-300"><br>
         <% } %>
     
-        <img src="/assets/logo.png" alt="logo" class="w-[80%] m-auto max-w-80">
+        <% if (typeof loja !== "undefined" && loja.logo) { %>
+            <img src="<%= '/img/loja/logo/' + loja.logo %>" alt="logo" class="w-[80%] m-auto max-w-80">
+        <% } %>
     
-        <% const cnpj =  typeof data[0] != "undefined" &&  data[0].cnpj ? data[0].cnpj : "" %>
-        <% const nome_fantasia = typeof data[0] != "undefined" && data[0].nome_fantasia ? data[0].nome_fantasia.toUpperCase() : "" %>
-        <% const data_criacao = typeof  data[0] != "undefined" &&  data[0].data_criacao ?  data[0].data_criacao : "" %>
+        <% const cnpj = typeof loja !== "undefined" && loja.cnpj ? loja.cnpj : "" %>
+        <% const nome = typeof loja !== "undefined" && loja.nome ? loja.nome.toUpperCase() : "" %>
+        <% const data_criacao = typeof loja !== "undefined" && loja.data_criacao ? loja.data_criacao : "" %>
     
-    
-        <% if ( cnpj && nome_fantasia && data_criacao ) { %>
-            <p class="text-sm text-c0 pt-5 pb-1 text-center">Copyright <%= nome_fantasia  %> - <%= data_criacao %> <br> <%= 'CNPJ: ' + cnpj %> <br> Todos os direitos reservados.</p>
+        <% if (cnpj && nome && data_criacao) { %>
+            <p class="text-sm lg:text-normal <%= `text-[${paleta.c0}]` %> pt-5 pb-1 text-center">Copyright <%= nome %> - <%= data_criacao %> <br> <%= 'CNPJ: ' + cnpj %> <br> Todos os direitos reservados.</p>
         <% } %>
     </div>
-
-
 </footer>
-
-
-

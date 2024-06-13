@@ -47,9 +47,13 @@ const EnderecoLoja = db.define('EnderecoLoja', {
   link_maps: {
     type: DataTypes.STRING,
     allowNull: true,
+  },
+  whatsapp: {
+    type: DataTypes.STRING,
+    allowNull: true,
   }
 }, {
-  tableName: 'enderecos',
+  tableName: 'enderecos_loja',
   timestamps: false,
 });
 

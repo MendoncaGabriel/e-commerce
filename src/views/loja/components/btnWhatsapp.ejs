@@ -1,43 +1,46 @@
-<div  class="fixed bottom-10 right-5 z-30 space-y-4 flex flex-col duration-300 " >
-    <button id="btnUp" class="bg-c1   hover:border-c1  border-2 border-transparent text-c0 overflow-hidden w-[45px] h-[45px] m-auto rounded-full  active::scale-110 duration-100  aspect-square flex items-center justify-center ">
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-up-short " viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
-          </svg>
-    </button>
-    
+<% if (typeof loja[0] != "undefined" && loja[0].whatsapp ) { %>
 
-    <a 
-        href='https://api.whatsapp.com/send?phone=<%= whatsapp  %>'
-        target="_blank"
+    <div  class="fixed bottom-10 right-5 z-30 space-y-4 flex flex-col duration-300 " >
+        <button id="btnUp" class="bg-c1   hover:border-c1  border-2 border-transparent text-c0 overflow-hidden w-[45px] h-[45px] m-auto rounded-full  active::scale-110 duration-100  aspect-square flex items-center justify-center ">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-up-short " viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"/>
+            </svg>
+        </button>
+        
 
-    >
-        <img src="/assets/whatsapp.png" class="w-[50px] duration-200 hover:scale-110" alt="">
-    </a>
-</div>
+        <a 
+            href='https://api.whatsapp.com/send?phone=<%= whatsapp  %>'
+            target="_blank"
+        >
+            <img src="/assets/whatsapp.png" class="w-[50px] duration-200 hover:scale-110" alt="">
+        </a>
+    </div>
 
-<script>
-    const btnUp = document.getElementById('btnUp');
+    <script>
+        const btnUp = document.getElementById('btnUp');
 
-    // esconder btn quando tiver no topo
-    window.onscroll = function() {
-    if (document.documentElement.scrollTop === 0) {
-        btnUp.classList.replace('flex', 'hidden')
-    } else {
-        btnUp.classList.replace('hidden', 'flex')
-    }
+        // esconder btn quando tiver no topo
+        window.onscroll = function() {
+        if (document.documentElement.scrollTop === 0) {
+            btnUp.classList.replace('flex', 'hidden')
+        } else {
+            btnUp.classList.replace('hidden', 'flex')
+        }
 
-    btnUp.addEventListener('click', ()=>scrollToTop())
+        btnUp.addEventListener('click', ()=>scrollToTop())
 
-    function scrollToTop() {
-        // Se a página já estiver no topo, não há necessidade de rolar
-        if (window.scrollY === 0) return;
+        function scrollToTop() {
+            // Se a página já estiver no topo, não há necessidade de rolar
+            if (window.scrollY === 0) return;
 
-        // Rola suavemente até o topo da página em 300ms
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    }
-};
+            // Rola suavemente até o topo da página em 300ms
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    };
 
-</script>
+    </script>
+
+<% } %>

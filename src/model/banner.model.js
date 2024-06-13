@@ -4,7 +4,7 @@ exports.getAll = async (pagina, loja_id) => {
     try {
         const banners = await Banner.findAll({
             where: { 
-                loja_id: loja_id,
+                lojaId: loja_id,
                 pagina: pagina
             }
         });

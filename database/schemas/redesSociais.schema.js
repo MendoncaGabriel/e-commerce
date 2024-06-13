@@ -20,6 +20,10 @@ const RedeSocial = db.define('RedeSocial', {
       isUrl: true, 
     },
   },
+  perfil: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  }
 }, {
   tableName: 'redes_sociais', 
   timestamps: false, 

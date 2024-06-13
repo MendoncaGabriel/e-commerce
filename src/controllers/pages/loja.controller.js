@@ -1,4 +1,5 @@
 const loja_id = process.env.LOJA_ID;
+
 const jwt = require('jsonwebtoken');
 const produtoModel = require('../../model/produto.model');
 const empresaModel = require('../../model/empresa.model');
@@ -9,6 +10,8 @@ const categoriaModel = require('../../model/categoria.model');
 const bannerModel = require('../../model/banner.model');
 const redesSociais = require('../../model/redesSociais.loja.model');
 const carroselModel = require('../../model/carrosel.model');
+const lojaModel = require('../../model/loja.model')
+const enderecoLoja = require('../../model/endereco.loja.model')
 
 async function getCarrosel() {
     const categorias = await categoriaModel.getAll()
@@ -103,14 +106,21 @@ async function getDataCategorias(req) {
 
 exports.home = async (req, res) => {
     try {
-        const carrosel = await carroselModel.getAll(loja_id)
+        const carrosel = await carroselModel.getAll(loja_id);
+        const categoria = await categoriaModel.getAll(loja_id);
+        const loja = await lojaModel.getById(loja_id);
+        const banners = await bannerModel.getAll("home", loja_id);
+        const redes = await redesSociais.getAll(loja_id);
+        const endereco = await enderecoLoja.getAll(loja_id)
+       
         let data = {
-            banners: await bannerModel.getAll("home", loja_id), 
-            redesSociais: [], 
-            dadosEmpresa: [], 
-            categorias: [],
-            enderecosEmpresa: [], 
-            carroselProdutos: [] //carroselProdutos
+            banners: banners,
+            paleta: [],
+            loja: loja, 
+            categorias: categoria,
+            redesSociais: redes, 
+            enderecosLoja: endereco, 
+            carroselProdutos: [] 
         };
 
         //carroselProdutos

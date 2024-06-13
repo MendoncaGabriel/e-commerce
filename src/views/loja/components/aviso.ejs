@@ -1,5 +1,5 @@
 <% if (typeof aviso != "undefined" && aviso) { %>
-    <div class=" bg-black p-2 text-sm text-white text-center">
+    <div class=" <%= `bg-[${paleta.c1}]` %> p-2 text-sm <%= `text-[${paleta.c5}]` %> text-center">
         <p class="font-semibold drop-shadow-md"><%= aviso %></p>
     </div>
 <% } %>
