@@ -7,7 +7,7 @@ const Variante = require('../../database/schemas/variante.produto.schema');
 async function removePreviousImagem(id) {
     try {
         const produto = await Produto.findByPk(id);
-        if (!produto[0].imagem) return;
+        if (!produto[0].imagem) return; 
 
         const caminhoArquivo = path.resolve('src', 'public', 'img', produto[0].imagem);
         if(caminhoArquivo) await deleteFile(caminhoArquivo);

@@ -47,7 +47,7 @@
     </ul>
 
     <div>
-        <img src="/assets/logo.png" alt="logo" class="w-[50%] mb-5 max-w-40 m-auto ">
+        <img src="<%= typeof loja != 'undefined' && loja.logo ? `/img/loja/logo/${loja.logo}`  : '' %>" alt="logo" class="w-[50%] mb-5 max-w-40 m-auto ">
     </div>
 </section>
 

@@ -12,8 +12,6 @@ BtnAbrirCarrinho.addEventListener('click', abrirCarrinho)
 BtnFecharCarrinho.addEventListener('click', btnFecharCarrinho)
 
 
-
-
 function converterEmRealCarrinho(precoString) {
     const precoNumero = Number(precoString).toFixed(2);
 
@@ -36,7 +34,7 @@ const itemCarrinho = (imagem, quantidade, preco, variante_id) => `
 <li id="li${variante_id}" class="bg-gray-100 p-2 border grid grid-cols-10  duration-300">
     <div class="col-span-3 aspect-square  border-c1 ">
         <img 
-            src="/img/${imagem}" 
+            src="/img/produtos/${imagem}" 
             alt=""
             class="h-full max-[95.84px]: aspect-square rounded-md shadow "
             onerror="this.src='/assets/produto-default.png'"

@@ -1,8 +1,10 @@
 const PaletaCores = require('../../database/schemas/paleta.cores.schema');
 
-exports.getById = async (id) => {
+exports.getByLojaId = async (id) => {
     try {
-        const paleta = await PaletaCores.findByPk(id)
+        const paleta = await PaletaCores.findOne({
+            where:{LojaId: id}
+        })
         return paleta.dataValues
     } catch (error) {
         console.error(error)

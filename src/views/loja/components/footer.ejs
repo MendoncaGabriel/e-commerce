@@ -1,5 +1,5 @@
 <footer 
-    class="w-full p-5 md:p-8 lg:p-16 <%= `bg-[${paleta.c4}]` %>" 
+    class="w-full p-5 md:p-8 lg:p-16 bg-c4 %>" 
     <% if (typeof loja !== 'undefined' && loja.fundo) { %>
         style="background-image: url('<%= '/img/loja/fundo/' + loja.fundo %>'); background-size: 50%;"
     <% } %>
@@ -8,7 +8,7 @@
 
         <!-- REDES SOCIAIS -->
         <% if (typeof redesSociais !== "undefined" && redesSociais && redesSociais.length > 0) { %>
-            <h2 class="text-center text-xl font-semibold mb-5 <%= `text-[${paleta.c1}]` %> bg-white px-10 m-auto py-2 rounded-full w-72">REDES SOCIAIS</h2>
+            <h2 class="text-center text-xl font-semibold mb-5 text-c1 bg-white px-10 m-auto py-2 rounded-full w-72">REDES SOCIAIS</h2>
             <div class="p-4 rounded-xl flex items-end justify-center space-x-4">
                 <% redesSociais.forEach(element => { %>
                     <a href="<%= element.url %>" target="_blank">
@@ -21,7 +21,7 @@
 
         <!-- ENDEREÇOS -->
         <% if (typeof enderecosLoja !== "undefined" && enderecosLoja.length > 0) { %>
-            <h2 class="text-center text-xl font-semibold mb-5 <%= `text-[${paleta.c1}]` %> <%= `bg-[${paleta.c5}]` %> px-10 m-auto py-2 rounded-full w-52">UNIDADES</h2>
+            <h2 class="text-center text-xl font-semibold mb-5 text-c1 bg-c5 px-10 m-auto py-2 rounded-full w-52">UNIDADES</h2>
             <div class="bg-gray-50 p-4 rounded-xl">
                 <ul class="space-y-5 grid md:grid-cols-2 md:gap-5 items-baseline">
                     <!-- MAPS -->
@@ -35,16 +35,16 @@
     
         <!-- PAGINAS  -->
         <% if (typeof paginas !== "undefined" && paginas && paginas.length > 0) { %>
-            <h2 class="text-center text-xl font-semibold mb-5 <%= `text-[${paleta.c1}]` %> bg-c0 px-10 m-auto py-2 rounded-full w-40">Páginas</h2>
+            <h2 class="text-center text-xl font-semibold mb-5 text-c1 bg-c0 px-10 m-auto py-2 rounded-full w-40">Páginas</h2>
             <div class="bg-gray-50 p-4 rounded-xl">
                 <ul class="space-y-1 text-gray-700 text-md lg:text-lg md:grid md:grid-cols-2 lg:grid-cols-3">
                     <% paginas.forEach(element => { %>
                         <li>
                             <a href="<%= element.nome_pagina.replace(/ /g, '-') %>" class="flex items-center space-x-2">
-                                <svg class="<%= `text-[${paleta.c1}]` %>" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <svg class="text-c1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
                                 </svg>
-                                <p class="<%= `hover:text-[${paleta.c1}]` %> underline"><%= element.nome_pagina %></p>
+                                <p class="<%= `hover:text-c1` %> underline"><%= element.nome_pagina %></p>
                             </a>
                         </li>
                     <% }) %>
@@ -62,7 +62,7 @@
         <% const data_criacao = typeof loja !== "undefined" && loja.data_criacao ? loja.data_criacao : "" %>
     
         <% if (cnpj && nome && data_criacao) { %>
-            <p class="text-sm lg:text-normal <%= `text-[${paleta.c0}]` %> pt-5 pb-1 text-center">Copyright <%= nome %> - <%= data_criacao %> <br> <%= 'CNPJ: ' + cnpj %> <br> Todos os direitos reservados.</p>
+            <p class="text-sm lg:text-normal text-c0 pt-5 pb-1 text-center">Copyright <%= nome %> - <%= data_criacao %> <br> <%= 'CNPJ: ' + cnpj %> <br> Todos os direitos reservados.</p>
         <% } %>
     </div>
 </footer>

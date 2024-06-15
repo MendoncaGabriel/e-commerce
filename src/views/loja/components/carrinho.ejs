@@ -3,7 +3,7 @@
         <!-- BTN FECHAR -->
 
         <button id="btnFecharCarrinho" class="border-b p-2 pl-4 pr-5 w-full text-right flex items-center justify-between" >
-            <img src="/assets/logo.png" alt="logo" class="h-10" >
+            <img src="<%= typeof loja != 'undefined' && loja.logo ? `/img/loja/logo/${loja.logo}`  : '' %>" alt="logo" class="h-10" >
             <i class="bi bi-x  text-4xl text-gray-700"></i>
         </button>
 

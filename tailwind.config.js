@@ -1,36 +1,20 @@
-const paletaCores = require('./src/model/paleta.cores');
+/** @type {import('tailwindcss').Config} */
 
-const carregarCoresDinamicamente = async () => {
-    
-    const paleta = await paletaCores.getById(1);
-    console.log('================================')
-    console.log('================================')
-    
-    console.log(paleta)
-    console.log('================================')
-    console.log('================================')
-    return {
-        c0: "#FFFFFF",
-        c1: '#EC268F',
-        c2: '#D886C3',
-        c3: '#201E1E',
-        c4: 'rgb(0 0 0)',
-        c5: "#FFFFFF",
-        avisoG2: '#EC268F',
-        newsletter: "#EC4899",
-        sigaNoInstagram: "#FFFFFF",
-        footer: "#FFF212"
-    };
+const colors = {
+  c0: 'var(--c0)',
+  c1: 'var(--c1)',
+  c2: 'var(--c2)',
+  c3: 'var(--c3)',
+  c4: 'var(--c4)',
+  c5: 'var(--c5)'
 };
-
-
 
 module.exports = {
-    content: ["./**/**/*.{ejs,js}"],
+    content: ["./src/**/*.{ejs,js}"],
     theme: {
-        extend: {
-            colors: carregarCoresDinamicamente(), // Carrega as cores dinamicamente
-        },
+      extend: {
+        colors: colors
+      },
     },
     plugins: [],
-};
+  }
