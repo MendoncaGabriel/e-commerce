@@ -44,7 +44,8 @@ class AbrirFechar {
         }, 250)
     }
 }
-class Load{
+
+class Load {
     constructor(){
         this.btnOpenModal = document.querySelectorAll('.btnOpenModal')
         this.imagemModal = document.getElementById('imagemModal')
@@ -54,7 +55,9 @@ class Load{
         this.totalModal = document.getElementById('totalModal')
 
         if(this.btnOpenModal){
-            this.btnOpenModal.forEach(item => item.addEventListener('click', () => this.fill(item)));
+            this.btnOpenModal.forEach(item => {
+                item.addEventListener('click', () => this.fill(item))
+            })
         }
     }
 
@@ -70,8 +73,7 @@ class Load{
             qtd: 1
         };
 
-        itemSelected = itemData; // Definindo itemSelected como uma propriedade da classe
-        console.log(itemSelected)
+        itemSelected = itemData;
         return itemData;
     }
 
@@ -96,13 +98,11 @@ class Load{
         }
     }
 
-    fill(item) {
+    fill(item) { //preencher informações no formulario
         const itemData = this.load(item);
         this.updateCard(itemData);
-
-        // Preenche o modal
         this.nomeModal.innerText = itemData.nome;
-        this.imagemModal.src = '/img/' + itemData.imagem;
+        this.imagemModal.src = '/img/produtos/' + itemData.imagem;
         this.valorModal.innerText = 'Valor: ' + converterEmReal(itemData.preco);
         this.totalModal.innerText = 'Total: ' + converterEmReal(Number(itemData.preco) * Number(this.quantidade.value));
     }
@@ -119,6 +119,7 @@ class Controle{
             this.btnMenosQtd.addEventListener('click', () => this.menosQtd())
         }
     }
+
     maisQtd(){
         if(Number(this.quantidade.value) < Number(itemSelected.estoque) || 0){
             quantidade.value++;  
@@ -132,6 +133,7 @@ class Controle{
         }
     };
 }
+
 class Buttons {
     constructor(abrirFechar){
         this.abrirFechar = abrirFechar
@@ -165,13 +167,13 @@ class Buttons {
             localStorage.carrinho = JSON.stringify(carrinho);
         };
         this.abrirFechar.fechar()
-        notificarItemCarrinho()
+        carrinho.alertItems()
         
         // rolar a tela ate o topo
         window.scrollTo({top: 0, behavior: 'smooth'
     });
     
-    setTimeout(() => abrirCarrinho(), 400);
+    setTimeout(() => carrinho.abrir(), 400);
     }
 
     finalizarCompra(){
@@ -214,5 +216,3 @@ const modal = new Modal()
 
 
 
-
-notificarItemCarrinho()
