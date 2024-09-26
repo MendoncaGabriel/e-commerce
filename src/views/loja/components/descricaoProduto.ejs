@@ -1,0 +1,7 @@
+<!-- Descrição -->
+<% if (produto[0].descricao) { %>
+    <div class="mb-5 max-w-screen-xl m-auto p-4">
+        <h2 class="text-3xl text-gray-700">Descrição do produto</h2>
+        <p><%= produto[0].descricao ?? "" %></p>
+    </div>
+<% } %>
