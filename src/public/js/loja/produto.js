@@ -1,34 +1,35 @@
-const quantidadeProduto = document.querySelector('#quantidadeProduto');
+const inputQtd = document.querySelector('#inputQtd');
 const variantesSelect = document.querySelector('#variantesSelect');
 const preco = document.querySelector('#preco');
+const maisQtd = document.getElementById('maisQtd')
+const menosQtd = document.getElementById('menosQtd')
+const finalizarCompraProduto = document.getElementById('finalizarCompraProduto')
+const btnAdicionarProdutoAoCarrinho = document.getElementById('btnAdicionarProdutoAoCarrinho')
 
-//PRODUTOS E VARIANTES 
-let produtoPagina = [];
-if(localStorage.paginaProduto){
-    produtoPagina = JSON.parse(localStorage.paginaProduto);
-};
-
-
-//SE NÃO TIVER VARIANTES O ITEM SELECIONADO E O 0
-let produtoSelecionado = {};
-if(produtoPagina.length == 1){
-    produtoSelecionado = produtoPagina[0]
-    produtoSelecionado.qtd = 1;
-}
-
+var produtoSelecionado = {qtd: 1};
 
 //BUSCAR ITEM SELECIONADO EM SELECT
 variantesSelect.addEventListener('change', () => {
-    const variante_id = variantesSelect.value;
-    const item = produtoPagina.filter(e => e.variante_id == variante_id)[0];
-    item.qtd = 1
-    produtoSelecionado = item;
-    preco.innerHTML = converterEmReal(Number(produtoSelecionado.preco));
-    quantidadeProduto.value = 1;
+    const option = variantesSelect.options[variantesSelect.selectedIndex]
+    const preco = Number(option.getAttribute('preco'));
+    const estoque = Number(option.getAttribute('estoque'));
+    const variante_id = Number(option.getAttribute('variante_id'));
+    const produto_id = Number(option.getAttribute('produto_id'));
+    const nome = option.getAttribute('nome');
+    const imagem = option.getAttribute('imagem');
 
-    console.log(produtoSelecionado)
+    document.querySelector('#preco').innerHTML = converterEmReal(preco);
+    produtoSelecionado.qtd = 1
+    produtoSelecionado.estoque = estoque
+    produtoSelecionado.preco = preco
+    produtoSelecionado.variante_id = variante_id || null
+    produtoSelecionado.produto_id = produto_id
+    produtoSelecionado.nome = nome
+    produtoSelecionado.imagem = imagem
+
+    // quando talterar de option começa do 1
+    inputQtd.value = 1
 })
-
 
 //ULTILITARIOS
 function converterEmReal(precoString){
@@ -41,7 +42,6 @@ function converterEmReal(precoString){
 
     return formatoMoeda.format(precoNumero);
 };
-
 
 //CONTROLES
 function verificarItemSelecionado(){
@@ -62,61 +62,81 @@ function verificarItemSelecionado(){
     return true
 };
 
-
-function maisQtd(){
+//MAIS E MENOS  
+maisQtd.addEventListener('click', ()=> {
     if(verificarItemSelecionado() == false)  return ;
-
     if(produtoSelecionado.estoque > produtoSelecionado.qtd){
         produtoSelecionado.qtd++;
-        quantidadeProduto.value = produtoSelecionado.qtd;
         preco.innerHTML = converterEmReal(Number(produtoSelecionado.preco) * Number(produtoSelecionado.qtd));
-
+        inputQtd.value = produtoSelecionado.qtd
     }
-}
-function menosQtd(){
+})
+
+menosQtd.addEventListener('click', ()=> {
     if(verificarItemSelecionado() == false)  return ;
-    
     if(produtoSelecionado.qtd > 1){
         produtoSelecionado.qtd--
-        quantidadeProduto.value = produtoSelecionado.qtd;
         preco.innerHTML = converterEmReal(Number(produtoSelecionado.preco) * Number(produtoSelecionado.qtd));
+        inputQtd.value = produtoSelecionado.qtd
+    }
+})
+
+
+finalizarCompraProduto.addEventListener('click', ()=>{
+    if(verificarItemSelecionado() == false)  return ;
+    if(!localStorage.carrinho){
+        localStorage.carrinho = JSON.stringify([produtoSelecionado]);
+    }else{
+        const carrinho = JSON.parse(localStorage.carrinho);
+        let pushNoCarrinho = true;
+
+        //se item ja estiver no carrinho atualizar
+        carrinho.forEach(e => {
+            if(e.variante_id == produtoSelecionado.variante_id){
+                pushNoCarrinho = false;
+                e.qtd = produtoSelecionado.qtd;
+            };
+        });
+        //se não estiver no carrinho, adicionar
+        if(pushNoCarrinho){
+            carrinho.push(produtoSelecionado);
+        };
+        localStorage.carrinho = JSON.stringify(carrinho);
+    };
+
+    function setCookie(name, value, days) {
+        if (typeof name !== 'string' || typeof value !== 'string' || typeof days !== 'number' || days <= 0) {
+            console.error('Parâmetros inválidos para setCookie.');
+            return;
+        }
+        const expires = new Date();
+        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/`;
+        return {
+            msg: 'Item salvo em Cookies',
+            name: name, 
+            value: value
+        }
     }
 
-}
+    //passar para o cookies
+    const itens = []
+    const carrinho = JSON.parse(localStorage.carrinho);
+    carrinho.forEach(e => {
+        itens.push({produto_id: e.produto_id, qtd: e.qtd, variante_id: e.variante_id})
+    })
+    setCookie("carrinho", JSON.stringify(itens), 30)
 
-function finalizarCompra(){
-    if(verificarItemSelecionado() == false)  return ;
-
-
-    if(!localStorage.carrinho){
-        localStorage.carrinho = JSON.stringify([produtoSelecionado]);
-    }else{
-        const carrinho = JSON.parse(localStorage.carrinho);
-        let pushNoCarrinho = true;
-
-        //se item ja estiver no carrinho atualizar
-        carrinho.forEach(e => {
-            if(e.variante_id == produtoSelecionado.variante_id){
-                pushNoCarrinho = false;
-                e.qtd = produtoSelecionado.qtd;
-            };
-        });
-        //se não estiver no carrinho, adicionar
-        if(pushNoCarrinho){
-            carrinho.push(produtoSelecionado);
-        };
-        localStorage.carrinho = JSON.stringify(carrinho);
-    };
-
-    notificarItemCarrinho();
     window.location.href = '/checkout'
-}
+})
 
-function adicionarAoCarrinho(){
+
+btnAdicionarProdutoAoCarrinho.addEventListener('click', ()=>{
     if(verificarItemSelecionado() == false)  return ;
 
-
-    if(!localStorage.carrinho){
+    if(!localStorage.carrinho || localStorage.carrinho == '[]'){
+        console.log("item adicionado ao carrinho ")
+        console.log(produtoSelecionado)
         localStorage.carrinho = JSON.stringify([produtoSelecionado]);
     }else{
         const carrinho = JSON.parse(localStorage.carrinho);
@@ -136,8 +156,7 @@ function adicionarAoCarrinho(){
         localStorage.carrinho = JSON.stringify(carrinho);
     };
 
-    notificarItemCarrinho();
-    abrirCarrinho();
+    window.notificarItemCarrinho();
+    window.abrirCarrinho();
         
-}
-
+})

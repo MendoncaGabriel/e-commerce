@@ -1,0 +1,21 @@
+ <!-- PAGAMENTO -->
+ <div class="text-xl text-left p-4 bg-white rounded-lg   shadow-md">
+   
+    <h2 class="w-full p-4 pt-0 text-2xl text-center font-mediu text-gray-700">PAGAMENTO</h2>
+    <div class="flex justify-between items-center font-semibold text-gray-700">
+        <h2 class="p-4 text-xl " >TOTAL: </h2>
+        <h2 class="p-4 text-xl flex space-x-2" id="subtotal">
+            <span>R$ <%= stringParaReal(carrinhoProcessado.total) %></span>
+            <span id="adicionalEntrega" class="block text-green-600 text-sm"></span>
+        </h2>
+    </div>
+
+    <button 
+    id="btnPagar" 
+    class="bg-gradient-to-l bg-c1 rounded-md px-4 py-2 w-full font-semibold text-white my-2 flex items-center justify-center space-x-4">
+        <img src="/icons/logo-pix-520x520.png" alt="" class="w-10 drop-shadow-lg">
+        <p class="text-xl leading-none drop-shadow-lg">PAGAR COM PIX</p>
+    </button>
+    <a class="text-center text-sm m-auto block hover:text-c1 font-light p-4" href="/">Voltar a Home</a>
+</div>
+

@@ -1,20 +1,20 @@
 /** @type {import('tailwindcss').Config} */
+
+const colors = {
+  c0: 'var(--c0)',
+  c1: 'var(--c1)',
+  c2: 'var(--c2)',
+  c3: 'var(--c3)',
+  c4: 'var(--c4)',
+  c5: 'var(--c5)'
+};
+
 module.exports = {
-  content: ["./**/**/*.{ejs,js}"],
-  theme: {
-    extend: {
-      colors:{
-        c0: "#FFFFFF",
-        c1: '#EC268F',
-        c2: '#D886C3',
-        c3: '#201E1E',
-        c4: 'rgb(0 0 0)',
-        avisoG2: '#EC268F',
-        newsletter: "#EC4899",
-        sigaNoInstagram:"#FFFFFF",
-        footer: "#FFF212"
-      }
+    content: ["./src/**/*.{ejs,js}"],
+    theme: {
+      extend: {
+        colors: colors
+      },
     },
-  },
-  plugins: [],
-}
+    plugins: [],
+  }

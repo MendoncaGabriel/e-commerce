@@ -1,31 +1,43 @@
-
 <div>
-    <label for="<%= id %>" class="text-sm text-gray-600"><%= titulo  %></label>
-    <select  id="<%= id %>" class="px-4  py-2 w-full border-2 border-c1  focus:outline-none rounded-lg">
-        <% if (opcoes.length > 1) { %>
-            <option value="" selected disabled>Selecione uma opção</option>
-            <% opcoes.forEach(item => { %>
-                <% if (item != '' && item != null ) { %>
-                    <% 
-                        let texto = ''    
-                        texto += typeof item.tamanho != "undefined" && item.tamanho ? `Tamanho: ${item.tamanho} /` : ''
-                        texto +=  typeof item.quantidade != "undefined" && item.quantidade ? ` Pct.: ${item.quantidade}` : ''
-                    %>
-                    <option estoque="<%= item.estoque ?? 0 %>" value="<%= item.variante_id %>" class="w-full bg-white block shadow-sm">
-                        <%= texto %>
-                    </option>
-                <% } %>
-            <% }); %>
-        <% } else { %>
-            <option estoque="<%= opcoes[0].estoque ?? 0 %>" value="<%= opcoes[0].variante_id %>" class="w-full bg-white block shadow-sm">
-                <% 
-                let texto = ''    
-                    texto += typeof opcoes[0].tamanho != "undefined" && opcoes[0].tamanho ? `Tamanho: ${opcoes[0].tamanho} /` : ''
-                    texto +=  typeof opcoes[0].quantidade != "undefined" && opcoes[0].quantidade ? `  Pct.: ${opcoes[0].quantidade}` : ''
-                 %>
-                <%= texto %>
+    <label for="selecao" class="text-sm text-gray-600">Selecione uma opção</label>
+    <select id="<%= selectId %>" class="px-4 py-2 w-full border-2 border-c1 focus:outline-none rounded-lg">
+ 
+        <option value="" selected disabled>Selecione uma opção</option>
+
+        <!-- produto -->
+        <option 
+            estoque="<%= produto[0].estoque || 0 %>" 
+            produto_id="<%= produto[0].produto_id %>" 
+            preco="<%= produto[0].preco %>"
+            class="w-full bg-white block shadow-sm"
+            nome="<%= produto[0].nome %>"
+            imagem="<%= produto[0].imagem %>"
+        >
+            1: 
+            <%= produto[0].tamanho ? `TAMANHO: ${produto[0].tamanho}` : '' %>
+            <%= produto[0].referencia ? ` REF: ${produto[0].referencia}` : '' %>
+            <%= produto[0].quantidade ? ` QTD: ${produto[0].quantidade}` : '' %>
+        </option>
+
+        <!-- Variantes -->
+        <% variantes.map((e, index) => { %>
+            <option 
+                estoque="<%= e.estoque || 0 %>" 
+                variante_id="<%= e.variante_id %>" 
+                produto_id="<%= e.produto_id %>" 
+                preco="<%= e.preco %>"
+                nome="<%= produto[0].nome %>"
+                imagem="<%= e.imagem %>"
+                class="w-full bg-white block shadow-sm"
+            >
+                <%= index+2 %>:
+                <%= e.tamanho ? `TAMANHO: ${e.tamanho}` : '' %>
+                <%= e.referencia ? ` REF: ${e.referencia}` : '' %>
+                <%= e.quantidade ? ` QTD: ${e.quantidade}` : '' %>
             </option>
-        <% } %>
-    
+        <% }); %>
+
+        
+      
     </select>
 </div>

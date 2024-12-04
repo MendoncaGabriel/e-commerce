@@ -19,7 +19,7 @@
 </section><br>
 
 
-
+<!-- tablela -->
 <section class="space-y-2 relative p-4 bg-gray-50  border shadow-lg">
 
     <table class="border w-full">
@@ -29,30 +29,24 @@
         <thead class="border text-left bg-gray-200 ">
             <tr >
                 <th class="p-2">Id</th>
+                <th class="p-2">Imagem</th>
                 <th class="p-2">Nome</th>
                 <th class="p-2">Status</th>
-                <th class="p-2">Modelo</th>
-                <th class="p-2">Categoria</th>
-                <th class="p-2">Marca</th>
                 <th class="p-2">Editar</th>
+                <th class="p-2">Variantes</th>
+                <th class="p-2">Deletar</th>
             </tr>
         </thead>
         <tbody class="text-left">
 
-            <% const apenasProdutos = produtos.filter((item, index, self) => {
-                return index === self.findIndex((t) => (
-                    t.produto_id === item.produto_id
-                ));
-            })%>
-
-            <% apenasProdutos.forEach(e => { %>             
+            <% produtos.forEach(e => { %>             
                 <tr class="border hover:bg-gray-100">
                     <th class="p-2 border"><%= e.produto_id %></th>
+                    <th class="p-2 border">
+                            <img src="/img/<%= e.imagem  %>" alt="" class="aspect-square object-cover w-20" onerror="this.onerror=null; this.src='/assets/produto-default.png'">
+                    </th>
                     <td class="p-2 border"><%= e.nome %></td>
                     <td class="p-2 border"><%= e.ativo == 1 ? 'Ativo' : 'Inativo'%></td>
-                    <td class="p-2 border"><%= e.modelo %> z</td>
-                    <td class="p-2 border"><%= e.categoria %></td>
-                    <td class="p-2 border"><%= e.marca %></td>
                     <td class="p-2 border">
                         <a href="/admin/edicao/produto/<%= e.produto_id %>" class="w-24 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white flex items-center space-x-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -60,6 +54,19 @@
                             </svg>
                             <p>Editar</p>
                         </a>
+                    </td>
+                    <td class="p-2 border">
+                        <a href="/admin/lista/variante/<%= e.produto_id %>" class="w-28 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white flex items-center space-x-2">
+                            <i class="bi bi-list-ul"></i>
+                            <p>Variantes</p>
+                        </a>
+                    </td>
+                    <td class="p-2 border">
+                        <button onclick="deleteProduto('<%= e.produto_id %>')" type="button" class="bg-red-500 hover:bg-red-600  hover:shadow-sm duration-200 flex items-center justify-center w-full px-4 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill text-white " viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                            </svg>
+                        </button>
                     </td>
                 </tr>
             <% }) %>
@@ -69,4 +76,4 @@
 
 </section>
 
-<script src="/js/admin/edicaoProduto.js"></script>
+<script src="/js/admin/listaProduto.js"></script>

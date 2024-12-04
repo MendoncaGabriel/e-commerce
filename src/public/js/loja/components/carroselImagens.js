@@ -1,6 +1,6 @@
 const imagemSlideProduto = document.querySelectorAll('.imagemSlideProduto')
 const containerSlideProduto = document.querySelector('#containerSlideProduto')
-const larguraImagem = imagemSlideProduto[0].offsetWidth
+const larguraImagem = imagemSlideProduto[0]?.offsetWidth
 var index = 1
 
 function voltarSlide(){
